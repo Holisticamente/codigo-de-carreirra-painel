@@ -6,6 +6,7 @@
 <title>Código de Carreira — Painel Interno</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+
 :root{
   --bg:#f8f5ef;--dark:#0c0b08;--gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
   --cream:#ede8de;--border:#ddd5c3;--text:#1a1810;--muted:#7a7060;--white:#fff;
@@ -78,292 +79,486 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
 .empty-state{padding:60px;text-align:center;color:var(--muted)}
 .empty-state p{font-size:14px;margin-top:8px}
 
-/* ═══ PDF STYLES ═══ */
+
+/* ════════════════════════════════════════
+   PDF REPORT STYLES — v2 approved layout
+════════════════════════════════════════ */
+:root{
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.12);
+  --dark:#0c0b08;--bg:#f8f5ef;--cream:#ede8de;
+  --border:#ddd5c3;--text:#1a1810;--muted:#6a6050;--white:#fff;
+  --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
+  --pad:56px;
+}
 
 *{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 
 
 :root{
-  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.12);
   --dark:#0c0b08;--bg:#f8f5ef;--cream:#ede8de;
-  --border:#ddd5c3;--text:#1a1810;--muted:#7a7060;--white:#fff;
+  --border:#ddd5c3;--text:#1a1810;--muted:#6a6050;--white:#fff;
   --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
+  --pad:56px; /* consistent horizontal padding across all pages */
 }
 
+/* ── PREVIEW BAR ── */
 
 .preview-bar strong{font-size:13px;letter-spacing:3px}
 
 
-/* PAGE WRAPPER */
+/* ── PAGE ── */
 .page{
-  width:210mm;margin:0 auto 32px;
-  box-shadow:0 8px 40px rgba(0,0,0,.25);
+  width:210mm;
+  margin:0 auto 28px;
+  box-shadow:0 6px 32px rgba(0,0,0,.3);
   background:var(--white);
-  position:relative;
+  overflow:hidden;
 }
 
-/* ══ CAPA ══ */
+/* ══════════════════════════════════
+   CAPA
+══════════════════════════════════ */
 .cover{
   background:var(--dark);
   min-height:297mm;
   display:flex;flex-direction:column;
   position:relative;overflow:hidden;
 }
-.cover-bar{height:6px;background:linear-gradient(90deg,var(--gold),var(--gold-lt),var(--gold))}
-.cover-body{
-  flex:1;display:flex;flex-direction:column;justify-content:center;
-  padding:64px 72px 48px;position:relative;
+.cover-bar{
+  height:7px;
+  background:linear-gradient(90deg,var(--gold) 0%,#e8c870 50%,var(--gold) 100%);
+  flex-shrink:0;
 }
+.cover-body{
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:72px var(--pad) 48px;
+  position:relative;
+}
+/* Geometric decoration */
 .cover-body::before{
   content:'';position:absolute;
-  width:500px;height:500px;border-radius:50%;
-  border:1px solid rgba(176,138,62,.07);
-  top:50%;right:-100px;transform:translateY(-50%);
-  pointer-events:none;
+  width:520px;height:520px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.09);
+  top:50%;right:-120px;transform:translateY(-50%);pointer-events:none;
 }
 .cover-body::after{
   content:'';position:absolute;
-  width:340px;height:340px;border-radius:50%;
-  border:1px solid rgba(176,138,62,.05);
-  top:50%;right:-20px;transform:translateY(-50%);
-  pointer-events:none;
+  width:360px;height:360px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.07);
+  top:50%;right:-30px;transform:translateY(-50%);pointer-events:none;
 }
 .cover-brand{
-  font-family:'Cinzel',serif;font-size:11px;letter-spacing:8px;
-  color:var(--gold);margin-bottom:80px;
-  display:flex;align-items:center;gap:16px;
+  font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:9px;
+  color:var(--gold-lt); /* lighter for visibility */
+  margin-bottom:72px;
+  display:flex;align-items:center;gap:18px;
   position:relative;z-index:1;
 }
-.cover-brand::after{content:'';width:80px;height:1px;background:rgba(176,138,62,.3)}
+.cover-brand::after{content:'';width:64px;height:1px;background:rgba(201,165,90,.4)}
 .cover-sublabel{
-  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:5px;
-  color:rgba(176,138,62,.5);text-transform:uppercase;
-  margin-bottom:24px;position:relative;z-index:1;
+  font-family:'Lato',sans-serif;
+  font-size:10px;letter-spacing:5px;
+  color:rgba(201,165,90,.7); /* brighter */
+  text-transform:uppercase;
+  margin-bottom:28px;position:relative;z-index:1;
 }
 .cover-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:80px;font-weight:300;color:#fff;
-  line-height:.95;margin-bottom:16px;
+  font-size:88px;font-weight:300;
+  color:#ffffff; /* pure white for max contrast */
+  line-height:.92;margin-bottom:20px;
   letter-spacing:-2px;position:relative;z-index:1;
 }
 .cover-archetype{
   font-family:'Cormorant Garamond',serif;
-  font-size:28px;font-style:italic;color:var(--gold-lt);
-  margin-bottom:36px;font-weight:300;position:relative;z-index:1;
+  font-size:32px;font-style:italic;
+  color:#e8c870; /* golden yellow, high contrast */
+  margin-bottom:40px;font-weight:300;
+  position:relative;z-index:1;
 }
-.cover-line{width:56px;height:1px;background:var(--gold);margin-bottom:28px;position:relative;z-index:1}
+.cover-line{
+  width:56px;height:2px;
+  background:var(--gold-lt);
+  margin-bottom:32px;position:relative;z-index:1;
+}
 .cover-tagline{
-  font-family:'Lato',sans-serif;font-size:12px;
-  color:rgba(255,255,255,.3);line-height:1.9;
-  max-width:420px;position:relative;z-index:1;
+  font-family:'Lato',sans-serif;
+  font-size:14px; /* larger */
+  color:rgba(255,255,255,.55); /* brighter */
+  line-height:1.85;max-width:440px;
+  position:relative;z-index:1;
+  letter-spacing:.3px;
 }
 .cover-footer{
-  padding:28px 72px;
-  border-top:1px solid rgba(176,138,62,.1);
+  padding:28px var(--pad);
+  border-top:1px solid rgba(176,138,62,.15);
   display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;
 }
-.cf-brand{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:rgba(176,138,62,.4)}
-.cf-date{font-family:'Lato',sans-serif;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:2px}
+.cf-brand{
+  font-family:'Cinzel',serif;font-size:11px;
+  letter-spacing:4px;color:rgba(201,165,90,.5);
+}
+.cf-date{
+  font-family:'Lato',sans-serif;font-size:10px;
+  color:rgba(255,255,255,.25);letter-spacing:2px;
+}
 
-/* ══ INTRO ══ */
-.intro-page{background:var(--white);padding:64px 72px}
+/* ══════════════════════════════════
+   PAGE HEADER (top of each page)
+══════════════════════════════════ */
 .page-hdr{
   display:flex;justify-content:space-between;align-items:center;
-  padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:44px;
+  padding:20px var(--pad) 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--white);
 }
 .ph-brand{font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold)}
-.ph-client{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.ph-client{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
 
-.intro-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700}
-.intro-h{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--dark);line-height:1.05;margin-bottom:6px}
+/* ══════════════════════════════════
+   INTRO PAGE
+══════════════════════════════════ */
+.intro-body-wrap{padding:44px var(--pad) 52px}
+
+.intro-eye{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700;
+}
+.intro-h{
+  font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;
+  color:var(--dark);line-height:1.05;margin-bottom:8px;
+}
 .intro-h em{font-style:italic;color:var(--gold)}
-.intro-div{width:40px;height:2px;background:var(--gold);margin:24px 0}
-.intro-p{font-family:'Lato',sans-serif;font-size:12.5px;color:var(--text);line-height:1.9;margin-bottom:18px}
+.intro-div{width:44px;height:2px;background:var(--gold);margin:24px 0}
+.intro-p{
+  font-family:'Lato',sans-serif;font-size:15px; /* larger */
+  color:var(--text);line-height:1.9;margin-bottom:20px;
+}
 .intro-p strong{font-weight:700;color:var(--dark)}
+
 .intro-box{
   background:var(--bg);border:1px solid var(--border);
-  border-left:4px solid var(--gold);padding:28px 32px;margin:28px 0;
+  border-left:5px solid var(--gold);padding:28px 32px;margin:28px 0;
 }
-.ib-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--dark);margin-bottom:16px}
+.ib-title{
+  font-family:'Cormorant Garamond',serif;font-size:21px;
+  font-weight:600;color:var(--dark);margin-bottom:18px;
+}
 .ib-list{list-style:none}
 .ib-list li{
-  font-family:'Lato',sans-serif;font-size:12px;color:var(--text);
-  padding:10px 0 10px 20px;border-bottom:1px solid var(--border);
-  position:relative;line-height:1.6;
+  font-family:'Lato',sans-serif;font-size:14px; /* larger */
+  color:var(--text);padding:11px 0 11px 22px;
+  border-bottom:1px solid var(--border);
+  position:relative;line-height:1.65;
 }
 .ib-list li:last-child{border-bottom:none}
 .ib-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
 .ib-list li strong{font-weight:700;color:var(--dark)}
-.intro-quote{
-  text-align:center;padding:36px;
-  border:1px solid var(--border);margin-top:32px;
-}
-.iq-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--dark);line-height:1.6;margin-bottom:14px}
-.iq-author{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
 
-/* ══ SECTION PAGES ══ */
-.sec-page{background:var(--white)}
+.intro-quote{
+  text-align:center;padding:36px 32px;
+  border:1px solid var(--border);margin-top:32px;
+  background:var(--bg);
+}
+.iq-text{
+  font-family:'Cormorant Garamond',serif;font-size:24px;
+  font-style:italic;color:var(--dark);line-height:1.6;margin-bottom:14px;
+}
+.iq-author{
+  font-family:'Lato',sans-serif;font-size:9px;
+  letter-spacing:3px;color:var(--gold);text-transform:uppercase;
+}
+
+/* ══════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════ */
 .sec-hdr{
-  background:var(--dark);padding:36px 72px;
+  background:var(--dark);padding:36px var(--pad);
   position:relative;overflow:hidden;
 }
 .sec-hdr::before{
   content:attr(data-n);
   position:absolute;right:40px;top:50%;transform:translateY(-50%);
-  font-family:'Cinzel',serif;font-size:140px;color:rgba(255,255,255,.025);
+  font-family:'Cinzel',serif;font-size:140px;color:rgba(255,255,255,.03);
   line-height:1;pointer-events:none;
 }
-.sh-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700}
-.sh-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#fff;margin-bottom:4px}
-.sh-title em{font-style:italic;color:var(--gold-lt)}
-.sh-sub{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
-.sec-body{padding:40px 72px 48px}
+.sh-eye{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:10px;font-weight:700;
+}
+.sh-title{
+  font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;
+  color:#fff;margin-bottom:5px;
+}
+.sh-title em{font-style:italic;color:#e8c870}
+.sh-sub{font-family:'Lato',sans-serif;font-size:12px;color:rgba(255,255,255,.35)}
 
-/* content */
-.aib{background:var(--bg);border:1px solid var(--border);padding:32px;margin-bottom:16px}
-.aib h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--dark);margin:22px 0 10px}
+/* ══════════════════════════════════
+   SECTION BODY
+══════════════════════════════════ */
+.sec-body{padding:40px var(--pad) 52px}
+
+/* Content blocks */
+.aib{
+  background:var(--bg);border:1px solid var(--border);
+  padding:32px 36px;margin-bottom:16px;
+}
+.aib h3{
+  font-family:'Cormorant Garamond',serif;font-size:25px;
+  font-weight:600;color:var(--dark);margin:26px 0 12px;
+}
 .aib h3:first-child{margin-top:0}
-.aib p{font-family:'Lato',sans-serif;font-size:12.5px;color:var(--text);line-height:1.85;margin-bottom:12px}
+.aib p{
+  font-family:'Lato',sans-serif;font-size:15px; /* larger */
+  color:var(--text);line-height:1.9;margin-bottom:14px;
+}
 .aib strong{font-weight:700;color:var(--dark)}
-.aib ul{list-style:none;margin:8px 0 16px}
-.aib ul li{font-family:'Lato',sans-serif;padding:7px 0 7px 20px;border-bottom:1px solid var(--border);font-size:12px;position:relative;line-height:1.6}
+.aib ul{list-style:none;margin:10px 0 18px}
+.aib ul li{
+  font-family:'Lato',sans-serif;
+  padding:9px 0 9px 22px;border-bottom:1px solid var(--border);
+  font-size:14px;position:relative;line-height:1.65;
+}
 .aib ul li:last-child{border-bottom:none}
 .aib ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
 
 .ical{
-  background:linear-gradient(135deg,rgba(176,138,62,.09),rgba(176,138,62,.04));
-  border:1px solid rgba(176,138,62,.2);border-left:4px solid var(--gold);
-  padding:18px 22px;margin:16px 0;
+  background:linear-gradient(135deg,rgba(176,138,62,.1),rgba(176,138,62,.04));
+  border:1px solid rgba(176,138,62,.2);border-left:5px solid var(--gold);
+  padding:20px 24px;margin:18px 0;
 }
-.ical-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:7px;font-weight:700}
-.ical p{font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.7;margin:0}
+.ical-lbl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700;
+}
+.ical p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.75;margin:0}
 
-/* 2-col cards */
+/* Cards 2-col */
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.rc{padding:20px 24px;border:1px solid var(--border);border-left:4px solid var(--border)}
+.rc{padding:20px 24px;border:1px solid var(--border);border-left:5px solid var(--border)}
 .rc.gold{border-left-color:var(--gold)}
 .rc.red{border-left-color:var(--red)}
 .rc.blue{border-left-color:var(--blue)}
 .rc.green{border-left-color:var(--green)}
 .rc.dk{background:var(--dark);border-color:var(--dark);border-left-color:var(--gold)}
-.rcl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
-.rcv{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--dark);margin-bottom:3px}
-.rc.dk .rcv{color:var(--gold-lt)}
-.rcd{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.5}
-.rc.dk .rcd{color:#555}
+.rcl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700;
+}
+.rcv{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:600;color:var(--dark);margin-bottom:4px;
+}
+.rc.dk .rcv{color:#e8c870}
+.rcd{font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);line-height:1.5}
+.rc.dk .rcd{color:#666}
 
-/* timeline table */
-.tl-intro{background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--gold);padding:22px 28px;margin-bottom:20px}
-.tl-intro-title{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700}
-.tl-intro-body{font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.8;margin-bottom:10px}
-.tl-intro-list{list-style:none}
-.tl-intro-list li{font-family:'Lato',sans-serif;padding:5px 0 5px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative}
-.tl-intro-list li:last-child{border-bottom:none}
-.tl-intro-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+/* Timeline intro box */
+.tl-intro{
+  background:var(--bg);border:1px solid var(--border);
+  border-left:5px solid var(--gold);padding:24px 28px;margin-bottom:20px;
+}
+.tl-intro-title{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700;
+}
+.tl-intro-body{
+  font-family:'Lato',sans-serif;font-size:14px;
+  color:var(--text);line-height:1.85;margin-bottom:12px;
+}
+.tl-list{list-style:none}
+.tl-list li{
+  font-family:'Lato',sans-serif;padding:7px 0 7px 20px;
+  border-bottom:1px solid var(--border);font-size:13px;
+  position:relative;line-height:1.6;
+}
+.tl-list li:last-child{border-bottom:none}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.tl-note{
+  font-family:'Lato',sans-serif;font-size:11px;
+  color:var(--muted);margin-top:10px;font-style:italic;
+}
+
+/* Timeline table */
 .tlt{width:100%;border-collapse:collapse;margin-top:16px}
-.tlt th{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:9px 14px;border-bottom:2px solid var(--border);text-align:left;font-weight:700}
-.tlt td{font-family:'Lato',sans-serif;padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px}
+.tlt th{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;font-weight:700;
+}
+.tlt td{
+  font-family:'Lato',sans-serif;padding:10px 14px;
+  border-bottom:1px solid var(--border);font-size:13px;
+}
 .tlt tr.cur td{background:var(--gold-dim);font-weight:700}
-.tltag{display:inline-block;font-size:8px;padding:2px 7px;background:var(--dark);color:var(--gold-lt);letter-spacing:1px}
+.tltag{
+  display:inline-block;font-size:9px;padding:2px 8px;
+  background:var(--dark);color:#e8c870;letter-spacing:1px;
+}
 
-/* monthly */
-.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
-.mc{padding:14px;border-top:3px solid var(--border);border:1px solid var(--border);border-top:3px solid var(--border);background:var(--bg)}
+/* Monthly grid */
+.men-header{
+  background:var(--dark);padding:18px 24px;margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.mh-lbl{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.mh-val{font-family:'Cormorant Garamond',serif;font-size:21px;color:#e8c870;margin-bottom:3px}
+.mh-next{font-family:'Lato',sans-serif;font-size:12px;color:#555}
+
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mc{
+  padding:14px 12px;background:var(--bg);
+  border:1px solid var(--border);border-top:3px solid var(--border);
+}
 .mc.hl{border-top-color:var(--gold);background:var(--gold-dim)}
-.mn{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1}
-.mname{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
-.mtheme{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:2px}
-.mact{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);line-height:1.4}
+.mn{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);line-height:1;margin-bottom:2px}
+.mname{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:7px;font-weight:700;
+}
+.mtheme{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--dark);margin-bottom:3px}
+.mact{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.45}
 
-/* plan */
-.pphase{border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
-.pph-hdr{background:var(--dark);padding:16px 22px;display:flex;align-items:center;gap:16px}
-.pph-n{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);line-height:1}
-.pph-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:#555;text-transform:uppercase;font-weight:700}
-.pph-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff}
-.pph-body{padding:20px 24px;background:var(--white)}
-.pw{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+/* Plan */
+.pphase{border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.pph-hdr{
+  background:var(--dark);padding:18px 24px;
+  display:flex;align-items:center;gap:18px;
+}
+.pph-n{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);line-height:1}
+.pph-lbl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:#666;text-transform:uppercase;font-weight:700;margin-bottom:2px;
+}
+.pph-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff}
+.pph-body{padding:22px 28px;background:var(--white)}
+
+.pw{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
 .pw:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.pwl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:4px;font-weight:700}
-.pwt{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--dark);margin-bottom:5px}
+.pwl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:5px;font-weight:700;
+}
+.pwt{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:600;color:var(--dark);margin-bottom:8px;
+}
 .pwa{list-style:none}
-.pwa li{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);padding:4px 0 4px 14px;position:relative;line-height:1.5}
+.pwa li{
+  font-family:'Lato',sans-serif;font-size:13px;color:var(--muted);
+  padding:5px 0 5px 16px;position:relative;line-height:1.6;
+}
 .pwa li::before{content:'—';position:absolute;left:0;color:var(--gold)}
 
-/* ══ CTA ══ */
+/* ══════════════════════════════════
+   CTA PAGE
+══════════════════════════════════ */
 .cta-page{
   background:var(--dark);
-  min-height:180mm;
-  padding:64px 72px;
+  padding:64px var(--pad);
   position:relative;overflow:hidden;
 }
 .cta-page::before{
   content:'';position:absolute;
-  width:440px;height:440px;border-radius:50%;
-  background:radial-gradient(circle,rgba(176,138,62,.05) 0%,transparent 70%);
-  top:50%;right:-80px;transform:translateY(-50%);
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(176,138,62,.06) 0%,transparent 70%);
+  top:50%;right:-100px;transform:translateY(-50%);
 }
-.cta-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;font-weight:700;position:relative;z-index:1}
-.cta-h{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:#fff;margin-bottom:14px;line-height:1.05;position:relative;z-index:1}
-.cta-h em{font-style:italic;color:var(--gold-lt)}
-.cta-div{width:50px;height:1px;background:var(--gold);margin:22px 0;position:relative;z-index:1}
-.cta-body{font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.45);max-width:520px;line-height:1.9;margin-bottom:36px;position:relative;z-index:1}
-.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:40px;position:relative;z-index:1}
-.cta-card{background:rgba(255,255,255,.04);border:1px solid rgba(176,138,62,.15);padding:22px 24px}
-.cta-card-icon{font-size:22px;margin-bottom:10px}
-.cta-card-title{font-family:'Cormorant Garamond',serif;font-size:17px;color:#fff;margin-bottom:6px}
-.cta-card-desc{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.3);line-height:1.6}
+.cta-eye{
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:20px;
+  font-weight:700;position:relative;z-index:1;
+}
+.cta-h{
+  font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;
+  color:#fff;margin-bottom:16px;line-height:1.02;
+  position:relative;z-index:1;
+}
+.cta-h em{font-style:italic;color:#e8c870}
+.cta-div{width:52px;height:2px;background:var(--gold-lt);margin:24px 0;position:relative;z-index:1}
+.cta-body{
+  font-family:'Lato',sans-serif;font-size:15px;
+  color:rgba(255,255,255,.5);max-width:540px;
+  line-height:1.9;margin-bottom:36px;position:relative;z-index:1;
+}
+.cta-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:44px;position:relative;z-index:1;
+}
+.cta-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(201,165,90,.2);
+  padding:24px 22px;
+}
+.cta-icon{font-size:24px;margin-bottom:12px}
+.cta-card-title{
+  font-family:'Cormorant Garamond',serif;font-size:19px;
+  color:#fff;margin-bottom:8px;font-weight:400;
+}
+.cta-card-desc{
+  font-family:'Lato',sans-serif;font-size:13px;
+  color:rgba(255,255,255,.38);line-height:1.65;
+}
 .cta-bottom{text-align:center;position:relative;z-index:1}
 .cta-btn{
   display:inline-block;background:var(--gold);color:var(--dark);
-  padding:17px 48px;font-family:'Lato',sans-serif;
-  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
+  padding:18px 52px;font-family:'Lato',sans-serif;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
 }
-.cta-note{font-family:'Lato',sans-serif;font-size:10px;color:rgba(255,255,255,.18);margin-top:16px;letter-spacing:1px}
+.cta-note{
+  font-family:'Lato',sans-serif;font-size:11px;
+  color:rgba(255,255,255,.2);margin-top:16px;letter-spacing:1px;
+}
+.cta-bar{height:5px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold))}
 
-/* bottom bar on last page */
-.cover-bar-bottom{height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-lt),var(--gold))}
-
+/* ══════════════════════════════════
+   PRINT
+══════════════════════════════════ */
 @media print{
-  /* Hide UI */
+  .preview-bar,
+  body{background:white!important;padding:0}
+  .page{
+    width:100%!important;margin:0!important;
+    box-shadow:none!important;page-break-after:always;
+  }
+  .cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cover-bar,.cta-bar{-webkit-print-color-adjust:exact}
+  .sec-hdr,.pph-hdr,.men-header,.cta-page{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .aib,.cgrid,.pphase,.tl-intro,.ical{page-break-inside:avoid}
+  .mgrid{-webkit-print-color-adjust:exact}
+}
+
+/* pdf-page-wrap: screen shadow, removed in print */
+.pdf-page-wrap{
+  width:210mm;margin:0 auto 24px;
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  overflow:hidden;
+}
+@media print{
   .hdr,.client-actions,.no-print,#sc-login,#sc-dash{display:none!important}
-  body{background:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:white!important;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .screen{display:none!important;min-height:0}
   #sc-client{display:block!important;padding:0}
   .client-hdr,.client-body{display:none!important}
-
-  /* Show PDF pages */
-  .pdf-page-wrap{display:block!important;box-shadow:none!important;margin:0!important;width:100%!important}
-  .cover{page-break-after:always;background:#0c0b08!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .cover-bar,.cover-bar-bottom{background:var(--gold)!important;-webkit-print-color-adjust:exact}
-  .intro-page{page-break-after:always}
-  .sec-page{page-break-after:always}
-  .sec-hdr{background:#0c0b08!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .cta-page{background:#0c0b08!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;page-break-after:always}
-
-  /* Dark backgrounds */
-  .pph-hdr{background:#0c0b08!important;-webkit-print-color-adjust:exact}
-  .pph-title{color:#fff!important}
-  .rc.dk{background:#0c0b08!important;-webkit-print-color-adjust:exact}
-  .rc.dk .rcv{color:#c9a55a!important}.rc.dk .rcd{color:#666!important}
-  .tltag{background:#0c0b08!important;color:#c9a55a!important;-webkit-print-color-adjust:exact}
-  .ical,.tl-intro{-webkit-print-color-adjust:exact}
-  .mc.hl{-webkit-print-color-adjust:exact}
-  .mgrid{grid-template-columns:repeat(4,1fr)!important}
-  .cgrid{page-break-inside:avoid}
-  .pphase{page-break-inside:avoid}
-  .aib{page-break-inside:avoid}
+  .pdf-page-wrap{
+    display:block!important;width:100%!important;
+    margin:0!important;box-shadow:none!important;
+    page-break-after:always;
+  }
+  .cover,.cta-page,.sec-hdr,.pph-hdr,.men-header{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .cover-bar,.cta-bar,.cover-line,.intro-div{-webkit-print-color-adjust:exact}
+  .aib,.cgrid,.pphase,.tl-intro,.ical{page-break-inside:avoid}
+  .mgrid{-webkit-print-color-adjust:exact;grid-template-columns:repeat(4,1fr)!important}
   *{box-shadow:none!important}
-}
-
-@media(max-width:768px){
-  .hdr{padding:0 16px}.client-hdr{padding:32px 20px}
-  .client-body,.client-actions{padding-left:20px;padding-right:20px}
-  .dash-stats,.cgrid,.ans-grid{grid-template-columns:1fr}
-  .mgrid{grid-template-columns:repeat(2,1fr)}
-  #sc-dash{padding:20px}
-  .dash-top{flex-direction:column;align-items:flex-start;gap:12px}
-  .cta-items{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -467,12 +662,14 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
   </div>
 
   <!-- ════════════════════════
-       PDF STRUCTURE (approved preview layout)
+       PDF STRUCTURE — v2 approved layout
   ════════════════════════ -->
 
-  <!-- CAPA -->
+  <!-- ══════════════════════════════════
+     P1 — CAPA
+══════════════════════════════════ -->
 <div class="pdf-page-wrap">
-  <div class="cover" id="pdf-cover">
+  <div class="cover">
     <div class="cover-bar"></div>
     <div class="cover-body">
       <div class="cover-brand">CÓDIGO DE CARREIRA</div>
@@ -480,7 +677,11 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
       <h1 class="cover-name" id="pdf-name">Janaina</h1>
       <p class="cover-archetype" id="pdf-archetype">O Parceiro Estratégico</p>
       <div class="cover-line"></div>
-      <p class="cover-tagline" id="pdf-tagline">A Rota da Parceria e Influência.</p>
+      <p class="cover-tagline" id="pdf-tagline">
+        Direção: A Rota da Parceria e Influência<br>
+        Motivação central: Harmonia e Cooperação<br>
+        Código anual: Início — Plantio e Iniciativa
+      </p>
     </div>
     <div class="cover-footer">
       <div class="cf-brand">Código de Carreira</div>
@@ -489,13 +690,15 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
   </div>
 </div>
 
-  <!-- ══ PÁGINA 2: INTRODUÇÃO ══ -->
+<!-- ══════════════════════════════════
+     P2 — INTRODUÇÃO
+══════════════════════════════════ -->
 <div class="pdf-page-wrap">
-  <div class="intro-page">
-    <div class="page-hdr">
-      <div class="ph-brand">Código de Carreira</div>
-      <div class="ph-client" id="pdf-intro-client">JANAINA · DIAGNÓSTICO ESTRATÉGICO</div>
-    </div>
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client" id="pdf-intro-client">JANAINA · DIAGNÓSTICO ESTRATÉGICO</div>
+  </div>
+  <div class="intro-body-wrap">
     <div class="intro-eye">Bem-vindo ao seu diagnóstico</div>
     <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
     <div class="intro-div"></div>
@@ -507,7 +710,7 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
         <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira ou posicionamento.</li>
         <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
         <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
-        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória. O que o momento pede de você agora.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de você agora.</li>
         <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
         <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
       </ul>
@@ -519,221 +722,371 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
   </div>
 </div>
 
-  <!-- ══ PÁGINA 3: TALENTO ══ -->
+<!-- ══════════════════════════════════
+     P3 — TALENTO PRINCIPAL
+══════════════════════════════════ -->
 <div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="01">
-      <div class="sh-eye">01 — Ativo Mais Rentável</div>
-      <h2 class="sh-title">Talento <em>Principal</em></h2>
-      <p class="sh-sub">O padrão que gera faturamento com menor desgaste.</p>
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 01 — TALENTO PRINCIPAL</div>
+  </div>
+  <div class="sec-hdr" data-n="01" id="pdf-sec-01">
+    <div class="sh-eye">01 — Ativo Mais Rentável</div>
+    <h2 class="sh-title">Talento <em>Principal</em></h2>
+    <p class="sh-sub">O padrão que gera faturamento com menor desgaste.</p>
+  </div>
+  <div class="sec-body" id="pdf-tal-body">
+    <div class="aib">
+      <h3>O Parceiro Estratégico</h3>
+      <p>Você funciona como <strong>O Parceiro Estratégico</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você tem uma forma específica de gerar valor através da diplomacia, da cooperação e do ajuste fino de detalhes que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia em atividades que exigem isolamento ou força bruta, quando o seu padrão natural é a influência e a mediação.</p>
+      <p>Quando você opera dentro do perfil de O Parceiro Estratégico, sua entrega é exponencialmente superior à média. Você transforma conflitos em cooperação, desorganização em harmonia, e ambientes complexos em estruturas que funcionam. Trabalhar contra esse padrão — assumindo posições de liderança solitária ou aceitando qualquer trabalho que chega — é a principal causa de estagnação de faturamento.</p>
+      <h3>Sua Diretriz de Faturamento</h3>
+      <p>O mercado paga mais por especialistas posicionados com clareza. Como O Parceiro Estratégico, você gera valor máximo quando filtra suas atividades por alinhamento com seu padrão de mediação e influência. Sua força reside no "nós": onde houver conflito ou desorganização interpessoal, existe uma oportunidade de valorização para você.</p>
+      <h3>Seu Posicionamento de Autoridade</h3>
+      <p>Busque parcerias e sociedades onde a sensibilidade estratégica e a gestão de relacionamentos sejam o centro. Posicione-se como a referência que une partes divergentes e faz projetos complexos funcionarem em harmonia — esse é o seu diferencial competitivo inimitável.</p>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Audite sua agenda desta semana: quantas horas estão em atividades que ativam seu padrão de mediação, cooperação e influência? Se menos de 50%, reposicione imediatamente — o faturamento segue o alinhamento.</p>
+      </div>
     </div>
-    <div class="sec-body" id="pdf-tal-body">
-      <div class="aib">
-        <h3>O Parceiro Estratégico</h3>
-        <p>Você funciona como <strong>O Parceiro Estratégico</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você tem uma forma específica de gerar valor através da diplomacia, da cooperação e do ajuste fino de detalhes que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia em atividades que exigem isolamento ou força bruta, quando o seu padrão natural é a influência e a mediação.</p>
-        <p>Quando você opera dentro do perfil de O Parceiro Estratégico, sua entrega é exponencialmente superior à média. Você transforma conflitos em cooperação, desorganização em harmonia, e ambientes complexos em estruturas que funcionam. Trabalhar contra esse padrão — assumindo posições de liderança solitária ou tarefas altamente técnicas sem interação humana — é a principal causa de estagnação de faturamento no seu caso.</p>
-        <h3>Sua Diretriz de Faturamento</h3>
-        <p>O mercado paga mais por especialistas posicionados com clareza. Como O Parceiro Estratégico, você gera valor máximo quando filtra suas atividades por alinhamento com seu padrão de mediação e influência — não quando aceita qualquer projeto que chega. Sua força reside no "nós": onde houver conflito ou desorganização interpessoal, existe uma oportunidade de valorização para você.</p>
-        <h3>Seu Posicionamento de Autoridade</h3>
-        <p>Busque parcerias e sociedades onde a sensibilidade estratégica e a gestão de relacionamentos sejam o centro. Sua autoridade se constrói pela consistência de entrega dentro do padrão de O Parceiro Estratégico — não por tentar operar no isolamento absoluto.</p>
-        <div class="ical">
-          <div class="ical-lbl">⚡ Insight para Ação</div>
-          <p>Audite sua agenda desta semana: quantas horas estão em atividades que ativam seu padrão de mediação, cooperação e influência? Se menos de 50%, reposicione imediatamente — o faturamento segue o alinhamento.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P4 — DIREÇÃO ESTRATÉGICA
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 02 — DIREÇÃO ESTRATÉGICA</div>
+  </div>
+  <div class="sec-hdr" data-n="02">
+    <div class="sh-eye">02 — Caminho de Maior Faturamento</div>
+    <h2 class="sh-title">Direção <em>Estratégica</em></h2>
+    <p class="sh-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p>
+  </div>
+  <div class="sec-body" id="pdf-dir-body">
+    <div class="aib">
+      <h3>A Rota do Visionário Inspirador</h3>
+      <p>Sua direção estratégica aponta para <strong>A Rota do Visionário Inspirador</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico. Quando você trabalha alinhada com essa direção, liderando através da visão estratégica e da inspiração — não da força bruta —, o faturamento vem com mais naturalidade e menos desgaste. Quando você trabalha contra ela, gasta o dobro de energia para metade do resultado.</p>
+      <p>Você encontrará resistência se tentar ser "normal" nesse percurso — seu faturamento real vem de se posicionar como referência visionária no seu nicho. O mercado não paga pelo seu esforço, paga pela sua direção estratégica e pelo seu posicionamento de autoridade. Essa é a diferença entre esforço sem retorno e crescimento consistente.</p>
+      <h3>Cenário de Retorno Financeiro</h3>
+      <p>O retorno mais previsível para você, com a direção de Visionário Inspirador, vem de posicionamentos como consultora estratégica, mentora ou especialista em nichos de inovação e transformação. Antes de tentar escalar, construa autoridade percebida — torne-se um recurso escasso e de alto valor no seu mercado.</p>
+      <h3>Sua Diretriz de Transição</h3>
+      <p>Abandone projetos e clientes que exigem conformidade. Sua transição deve ser para espaços onde sua visão de futuro e capacidade de inspirar sejam o diferencial competitivo. Elimine serviços que não refletem seu padrão de excelência e concentre-se no que gera autoridade percebida.</p>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Defina agora: qual nicho específico maximiza o seu perfil de O Parceiro Estratégico e a sua direção como Visionário Inspirador? Foque nele e recuse o restante nos próximos 30 dias. Essa decisão vale mais do que qualquer curso.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P5 — BLOQUEIO
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 03 — PONTOS DE BLOQUEIO</div>
+  </div>
+  <div class="sec-hdr" data-n="03">
+    <div class="sh-eye">03 — O Que Está Travando o Faturamento</div>
+    <h2 class="sh-title">Pontos de <em>Bloqueio</em></h2>
+    <p class="sh-sub">Padrões que drenam esforço sem retorno proporcional.</p>
+  </div>
+  <div class="sec-body" id="pdf-blq-body">
+    <div class="aib">
+      <h3>A Liberdade sem Instabilidade</h3>
+      <p>Seu padrão de bloqueio opera de forma sutil — frequentemente mascarado de busca por variedade, necessidade de novas experiências ou insatisfação com o atual. Para o seu perfil de O Parceiro Estratégico, o risco não é você travar de forma óbvia, mas sim mudar de direção constantemente nos momentos em que as coisas estão prestes a decolar. Você tende à instabilidade excessiva — muda de ideia quando está sob pressão financeira, exatamente quando mais precisa de consistência.</p>
+      <p>Os sabotadores que você reconhece em si mesma — <strong>dispersão e medo de arriscar</strong> — são manifestações diretas desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência: é o padrão de bloqueio operando para mantê-la onde está, disfarçado de prudência ou de busca por algo melhor.</p>
+      <h3>O Impacto no Seu Faturamento</h3>
+      <p>Com sua desvalorização financeira em <strong>5/10</strong> e facilidade de cobrança em <strong>5/10</strong>, esse bloqueio está custando faturamento real todo mês. Cada vez que você muda de direção antes do resultado aparecer, perde o investimento já feito e recomeça do zero — gastando energia que deveria estar convertendo em receita consistente.</p>
+      <h3>Seu Protocolo de Superação</h3>
+      <ul>
+        <li>Identifique a última decisão onde você mudou de direção antes do resultado — esse é o gatilho do padrão</li>
+        <li>Crie uma regra: "Antes de mudar, preciso de 90 dias de execução consistente no caminho atual"</li>
+        <li>Revisão semanal de 15 minutos: o que operou dentro do seu padrão? O que ficou fora?</li>
+        <li>Encontre um par de responsabilidade que te confronte quando o padrão de instabilidade ressurgir</li>
+      </ul>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Identifique agora: qual projeto ou decisão você está postergando ou prestes a abandonar? Antes de mudar, execute por mais 30 dias com total comprometimento. O faturamento está do outro lado da consistência.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P6 — LINHA DO TEMPO (intro + cards)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 04 — LINHA DO TEMPO E CICLOS</div>
+  </div>
+  <div class="sec-hdr" data-n="04">
+    <div class="sh-eye">04 — Timing Estratégico</div>
+    <h2 class="sh-title">Linha do Tempo e <em>Ciclos</em></h2>
+    <p class="sh-sub">Fases ativas e o momento certo para cada decisão.</p>
+  </div>
+  <div class="sec-body" id="pdf-tl-body">
+    <div class="tl-intro">
+      <div class="tl-intro-title">Como ler esta seção</div>
+      <p class="tl-intro-body">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p>
+      <ul class="tl-list">
+        <li><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos ao longo da vida: Formativo, Produtivo e Colheita.</li>
+        <li><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li>
+        <li><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li>
+      </ul>
+      <p class="tl-note">Os itens marcados como <strong>ATUAL</strong> estão ativos para você hoje, com 44 anos.</p>
+    </div>
+    <div class="cgrid">
+      <div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">O Estrategista</div><div class="rcd">2º Ciclo (Produtivo) · 26–52 anos</div></div>
+      <div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">O Arquiteto</div><div class="rcd">4º Pináculo · 44–∞ anos</div></div>
+    </div>
+    <div class="cgrid">
+      <div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">A Liberdade sem Instabilidade</div><div class="rcd">3º Desafio (Principal)</div></div>
+      <div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">O Catalisador</div><div class="rcd">Talento + Direção</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P7 — LINHA DO TEMPO (tabela completa)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 04 — HISTÓRICO COMPLETO</div>
+  </div>
+  <div class="sec-body" id="pdf-tl-table"> style="padding-top:36px">
+    <p style="font-family:'Lato',sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;font-weight:700">Histórico Completo de Ciclos e Pináculos</p>
+    <table class="tlt">
+      <thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead>
+      <tbody>
+        <tr><td>1º Ciclo (Formativo)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>0–25 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 2º Ciclo (Produtivo)</td><td>Ciclo</td><td>O Estrategista</td><td>26–52 anos</td></tr>
+        <tr><td>3º Ciclo (Colheita)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>53–∞ anos</td></tr>
+        <tr><td>1º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>0–25 anos</td></tr>
+        <tr><td>2º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>26–34 anos</td></tr>
+        <tr><td>3º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>35–43 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 4º Pináculo</td><td>Pináculo</td><td>O Arquiteto</td><td>44–∞ anos</td></tr>
+        <tr><td>1º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>0–25 anos</td></tr>
+        <tr><td>2º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>26–34 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 3º Desafio (Principal)</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>35–43 anos</td></tr>
+        <tr><td>4º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>44–∞ anos</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P8 — CALENDÁRIO PESSOAL
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 05 — CALENDÁRIO PESSOAL</div>
+  </div>
+  <div class="sec-hdr" data-n="05">
+    <div class="sh-eye">05 — Termômetro Mensal</div>
+    <h2 class="sh-title">Código Pessoal e <em>Calendário</em></h2>
+    <p class="sh-sub">O que cada mês pede de você — planejamento tático.</p>
+  </div>
+  <div class="sec-body" id="pdf-men-body">
+    <div class="men-header">
+      <div class="mh-lbl">Código Anual Ativo</div>
+      <div class="mh-val">Início — Plantio e Iniciativa</div>
+      <div class="mh-next">Próximo código: Gestação — Parceria e Paciência</div>
+    </div>
+    <div class="mgrid">
+      <div class="mc"><div class="mn">2</div><div class="mname">Janeiro</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, construa parcerias.</div></div>
+      <div class="mc"><div class="mn">3</div><div class="mname">Fevereiro</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing, vendas, visibilidade.</div></div>
+      <div class="mc"><div class="mn">4</div><div class="mname">Março</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Organize processos e finanças.</div></div>
+      <div class="mc"><div class="mn">5</div><div class="mname">Abril</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Aceite o inesperado.</div></div>
+      <div class="mc hl"><div class="mn">1</div><div class="mname">Maio ◀</div><div class="mtheme">Início e Novos Começos</div><div class="mact">Lance, comece, marque presença.</div></div>
+      <div class="mc"><div class="mn">2</div><div class="mname">Junho</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, parcerias.</div></div>
+      <div class="mc"><div class="mn">3</div><div class="mname">Julho</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing e vendas.</div></div>
+      <div class="mc"><div class="mn">4</div><div class="mname">Agosto</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Foco no método e entrega.</div></div>
+      <div class="mc"><div class="mn">5</div><div class="mname">Setembro</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Flexibilidade gera faturamento.</div></div>
+      <div class="mc"><div class="mn">6</div><div class="mname">Outubro</div><div class="mtheme">Responsabilidade e Equilíbrio</div><div class="mact">Qualidade gera indicações.</div></div>
+      <div class="mc"><div class="mn">7</div><div class="mname">Novembro</div><div class="mtheme">Estratégia e Planejamento</div><div class="mact">Planeje e refine a oferta.</div></div>
+      <div class="mc"><div class="mn">8</div><div class="mname">Dezembro</div><div class="mtheme">Resultados e Autoridade</div><div class="mact">Cobranças e autoridade.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P9 — PLANO 90 DIAS (Fase 1)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 06 — PLANO DE 90 DIAS</div>
+  </div>
+  <div class="sec-hdr" data-n="06">
+    <div class="sh-eye">06 — Execução Prática</div>
+    <h2 class="sh-title">Plano de <em>90 Dias</em></h2>
+    <p class="sh-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p>
+  </div>
+  <div class="sec-body" id="pdf-plan-body">
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">1</div>
+        <div>
+          <div class="pph-lbl">Fase 1 · Dias 1–30</div>
+          <div class="pph-title">Limpeza e Foco — Eliminar o que drena, ativar o que gera</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semana 1</div>
+          <div class="pwt">Auditoria de alinhamento</div>
+          <ul class="pwa">
+            <li>Liste todas as atividades atuais: ativa ou não o seu padrão de O Parceiro Estratégico</li>
+            <li>Identifique os 3 projetos que mais consomem energia sem retorno proporcional</li>
+            <li>Mapeie decisões pendentes que o padrão de instabilidade adiou</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 2</div>
+          <div class="pwt">Eliminação estratégica</div>
+          <ul class="pwa">
+            <li>Encerre ou renegocie pelo menos 1 contrato desalinhado com o seu padrão natural</li>
+            <li>Reposicione sua oferta principal como Parceiro Estratégico e Visionário Inspirador</li>
+            <li>Defina nicho prioritário onde mediação e visão estratégica são o diferencial</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 3</div>
+          <div class="pwt">Posicionamento inicial</div>
+          <ul class="pwa">
+            <li>Reescreva sua bio profissional alinhada ao seu padrão de O Parceiro Estratégico</li>
+            <li>Atualize proposta de valor com linguagem de autoridade e impacto</li>
+            <li>Mapeie 5 oportunidades onde seu padrão gera valor máximo</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 4</div>
+          <div class="pwt">Consolidação da base</div>
+          <ul class="pwa">
+            <li>Organize processos que liberam tempo para trabalho de alto impacto</li>
+            <li>Defina política de preços alinhada ao valor do seu padrão estratégico</li>
+            <li>Planeje o mês 2 com base no timing do seu código anual atual</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-  <!-- ══ PÁGINA 4: DIREÇÃO ══ -->
+<!-- ══════════════════════════════════
+     P10 — PLANO 90 DIAS (Fases 2 e 3)
+══════════════════════════════════ -->
 <div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="02">
-      <div class="sh-eye">02 — Caminho de Maior Faturamento</div>
-      <h2 class="sh-title">Direção <em>Estratégica</em></h2>
-      <p class="sh-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p>
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 06 — PLANO DE 90 DIAS (continuação)</div>
+  </div>
+  <div class="sec-body" id="pdf-plan-body2"> style="padding-top:36px">
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">2</div>
+        <div>
+          <div class="pph-lbl">Fase 2 · Dias 31–60</div>
+          <div class="pph-title">Execução e Posicionamento — Construir autoridade percebida</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semana 5</div>
+          <div class="pwt">Lançamento de autoridade</div>
+          <ul class="pwa">
+            <li>Crie e distribua conteúdo que demonstre sua capacidade visionária e estratégica</li>
+            <li>Faça 5 conversas com potenciais clientes que precisam de mediação e visão</li>
+            <li>Apresente nova oferta posicionada para pelo menos 3 parceiros estratégicos</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 6</div>
+          <div class="pwt">Expansão de relacionamentos</div>
+          <ul class="pwa">
+            <li>Mapeie sua rede: quem impulsiona seu padrão e quem drena</li>
+            <li>Agende reuniões com 3 parceiros estratégicos potenciais</li>
+            <li>Implemente processo de indicação ativa com clientes alinhados</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semanas 7 e 8</div>
+          <div class="pwt">Refinamento e aceleração</div>
+          <ul class="pwa">
+            <li>Ajuste preço baseado no posicionamento de autoridade conquistado</li>
+            <li>Crie um caso de sucesso documentado para uso em vendas</li>
+            <li>Duplique esforço no canal que mais gerou retorno nas semanas anteriores</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="sec-body" id="pdf-dir-body">
-      <div class="aib">
-        <h3>A Rota do Visionário Inspirador</h3>
-        <p>Sua direção estratégica aponta para <strong>A Rota do Visionário Inspirador</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico. Quando você trabalha alinhada com essa direção, liderando através da visão estratégica e da inspiração — não da força bruta —, o faturamento vem com mais naturalidade e menos desgaste.</p>
-        <p>No seu estado atual de transição, alinhar suas ações com essa direção é a diferença entre remar contra a maré e surfar a onda certa. Você encontrará resistência se tentar ser "normal" — seu faturamento real vem de se posicionar como referência visionária no seu nicho. O mercado não paga pelo seu esforço, paga pela sua direção estratégica e pelo seu posicionamento de autoridade.</p>
-        <h3>Cenário de Retorno Financeiro</h3>
-        <p>O retorno mais previsível para você, com a direção de Visionário Inspirador, vem de posicionamentos como consultora estratégica, mentora ou especialista em nichos de inovação e transformação. Antes de tentar escalar, construa autoridade percebida — torne-se um recurso escasso no seu mercado.</p>
-        <h3>Sua Diretriz de Transição</h3>
-        <p>Abandone projetos e clientes que exigem conformidade. Sua transição deve ser para espaços onde sua visão de futuro e capacidade de inspirar sejam o diferencial competitivo. Elimine serviços que não refletem seu padrão de excelência e concentre-se no que gera autoridade percebida.</p>
-        <div class="ical">
-          <div class="ical-lbl">⚡ Insight para Ação</div>
-          <p>Defina agora: qual nicho específico maximiza o seu perfil de O Parceiro Estratégico e a sua direção como Visionário Inspirador? Foque nele e recuse o restante nos próximos 30 dias.</p>
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">3</div>
+        <div>
+          <div class="pph-lbl">Fase 3 · Dias 61–90</div>
+          <div class="pph-title">Escala e Consolidação — Faturamento previsível e autoridade sólida</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semanas 9 e 10</div>
+          <div class="pwt">Escala e sistemas de crescimento</div>
+          <ul class="pwa">
+            <li>Lance versão de maior valor da oferta principal como Parceiro Estratégico de referência</li>
+            <li>Delegue atividades operacionais que não ativam o seu padrão natural</li>
+            <li>Defina meta de faturamento específica e mensurável para os próximos 90 dias</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semanas 11 e 12</div>
+          <div class="pwt">Autoridade de mercado e balanço</div>
+          <ul class="pwa">
+            <li>Publique posicionamento de autoridade em pelo menos 2 canais estratégicos</li>
+            <li>Solicite depoimentos que validam o seu padrão como O Parceiro Estratégico</li>
+            <li>Meça resultado dos 90 dias: faturamento, posicionamento e energia — e planeje o próximo ciclo</li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-  <!-- ══ PÁGINA 5: BLOQUEIO ══ -->
+<!-- ══════════════════════════════════
+     P11 — CTA MENTORIA
+══════════════════════════════════ -->
 <div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="03">
-      <div class="sh-eye">03 — O Que Está Travando o Faturamento</div>
-      <h2 class="sh-title">Pontos de <em>Bloqueio</em></h2>
-      <p class="sh-sub">Padrões que drenam esforço sem retorno proporcional.</p>
-    </div>
-    <div class="sec-body" id="pdf-blq-body">
-      <div class="aib">
-        <h3>A Liberdade sem Instabilidade</h3>
-        <p>Seu padrão de bloqueio opera de forma sutil — frequentemente mascarado de busca por variedade, necessidade de novas experiências ou insatisfação com o atual. Para o seu perfil de O Parceiro Estratégico, o risco não é você travar de forma óbvia, mas sim mudar de direção constantemente nos momentos em que as coisas estão prestes a decolar. Você tende a instabilidade excessiva — muda de ideia quando está sob pressão financeira, exatamente quando mais precisa de consistência.</p>
-        <p>Os sabotadores que você reconhece em si mesma — dispersão e medo de arriscar — são manifestações diretas desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência: é o padrão de bloqueio operando para mantê-la onde está, disfarçado de prudência ou de busca por algo melhor.</p>
-        <h3>O Impacto no Seu Faturamento</h3>
-        <p>Com sua desvalorização financeira em <strong>5/10</strong> e facilidade de cobrança em <strong>5/10</strong>, esse bloqueio está custando faturamento real todo mês. Cada vez que você muda de direção antes do resultado aparecer, perde o investimento já feito e recomeça do zero — gastando energia que deveria estar convertendo em receita.</p>
-        <h3>Seu Protocolo de Superação</h3>
-        <ul>
-          <li>Identifique a última decisão onde você mudou de direção antes do resultado — esse é o gatilho do padrão</li>
-          <li>Crie uma regra: "Antes de mudar, preciso de 90 dias de execução consistente no caminho atual"</li>
-          <li>Revisão semanal de 15 minutos: o que operou dentro do seu padrão? O que ficou fora?</li>
-          <li>Encontre um par de responsabilidade que te confronte quando o padrão de instabilidade ressurgir</li>
-        </ul>
-        <div class="ical">
-          <div class="ical-lbl">⚡ Insight para Ação</div>
-          <p>Identifique agora: qual projeto ou decisão você está postergando ou prestes a abandonar? Antes de mudar, execute por mais 30 dias com total comprometimento. O faturamento está do outro lado da consistência.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <!-- ══ PÁGINA 6: LINHA DO TEMPO ══ -->
-<div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="04">
-      <div class="sh-eye">04 — Timing Estratégico</div>
-      <h2 class="sh-title">Linha do Tempo e <em>Ciclos</em></h2>
-      <p class="sh-sub">Fases ativas e o momento certo para cada decisão.</p>
-    </div>
-    <div class="sec-body" id="pdf-tl-body">
-      <div class="tl-intro">
-        <div class="tl-intro-title">Como ler esta seção</div>
-        <p class="tl-intro-body">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p>
-        <ul class="tl-intro-list">
-          <li><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos: Formativo, Produtivo e Colheita.</li>
-          <li><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li>
-          <li><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li>
-        </ul>
-      </div>
-      <div class="cgrid">
-        <div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">O Estrategista</div><div class="rcd">2º Ciclo (Produtivo) · 26–52 anos (44 anos)</div></div>
-        <div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">O Executivo</div><div class="rcd">4º Pináculo · 44–∞ anos</div></div>
-      </div>
-      <div class="cgrid">
-        <div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">A Liberdade sem Instabilidade</div><div class="rcd">3º Desafio (Principal)</div></div>
-        <div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">O Catalisador</div><div class="rcd">Talento + Direção</div></div>
-      </div>
-      <table class="tlt">
-        <thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead>
-        <tbody>
-          <tr><td>1º Ciclo (Formativo)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>0–25 anos</td></tr>
-          <tr class="cur"><td><span class="tltag">ATUAL</span> 2º Ciclo (Produtivo)</td><td>Ciclo</td><td>O Estrategista</td><td>26–52 anos</td></tr>
-          <tr><td>3º Ciclo (Colheita)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>53–∞ anos</td></tr>
-          <tr class="cur"><td><span class="tltag">ATUAL</span> 4º Pináculo</td><td>Pináculo</td><td>O Arquiteto</td><td>44–∞ anos</td></tr>
-          <tr class="cur"><td><span class="tltag">ATUAL</span> 3º Desafio (Principal)</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>35–43 anos</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-  <!-- ══ PÁGINA 7: CALENDÁRIO ══ -->
-<div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="05">
-      <div class="sh-eye">05 — Termômetro Mensal</div>
-      <h2 class="sh-title">Código Pessoal e <em>Calendário</em></h2>
-      <p class="sh-sub">O que cada mês pede de você — planejamento tático.</p>
-    </div>
-    <div class="sec-body" id="pdf-men-body">
-      <div class="rc dk" style="margin-bottom:16px">
-        <div class="rcl">Código Anual Ativo</div>
-        <div class="rcv">Início — Plantio e Iniciativa</div>
-        <div class="rcd">Próximo código: Gestação — Parceria e Paciência</div>
-      </div>
-      <div class="mgrid">
-        <div class="mc"><div class="mn">2</div><div class="mname">Janeiro</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, construa parcerias.</div></div>
-        <div class="mc"><div class="mn">3</div><div class="mname">Fevereiro</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing, vendas, visibilidade.</div></div>
-        <div class="mc"><div class="mn">4</div><div class="mname">Março</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Organize processos, finanças.</div></div>
-        <div class="mc"><div class="mn">5</div><div class="mname">Abril</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Aceite o inesperado.</div></div>
-        <div class="mc hl"><div class="mn">1</div><div class="mname">Maio ◀</div><div class="mtheme">Início e Novos Começos</div><div class="mact">Lance, comece, marque presença.</div></div>
-        <div class="mc"><div class="mn">2</div><div class="mname">Junho</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, parcerias.</div></div>
-        <div class="mc"><div class="mn">3</div><div class="mname">Julho</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing e vendas.</div></div>
-        <div class="mc"><div class="mn">4</div><div class="mname">Agosto</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Foco no método e entrega.</div></div>
-        <div class="mc"><div class="mn">5</div><div class="mname">Setembro</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Flexibilidade gera faturamento.</div></div>
-        <div class="mc"><div class="mn">6</div><div class="mname">Outubro</div><div class="mtheme">Responsabilidade e Equilíbrio</div><div class="mact">Qualidade gera indicações.</div></div>
-        <div class="mc"><div class="mn">7</div><div class="mname">Novembro</div><div class="mtheme">Estratégia e Planejamento</div><div class="mact">Planeje e refine a oferta.</div></div>
-        <div class="mc"><div class="mn">8</div><div class="mname">Dezembro</div><div class="mtheme">Resultados e Autoridade</div><div class="mact">Cobranças e autoridade.</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <!-- ══ PÁGINA 8: PLANO 90 DIAS ══ -->
-<div class="pdf-page-wrap">
-  <div class="sec-page">
-    <div class="sec-hdr" data-n="06">
-      <div class="sh-eye">06 — Execução Prática</div>
-      <h2 class="sh-title">Plano de <em>90 Dias</em></h2>
-      <p class="sh-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p>
-    </div>
-    <div class="sec-body" id="pdf-plan-body">
-      <div class="pphase">
-        <div class="pph-hdr"><div class="pph-n">1</div><div><div class="pph-lbl">Fase 1 · Dias 1–30</div><div class="pph-title">Limpeza e Foco — Eliminar o que drena, ativar o que gera</div></div></div>
-        <div class="pph-body">
-          <div class="pw"><div class="pwl">Semana 1</div><div class="pwt">Auditoria de alinhamento</div><ul class="pwa"><li>Liste todas as atividades: ativa ou não o seu padrão de O Parceiro Estratégico</li><li>Identifique os 3 projetos que mais consomem energia sem retorno proporcional</li><li>Mapeie decisões pendentes que o padrão de instabilidade adiou</li></ul></div>
-          <div class="pw"><div class="pwl">Semana 2</div><div class="pwt">Eliminação estratégica</div><ul class="pwa"><li>Encerre ou renegocie pelo menos 1 contrato desalinhado com o seu padrão</li><li>Reposicione sua oferta principal como Visionário Inspirador com capacidade de parceria</li><li>Defina nicho prioritário onde mediação e visão estratégica são o diferencial</li></ul></div>
-          <div class="pw"><div class="pwl">Semana 3</div><div class="pwt">Posicionamento inicial</div><ul class="pwa"><li>Reescreva sua bio profissional alinhada ao seu padrão de O Parceiro Estratégico</li><li>Atualize proposta de valor com linguagem de autoridade e impacto</li><li>Mapeie 5 oportunidades onde seu padrão gera valor máximo</li></ul></div>
-          <div class="pw"><div class="pwl">Semana 4</div><div class="pwt">Consolidação da base</div><ul class="pwa"><li>Organize processos que liberam tempo para trabalho de alto impacto</li><li>Defina política de preços alinhada ao valor do seu padrão estratégico</li><li>Planeje o mês 2 com base no timing do seu código anual atual</li></ul></div>
-        </div>
-      </div>
-      <div class="pphase">
-        <div class="pph-hdr"><div class="pph-n">2</div><div><div class="pph-lbl">Fase 2 · Dias 31–60</div><div class="pph-title">Execução e Posicionamento — Construir autoridade percebida</div></div></div>
-        <div class="pph-body">
-          <div class="pw"><div class="pwl">Semana 5</div><div class="pwt">Lançamento de autoridade</div><ul class="pwa"><li>Crie e distribua conteúdo que demonstre sua capacidade visionária e estratégica</li><li>Faça 5 conversas com potenciais clientes que precisam de mediação e visão</li><li>Apresente nova oferta posicionada para pelo menos 3 parceiros estratégicos</li></ul></div>
-          <div class="pw"><div class="pwl">Semana 6–8</div><div class="pwt">Expansão, refinamento e aceleração</div><ul class="pwa"><li>Mapeie sua rede: quem impulsiona seu padrão e quem drena</li><li>Ajuste preço baseado no posicionamento de autoridade conquistado</li><li>Duplique esforço no canal que mais gerou retorno nas semanas anteriores</li></ul></div>
-        </div>
-      </div>
-      <div class="pphase">
-        <div class="pph-hdr"><div class="pph-n">3</div><div><div class="pph-lbl">Fase 3 · Dias 61–90</div><div class="pph-title">Escala e Consolidação — Faturamento previsível</div></div></div>
-        <div class="pph-body">
-          <div class="pw"><div class="pwl">Semana 9–12</div><div class="pwt">Escala, sistemas e autoridade de mercado</div><ul class="pwa"><li>Lance versão de maior valor da oferta principal como Visionário Estratégico</li><li>Delegue atividades que não ativam o seu padrão de O Parceiro Estratégico</li><li>Meça resultado dos 90 dias: faturamento, posicionamento, energia e consistência</li></ul></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <!-- ══ PÁGINA 9: CTA MENTORIA ══ -->
-<div class="pdf-page-wrap">
-  <div class="cta-page" id="pdf-cta">
+  <div class="cta-page">
     <div class="cta-eye">O diagnóstico está pronto. A execução é o próximo passo.</div>
     <h2 class="cta-h">Pronta para <em>executar</em><br>com precisão?</h2>
     <div class="cta-div"></div>
     <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
     <div class="cta-grid">
       <div class="cta-card">
-        <div class="cta-card-icon">🎯</div>
+        <div class="cta-icon">🎯</div>
         <div class="cta-card-title">3 Encontros Individuais</div>
         <div class="cta-card-desc">Sessões exclusivas construídas em cima do seu diagnóstico. Cada encontro tem objetivo claro e ações práticas baseadas no seu perfil específico.</div>
       </div>
       <div class="cta-card">
-        <div class="cta-card-icon">⚡</div>
+        <div class="cta-icon">⚡</div>
         <div class="cta-card-title">Ajustes em Tempo Real</div>
         <div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div>
       </div>
       <div class="cta-card">
-        <div class="cta-card-icon">📈</div>
+        <div class="cta-icon">📈</div>
         <div class="cta-card-title">Foco Total em Faturamento</div>
         <div class="cta-card-desc">Cada decisão será validada com base no seu perfil. Sem estratégia genérica — só o que funciona para o seu código específico.</div>
       </div>
       <div class="cta-card">
-        <div class="cta-card-icon">🔒</div>
+        <div class="cta-icon">🔒</div>
         <div class="cta-card-title">Exclusividade Total</div>
         <div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaço seguro para trabalhar os pontos mais profundos do seu padrão de crescimento.</div>
       </div>
@@ -743,8 +1096,10 @@ tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
       <p class="cta-note">Entre em contato para agendar sua primeira sessão</p>
     </div>
   </div>
-  <div class="cover-bar-bottom"></div>
+  <div class="cta-bar"></div>
 </div>
+
+
 </div><!-- end sc-client -->
 
 <script>
@@ -846,13 +1201,23 @@ function openClient(idx){
   document.getElementById('cMeta').textContent=`CÓDIGO DE CARREIRA · ${(c.apelido||c.nome||'').toUpperCase()} · CONFIDENCIAL`;
   document.getElementById('cName').textContent=c.apelido||c.nome||'—';
   document.getElementById('cArch').textContent=tn;
-  document.getElementById('cNums').innerHTML=[{v:c.expression,l:'Talento',n:tn},{v:c.destiny,l:'Direção',n:dn},{v:c.soul,l:'Motivação',n:MN2[c.soul]||'—'},{v:c.mission,l:'Missão',n:'Código de Vida'},{v:c.personalYear,l:'Código Anual',n:CT[c.personalYear]||'—'}].map(x=>`<div class="cn-item"><div class="cn-v">${x.v||'—'}</div><div class="cn-l">${x.l}</div><div class="cn-n">${x.n}</div></div>`).join('');
-  // PDF cover
-  document.getElementById('pdf-name').textContent=c.apelido||c.nome||'—';
-  document.getElementById('pdf-archetype').textContent=tn;
-  document.getElementById('pdf-tagline').textContent=`${dn}. Motivação central: ${MN2[c.soul]||'—'}. Código anual: ${CT[c.personalYear]||'—'}.`;
-  document.getElementById('pdf-date').textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
-  document.getElementById('pdf-intro-client').textContent=(c.apelido||c.nome||'').toUpperCase();
+  // PDF cover — dynamic fields
+  const _n=document.getElementById('pdf-name');
+  const _a=document.getElementById('pdf-archetype');
+  const _t=document.getElementById('pdf-tagline');
+  const _d=document.getElementById('pdf-date');
+  const _ic=document.getElementById('pdf-intro-client');
+  if(_n)_n.textContent=c.apelido||c.nome||'--';
+  if(_a)_a.textContent=tn;
+  if(_t)_t.innerHTML='Direcao: '+dn+'<br>Motivacao central: '+(MN2[c.soul]||'--')+'<br>Codigo anual: '+(CT[c.personalYear]||'--');
+  if(_d)_d.textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
+  if(_ic)_ic.textContent=(c.apelido||c.nome||'').toUpperCase()+' · DIAGNOSTICO ESTRATEGICO';
+  // Update all page headers
+  document.querySelectorAll('.ph-client').forEach(function(el){
+    var parts=el.textContent.split('·');
+    if(parts.length>1) el.textContent=(c.apelido||c.nome||'').toUpperCase()+' ·'+parts[1];
+    else el.textContent=(c.apelido||c.nome||'').toUpperCase();
+  });
   // Render answers
   renderAnswers(c);
   // Static sections
@@ -904,8 +1269,12 @@ function buildTL(c){
   [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{const isc=ag>=x.start&&(x.end===null||ag<=x.end);const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';tbl+=`<tr class="${isc?'cur':''}"><td>${isc?'<span class="tltag">ATUAL</span> ':''}${x.label}</td><td>${t}</td><td>${TN[x.num]||CH[x.num]||x.num}</td><td>${x.start}–${x.end??'∞'} anos</td></tr>`;});
   tbl+='</tbody></table>';
   const html=intro+cards+tbl;
+  const htmlCards=intro+cards;
   document.getElementById('c-tl').innerHTML=html;
-  document.getElementById('pdf-tl-body').innerHTML=html;
+  var _ptlb=document.getElementById('pdf-tl-body');
+  var _ptlt=document.getElementById('pdf-tl-table');
+  if(_ptlb)_ptlb.innerHTML=cards+tbl;
+  if(_ptlt)_ptlt.innerHTML=tbl;
 }
 
 function buildMen(c){
@@ -916,7 +1285,8 @@ function buildMen(c){
   grid+='</div>';
   const html=header+grid;
   document.getElementById('c-men').innerHTML=html;
-  document.getElementById('pdf-men-body').innerHTML=html;
+  var _pmb=document.getElementById('pdf-men-body');
+  if(_pmb)_pmb.innerHTML=html;
 }
 
 /* ══ GENERATE ══ */
@@ -966,7 +1336,12 @@ Dor: ${c.dor||'—'}
 Sonho: ${c.sonho||'—'}
 Bloqueio percebido: ${c.bloq||'—'}`;}
 
-function setContent(ids,html){ids.forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<div class="aib">${html}</div>`;});}
+function setContent(ids,html){
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.innerHTML='<div class="aib">'+html+'</div>';
+  });
+}
 
 async function aiTalento(c){
   ['c-tal','pdf-tal-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Analisando talento principal...</p></div>';});
@@ -995,7 +1370,7 @@ async function aiPlano(c){
   try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Plano de 90 Dias. Retorne APENAS JSON puro:\n{"fase1":{"titulo":"título fase 1","semanas":[{"titulo":"Semana 1: título","acoes":["ação1","ação2","ação3"]},{"titulo":"Semana 2: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 3: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 4: título","acoes":["a1","a2","a3"]}]},"fase2":{"titulo":"título fase 2","semanas":[{"titulo":"Semana 5: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 6: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 7: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 8: título","acoes":["a1","a2","a3"]}]},"fase3":{"titulo":"título fase 3","semanas":[{"titulo":"Semana 9: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 10: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 11: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 12: título","acoes":["a1","a2","a3"]}]}}\nAções específicas para: perfil ${c.expression} (${tn}), ocupação "${c.ocup}", estado "${c.estado}", sonho "${c.sonho||'crescer'}". Use o nome "${c.apelido}". Verbos de ação, concreto e mensurável.`);
     const plan=JSON.parse(t.replace(/```json|```/g,'').trim());
     const html=renderPlan(plan);
-    ['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
+    ['c-plan','pdf-plan-body','pdf-plan-body2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=html;});
   }catch(e){const html=renderPlan(fbPlan(c));['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
 }
 
