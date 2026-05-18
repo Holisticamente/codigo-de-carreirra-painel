@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Código de Carreira — Formulário</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f9f6f0;--dark:#0f0e0a;--gold:#b5873a;--gold-lt:#d4a85a;
+  --gold-dim:rgba(181,135,58,.12);--cream:#f0ebe0;--border:#e0d8c8;
+  --text:#1c1a14;--muted:#7a7260;--white:#fff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6}
+
+/* HEADER */
+.hdr{background:var(--dark);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px}
+.hdr-brand{font-family:'Cinzel',serif;font-size:13px;letter-spacing:5px;color:var(--gold-lt)}
+.hdr-tag{font-size:9px;letter-spacing:3px;color:#444;text-transform:uppercase}
+
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block}
+
+/* HERO */
+.hero{background:var(--dark);padding:64px 40px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'Σ';position:absolute;right:-20px;top:50%;transform:translateY(-50%);
+  font-family:'Cinzel',serif;font-size:280px;color:rgba(255,255,255,.02);pointer-events:none;line-height:1}
+.hero-eye{font-size:9px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
+.hero-h{font-family:'Cormorant',serif;font-size:clamp(36px,5vw,64px);font-weight:300;color:#fff;margin-bottom:16px}
+.hero-h em{font-style:italic;color:var(--gold-lt)}
+.hero-body{font-size:12px;color:#666;max-width:520px;margin:0 auto;line-height:1.9}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--cream);border-bottom:1px solid var(--border);padding:16px 40px}
+.prog-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:0}
+.prog-step{flex:1;text-align:center;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:#bbb;padding:8px 4px;border-bottom:2px solid var(--border);transition:all .3s}
+.prog-step.active{color:var(--gold);border-color:var(--gold)}
+.prog-step.done{color:var(--muted);border-color:var(--muted)}
+
+/* FORM */
+.fw{max-width:700px;margin:0 auto;padding:48px 32px 80px}
+.fb{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--border)}
+.fb:last-of-type{border-bottom:none}
+.fb-lbl{font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px}
+.fb-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.fg{margin-bottom:18px}
+.fg label{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:7px}
+.fg .hint{font-size:10px;color:var(--muted);margin-top:5px;font-style:italic}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--white);border:1px solid var(--border);
+  color:var(--text);padding:13px 16px;font-family:'IBM Plex Mono',monospace;font-size:13px;
+  outline:none;transition:border-color .2s;appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold)}
+.fg textarea{resize:vertical;min-height:80px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rg{display:flex;flex-direction:column;gap:8px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ro,.co{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
+  border:1px solid var(--border);background:var(--white);cursor:pointer;transition:all .2s}
+.ro:hover,.co:hover{border-color:var(--gold)}
+.ro.sel,.co.sel{border-color:var(--gold);background:var(--gold-dim)}
+.ro input,.co input{display:none}
+.rdot{width:13px;height:13px;border:1.5px solid var(--border);border-radius:50%;
+  flex-shrink:0;margin-top:1px;transition:all .2s}
+.ro.sel .rdot{border-color:var(--gold);background:var(--gold)}
+.cbox{width:13px;height:13px;border:1.5px solid var(--border);flex-shrink:0;
+  margin-top:1px;transition:all .2s;position:relative}
+.co.sel .cbox{border-color:var(--gold);background:var(--gold)}
+.co.sel .cbox::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:10px;color:var(--dark)}
+.otxt{font-size:12px;color:var(--text);line-height:1.5}
+.scrow{display:flex;gap:6px;margin-top:6px}
+.scb{flex:1;aspect-ratio:1;border:1px solid var(--border);background:var(--white);
+  font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .2s}
+.scb:hover{border-color:var(--gold)}
+.scb.sel{background:var(--gold);color:var(--dark);border-color:var(--gold)}
+.scends{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px}
+.grow{display:flex;gap:8px}
+.gb{flex:1;padding:13px;border:1px solid var(--border);background:var(--white);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s;color:var(--muted)}
+.gb.sel{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
+
+/* NAV BUTTONS */
+.fnav{display:flex;gap:12px;align-items:center;margin-top:40px;padding-top:32px;border-top:1px solid var(--border)}
+.btn-gold{background:var(--gold);color:var(--dark);border:none;padding:15px 36px;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-gold:hover{background:var(--gold-lt)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:13px 28px;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+
+/* SENDING */
+#sc-sending{background:var(--dark);min-height:calc(100vh - 60px);display:none;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px}
+#sc-sending.active{display:flex}
+.send-glyph{width:80px;height:80px;margin:0 auto 40px;animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.send-h{font-family:'Cormorant',serif;font-size:36px;font-weight:300;color:#fff;margin-bottom:8px}
+.send-h em{font-style:italic;color:var(--gold-lt)}
+.send-sub{font-size:11px;color:#444;letter-spacing:2px}
+
+/* CONFIRMATION */
+#sc-confirm{background:var(--dark);min-height:calc(100vh - 60px);display:none;
+  flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 40px}
+#sc-confirm.active{display:flex}
+.conf-icon{font-size:48px;margin-bottom:32px}
+.conf-h{font-family:'Cormorant',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:#fff;margin-bottom:16px}
+.conf-h em{font-style:italic;color:var(--gold-lt)}
+.conf-body{font-size:13px;color:#666;max-width:480px;line-height:1.9;margin-bottom:40px}
+.conf-box{background:#161410;border:1px solid #2a2820;padding:28px 36px;max-width:440px;margin-bottom:32px}
+.conf-box-title{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.conf-box-text{font-size:12px;color:#888;line-height:1.8}
+.conf-name{font-family:'Cormorant',serif;font-size:22px;color:var(--gold-lt);margin-bottom:4px}
+.conf-small{font-size:10px;color:#444;margin-top:24px;letter-spacing:1px}
+
+@media(max-width:640px){
+  .hdr{padding:0 20px}.hero{padding:48px 20px}
+  .fw{padding:32px 20px 60px}.prog-wrap{padding:12px 20px}
+  .frow,.cg{grid-template-columns:1fr}.prog-step{font-size:7px;letter-spacing:1px}
+  #sc-sending,#sc-confirm{padding:40px 24px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-brand">Código de Carreira</div>
+  <div class="hdr-tag">Diagnóstico Estratégico</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eye">Metodologia Proprietária</p>
+  <h1 class="hero-h">Preencha com <em>atenção.</em></h1>
+  <p class="hero-body">Cada resposta alimenta a construção do seu diagnóstico estratégico individual. Quanto mais preciso você for, mais certeiro será o resultado. Estimativa: 8–12 minutos.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-inner">
+    <div class="prog-step active" id="ps1">Identidade</div>
+    <div class="prog-step" id="ps2">Carreira</div>
+    <div class="prog-step" id="ps3">Momento</div>
+    <div class="prog-step" id="ps4">Padrões</div>
+    <div class="prog-step" id="ps5">Dores</div>
+    <div class="prog-step" id="ps6">Energia</div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div id="sc-form" class="screen active">
+  <div class="fw">
+
+    <!-- B1 -->
+    <div class="fb" id="bloco1">
+      <div class="fb-lbl">01 — Identidade</div>
+      <div class="fg">
+        <label>Nome completo de batismo (conforme certidão de nascimento)</label>
+        <input type="text" id="f_nome" placeholder="Exatamente como consta no registro civil"/>
+        <div class="hint">⚠ Use o nome completo original — sem apelidos, nomes sociais ou alterações. Isso é essencial para a precisão do diagnóstico.</div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Data de nascimento</label>
+          <input type="date" id="f_nasc"/>
+        </div>
+        <div class="fg">
+          <label>Como gosta de ser chamado(a)</label>
+          <input type="text" id="f_apelido" placeholder="Primeiro nome ou apelido"/>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Gênero</label>
+        <div class="grow">
+          <button class="gb sel" id="g_m" onclick="setG('masculino')">Masculino</button>
+          <button class="gb" id="g_f" onclick="setG('feminino')">Feminino</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2 -->
+    <div class="fb" id="bloco2">
+      <div class="fb-lbl">02 — Situação de Carreira</div>
+      <div class="fg">
+        <label>Qual é a sua ocupação principal hoje?</label>
+        <input type="text" id="f_ocup" placeholder="Ex: Gerente de RH, coach, médica, empresária, professora..."/>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Modelo de trabalho atual</label>
+          <select id="f_modelo">
+            <option value="">Selecione...</option>
+            <option value="CLT">CLT — trabalho para uma empresa</option>
+            <option value="PJ">PJ / Freelancer — prestação de serviços</option>
+            <option value="empresaria">Empresária / Sócia — tenho meu negócio</option>
+            <option value="transicao">Em transição de modelo</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Faturamento / renda mensal atual</label>
+          <select id="f_fat">
+            <option value="">Selecione...</option>
+            <option value="ate3k">Até R$ 3.000</option>
+            <option value="3k7k">R$ 3.000 – R$ 7.000</option>
+            <option value="7k15k">R$ 7.000 – R$ 15.000</option>
+            <option value="15k30k">R$ 15.000 – R$ 30.000</option>
+            <option value="acima30k">Acima de R$ 30.000</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Qual faturamento seria justo para o que você entrega?</label>
+        <select id="f_fatd">
+          <option value="">Selecione...</option>
+          <option value="ate5k">Até R$ 5.000</option>
+          <option value="5k12k">R$ 5.000 – R$ 12.000</option>
+          <option value="12k25k">R$ 12.000 – R$ 25.000</option>
+          <option value="25k50k">R$ 25.000 – R$ 50.000</option>
+          <option value="acima50k">Acima de R$ 50.000</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- B3 -->
+    <div class="fb" id="bloco3">
+      <div class="fb-lbl">03 — Momento Atual</div>
+      <div class="fg">
+        <label>Como você descreveria seu estado atual com a carreira?</label>
+        <div class="rg" id="f_estado"></div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label>Há quanto tempo você está nesse estado?</label>
+          <select id="f_tempo">
+            <option value="">Selecione...</option>
+            <option value="menos6m">Menos de 6 meses</option>
+            <option value="6m1a">Entre 6 meses e 1 ano</option>
+            <option value="1a3a">Entre 1 e 3 anos</option>
+            <option value="mais3a">Mais de 3 anos</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>O que você já tentou para mudar? (marque todos)</label>
+          <div class="cg" id="f_tent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B4 -->
+    <div class="fb" id="bloco4">
+      <div class="fb-lbl">04 — Padrões e Comportamentos</div>
+      <div class="fg">
+        <label>Qual frase mais representa como você funciona no trabalho?</label>
+        <div class="rg" id="f_padrao"></div>
+      </div>
+      <div class="fg">
+        <label>O que mais te sabota profissionalmente? (1 ou 2 opções)</label>
+        <div class="cg" id="f_sab"></div>
+      </div>
+      <div class="fg">
+        <label>Com que frequência você se sente desvalorizada financeiramente pelo que entrega?</label>
+        <div class="scrow" id="sc_desv"></div>
+        <div class="scends"><span>Raramente</span><span>Constantemente</span></div>
+      </div>
+      <div class="fg">
+        <label>Qual é a sua relação com visibilidade e reconhecimento profissional?</label>
+        <div class="rg" id="f_visib"></div>
+      </div>
+    </div>
+
+    <!-- B5 -->
+    <div class="fb" id="bloco5">
+      <div class="fb-lbl">05 — Dores Reais e Sonhos</div>
+      <div class="fg">
+        <label>Qual é o maior problema profissional que você enfrenta HOJE?</label>
+        <textarea id="f_dor" placeholder="Seja específica. Quanto mais real e detalhada for sua resposta, mais certeiro será o diagnóstico..."></textarea>
+      </div>
+      <div class="fg">
+        <label>Descreva como seria sua vida profissional ideal daqui a 2 anos:</label>
+        <textarea id="f_sonho" placeholder="Onde você está, o que faz, com quem trabalha, quanto ganha, como se sente..."></textarea>
+      </div>
+      <div class="fg">
+        <label>Na sua percepção, o que está impedindo você de chegar lá?</label>
+        <textarea id="f_bloq" placeholder="O que você acredita que é o obstáculo real entre onde está e onde quer chegar..."></textarea>
+      </div>
+    </div>
+
+    <!-- B6 -->
+    <div class="fb" id="bloco6">
+      <div class="fb-lbl">06 — Energia e Relações</div>
+      <div class="fg">
+        <label>Como está sua energia e disposição para o trabalho nos últimos 3 meses?</label>
+        <div class="scrow" id="sc_en"></div>
+        <div class="scends"><span>Esgotada / sem ânimo</span><span>Plena / motivada</span></div>
+      </div>
+      <div class="fg">
+        <label>Suas relações profissionais (clientes, sócios, líderes) te impulsionam ou te drenam?</label>
+        <div class="rg" id="f_relac"></div>
+      </div>
+      <div class="fg">
+        <label>Você tem facilidade em cobrar o que vale pelo seu trabalho?</label>
+        <div class="scrow" id="sc_cob"></div>
+        <div class="scends"><span>Muita dificuldade</span><span>Total facilidade</span></div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="fnav">
+      <button class="btn-gold" onclick="enviarFormulario()">
+        Concluir e enviar diagnóstico →
+      </button>
+    </div>
+    <p style="font-size:10px;color:var(--muted);margin-top:16px;line-height:1.7">
+      Ao enviar, suas respostas serão analisadas e você receberá seu diagnóstico completo em até <strong>3 dias úteis</strong> no seu e-mail.
+    </p>
+
+  </div>
+</div>
+
+<!-- ENVIANDO -->
+<div id="sc-sending" class="screen">
+  <svg class="send-glyph" viewBox="0 0 80 80" fill="none">
+    <circle cx="40" cy="40" r="36" stroke="#b5873a" stroke-width=".5" opacity=".3"/>
+    <circle cx="40" cy="40" r="26" stroke="#b5873a" stroke-width=".5" opacity=".4"/>
+    <polygon points="40,6 62,34 54,70 26,70 18,34" stroke="#b5873a" stroke-width=".7" fill="none" opacity=".7"/>
+    <circle cx="40" cy="40" r="3" fill="#b5873a"/>
+  </svg>
+  <h2 class="send-h">Enviando seu <em>diagnóstico...</em></h2>
+  <p class="send-sub">Aguarde um momento</p>
+</div>
+
+<!-- CONFIRMAÇÃO -->
+<div id="sc-confirm" class="screen">
+  <div class="conf-icon">✦</div>
+  <h2 class="conf-h">Diagnóstico <em>recebido.</em></h2>
+  <p class="conf-body">Suas respostas foram registradas com sucesso. Seu diagnóstico estratégico personalizado está sendo preparado.</p>
+  <div class="conf-box">
+    <div class="conf-box-title">O que acontece agora</div>
+    <div class="conf-name" id="conf-nome"></div>
+    <div class="conf-box-text">
+      Seu diagnóstico completo será preparado com base nas informações que você forneceu e entregue em até <strong style="color:var(--gold-lt)">3 dias úteis</strong>.<br><br>
+      Você receberá um documento estratégico individual com seu perfil de funcionamento, direção de maior faturamento, pontos de bloqueio e um plano de 90 dias personalizado.
+    </div>
+  </div>
+  <p class="conf-small">CÓDIGO DE CARREIRA · DIAGNÓSTICO ESTRATÉGICO INDIVIDUAL</p>
+</div>
+
+<script>
+'use strict';
+
+/* ══ SHEETS URL ══ */
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxaV0xidYj_lPoRrbAchIEUZERlTkXf4FEhEMzR8DkvTxL9AMXuK7VTMuwoCvHTGjoeTQ/exec';
+
+/* ══ KABBALISTIC ENGINE ══ */
+const LV={a:1,b:2,c:3,d:4,e:5,f:8,g:3,h:5,i:1,j:1,k:2,l:3,m:4,n:5,o:7,p:8,q:1,r:2,s:3,t:4,u:6,v:6,w:6,x:6,y:1,z:7};
+const AM={'\u0301':2,'\u0300':1,'\u0308':1,'\u0302':7,'\u0303':3,'\u0327':0};
+const VOWELS=new Set(['a','e','i','o','u']);
+
+function getCharValues(str){
+  const dec=str.normalize('NFD').toLowerCase();const res=[];let i=0;
+  while(i<dec.length){
+    const ch=dec[i];
+    if(LV[ch]!==undefined){
+      let val=LV[ch],j=i+1;
+      while(j<dec.length&&dec.charCodeAt(j)>=0x0300&&dec.charCodeAt(j)<=0x036f){
+        const cc=dec[j];if(cc==='\u0327')val=6;else if(AM[cc]!==undefined)val+=AM[cc];j++;
+      }
+      res.push({base:ch,value:val});i=j;
+    }else i++;
+  }
+  return res;
+}
+function sumLetters(name,filter){return getCharValues(name).reduce((a,{base:b,value:v})=>(!filter||filter(b))?a+v:a,0);}
+function reduceToDigit(n,keepM=true){
+  if(n<0)n=Math.abs(n);
+  while(n>9&&!(keepM&&(n===11||n===22))){n=String(n).split('').reduce((a,b)=>a+parseInt(b),0);}
+  return n;
+}
+function calcExpression(name){return reduceToDigit(sumLetters(name));}
+function calcSoul(name){return reduceToDigit(sumLetters(name,ch=>VOWELS.has(ch)));}
+function calcDestiny(d,m,y){
+  const s=(String(d)+String(m)+String(y)).split('').reduce((a,b)=>a+parseInt(b),0);
+  return reduceToDigit(s);
+}
+function calcPersonalYear(d,m,curY){
+  const now=new Date(),cm=now.getMonth()+1,cd=now.getDate();
+  let yr=curY;if(cm<m||(cm===m&&cd<d))yr=curY-1;
+  const dd=reduceToDigit(d,false),mm=reduceToDigit(m,false);
+  const yy=reduceToDigit(String(yr).split('').reduce((a,b)=>a+parseInt(b),0),false);
+  return reduceToDigit(dd+mm+yy,false);
+}
+
+/* ══ STATE ══ */
+let gend='masculino';
+
+/* ══ FORM BUILDERS ══ */
+function bRadio(cid,opts,name){
+  document.getElementById(cid).innerHTML=opts.map(o=>`<label class="ro" onclick="selR(this,'${name}')"><input type="radio" name="${name}" value="${o.v}"><div class="rdot"></div><div class="otxt">${o.l}</div></label>`).join('');
+}
+function bCheck(cid,opts){
+  const c=document.getElementById(cid);
+  c.innerHTML=opts.map(o=>`<label class="co"><input type="checkbox" value="${o.v}"><div class="cbox"></div><div class="otxt">${o.l}</div></label>`).join('');
+  c.querySelectorAll('.co').forEach(el=>{
+    el.addEventListener('click',function(e){
+      e.preventDefault();this.classList.toggle('sel');
+      this.querySelector('input').checked=this.classList.contains('sel');
+    });
+  });
+}
+function bScale(cid){
+  document.getElementById(cid).innerHTML=Array.from({length:10},(_,i)=>`<button class="scb" onclick="selSc(this,'${cid}')">${i+1}</button>`).join('');
+}
+function selR(el,name){document.querySelectorAll(`[name="${name}"]`).forEach(r=>r.closest('.ro').classList.remove('sel'));el.classList.add('sel');el.querySelector('input').checked=true;}
+function selSc(btn,id){document.querySelectorAll(`#${id} .scb`).forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
+function setG(g){gend=g;document.getElementById('g_m').classList.toggle('sel',g==='masculino');document.getElementById('g_f').classList.toggle('sel',g==='feminino');}
+function gSc(id){const s=document.querySelector(`#${id} .scb.sel`);return s?parseInt(s.textContent):5;}
+function gRad(name){const s=document.querySelector(`[name="${name}"].sel input`);return s?s.value:'';}
+function gChk(id){return Array.from(document.querySelectorAll(`#${id} .co.sel input`)).map(i=>i.value);}
+
+function goTo(sc){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sc).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function initForm(){
+  bRadio('f_estado',[
+    {v:'estagnada',l:'Estagnada — trabalho muito mas não avanço'},
+    {v:'perdida',l:'Perdida — não sei qual direção seguir'},
+    {v:'insatisfeita',l:'Crescendo, mas insatisfeita — vai bem mas algo falta'},
+    {v:'transicao',l:'Em transição — sei que preciso mudar, mas travo'},
+    {v:'pronta',l:'Pronta para escalar — tenho base, quero crescer'},
+  ],'estado');
+  bCheck('f_tent',[
+    {v:'cursos',l:'Cursos e formações'},{v:'terapia',l:'Terapia ou coaching'},
+    {v:'networking',l:'Networking / eventos'},{v:'empreender',l:'Empreendedorismo'},
+    {v:'mudouarea',l:'Mudou de área ou empresa'},{v:'nada',l:'Ainda não tentei nada'},
+  ]);
+  bRadio('f_padrao',[
+    {v:'D',l:'Decido rápido, prefiro liderar e não espero aprovação de ninguém'},
+    {v:'I',l:'Inspiro, conecto pessoas e crio energia nos ambientes que chego'},
+    {v:'S',l:'Sustento, apoio e garanto que tudo funcione de forma consistente'},
+    {v:'C',l:'Analiso, organizo e entrego com qualidade e precisão acima da média'},
+  ],'padrao');
+  bCheck('f_sab',[
+    {v:'perfeccionismo',l:'Perfeccionismo — nunca está bom o suficiente'},
+    {v:'procrastinacao',l:'Procrastinação — sei o que fazer mas não faço'},
+    {v:'dispersao',l:'Dispersão — começo muito, termino pouco'},
+    {v:'medo',l:'Medo de arriscar — prefiro segurança'},
+    {v:'comparacao',l:'Comparação — me sinto menor que outros'},
+    {v:'autossabotagem',l:'Autossabotagem — quando vai bem, trava'},
+  ]);
+  bScale('sc_desv');bScale('sc_en');bScale('sc_cob');
+  bRadio('f_visib',[
+    {v:'busca',l:'Busco reconhecimento ativamente — me exponho bem'},
+    {v:'misto',l:'Quero reconhecimento mas tenho dificuldade de me mostrar'},
+    {v:'evita',l:'Evito exposição — prefiro fazer bem feito no silêncio'},
+  ],'visib');
+  bRadio('f_relac',[
+    {v:'impulsionam',l:'Principalmente me impulsionam'},
+    {v:'misto',l:'Misto — algumas constroem, outras drenam'},
+    {v:'drenam',l:'Principalmente me drenam'},
+  ],'relac');
+}
+
+/* ══ SUBMIT ══ */
+async function enviarFormulario(){
+  const nome=document.getElementById('f_nome').value.trim();
+  const nasc=document.getElementById('f_nasc').value;
+  if(!nome||!nasc){
+    alert('Por favor, preencha o nome completo de batismo e a data de nascimento.');return;
+  }
+  if(nome.split(' ').length<2){
+    alert('Por favor, informe o nome COMPLETO de batismo (nome e sobrenome).');return;
+  }
+
+  // Calculate numerology
+  const bd=new Date(nasc+'T00:00:00');
+  const d=bd.getDate(),m=bd.getMonth()+1,y=bd.getFullYear();
+  const expression=calcExpression(nome);
+  const destiny=calcDestiny(d,m,y);
+  const soul=calcSoul(nome);
+  const mission=reduceToDigit(expression+destiny);
+  const personalYear=calcPersonalYear(d,m,new Date().getFullYear());
+  const now=new Date();
+  let age=now.getFullYear()-y;
+  if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;
+
+  const payload={
+    timestamp: new Date().toLocaleString('pt-BR'),
+    nome,
+    nasc,
+    apelido: document.getElementById('f_apelido').value.trim()||nome.split(' ')[0],
+    gender: gend,
+    ocup: document.getElementById('f_ocup').value.trim(),
+    modelo: document.getElementById('f_modelo').value,
+    fat: document.getElementById('f_fat').value,
+    fatd: document.getElementById('f_fatd').value,
+    estado: gRad('estado'),
+    tempo: document.getElementById('f_tempo').value,
+    tent: gChk('f_tent').join(', '),
+    padrao: gRad('padrao'),
+    sab: gChk('f_sab').join(', '),
+    desv: gSc('sc_desv'),
+    visib: gRad('visib'),
+    dor: document.getElementById('f_dor').value.trim(),
+    sonho: document.getElementById('f_sonho').value.trim(),
+    bloq: document.getElementById('f_bloq').value.trim(),
+    en: gSc('sc_en'),
+    relac: gRad('relac'),
+    cob: gSc('sc_cob'),
+    // Calculated
+    expression, destiny, soul, mission, personalYear, age
+  };
+
+  goTo('sc-sending');
+
+  // Apps Script requer text/plain para funcionar com no-cors
+  try{
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {
+    console.error('Fetch error:', e);
+  }
+
+  setTimeout(()=>{
+    document.getElementById('conf-nome').textContent=payload.apelido+',';
+    goTo('sc-confirm');
+  },1800);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initForm();
+  // Update progress bar on scroll / interaction
+  ['bloco1','bloco2','bloco3','bloco4','bloco5','bloco6'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const obs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        document.querySelectorAll('.prog-step').forEach((s,si)=>{
+          s.classList.toggle('active',si===i);
+          s.classList.toggle('done',si<i);
+        });
+      }
+    },{threshold:0.3});
+    obs.observe(el);
+  });
+});
+</script>
+</body>
+</html>
