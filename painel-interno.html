@@ -616,7 +616,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   </div>
 
   <div class="client-actions no-print">
-    <button class="btn-gold" onclick="window.print()">⬇ Salvar PDF</button>
+    <button class="btn-gold" onclick="abrirPDF()">⬇ Salvar PDF</button>
     <button class="btn-ghost" id="btnGenerate" onclick="gerarDiagnostico()">⚙ Gerar diagnóstico completo</button>
     <button class="btn-ghost" onclick="goTo('dash')">← Voltar</button>
   </div>
@@ -1383,6 +1383,58 @@ function fbB(c){const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.e
 function fbPlan(c){const tn=TN[c.expression]||'seu perfil';return{fase1:{titulo:'Limpeza e Foco — Eliminar o que drena, ativar o que gera',semanas:[{titulo:'Semana 1: Auditoria de alinhamento',acoes:['Liste todas as atividades: ativa ou não o padrão '+tn,'Identifique os 3 projetos que mais consomem energia sem retorno','Mapeie decisões pendentes que o bloqueio adiou']},{titulo:'Semana 2: Eliminação estratégica',acoes:['Encerre ou renegocie pelo menos 1 contrato desalinhado com o padrão '+tn,'Reposicione sua oferta principal para refletir o seu talento natural','Defina nicho prioritário baseado na sua direção estratégica']},{titulo:'Semana 3: Posicionamento inicial',acoes:['Reescreva sua bio profissional alinhada ao seu padrão como '+tn,'Atualize proposta de valor com linguagem de autoridade','Mapeie 5 oportunidades alinhadas com sua direção']},{titulo:'Semana 4: Consolidação da base',acoes:['Organize processos que liberam tempo para trabalho de alto valor','Defina política de preços alinhada ao valor do seu padrão','Planeje o mês 2 com base no seu código anual '+c.personalYear]}]},fase2:{titulo:'Execução e Posicionamento — Construir autoridade percebida',semanas:[{titulo:'Semana 5: Lançamento de autoridade',acoes:['Crie e distribua conteúdo de autoridade alinhado ao seu padrão','Faça 5 conversas estratégicas com potenciais clientes ideais','Apresente nova oferta posicionada para pelo menos 3 pessoas']},{titulo:'Semana 6: Expansão de relacionamentos',acoes:['Mapeie sua rede: quem impulsiona e quem drena o seu padrão','Agende reuniões com 3 parceiros estratégicos potenciais','Implemente processo de indicação ativa com clientes alinhados']},{titulo:'Semana 7: Refinamento da oferta',acoes:['Colete feedback sobre o valor percebido','Ajuste preço baseado no posicionamento do seu padrão','Crie um caso de sucesso documentado para uso em vendas']},{titulo:'Semana 8: Revisão e aceleração',acoes:['Meça resultados das semanas 5–7: o que gerou mais retorno?','Duplique esforço no canal mais efetivo','Prepare estratégia de escala para o mês 3']}]},fase3:{titulo:'Escala e Consolidação — Faturamento previsível e autoridade sólida',semanas:[{titulo:'Semana 9: Escala da oferta principal',acoes:['Lance versão de maior valor da oferta principal','Implemente processo de vendas estruturado para o seu padrão','Defina meta de faturamento específica para os próximos 90 dias']},{titulo:'Semana 10: Sistemas de crescimento',acoes:['Documente processos que mais geram resultado','Delegue atividades operacionais que não ativam seu talento principal','Crie ritmo semanal de prospecção alinhado ao seu código anual '+c.personalYear]},{titulo:'Semana 11: Autoridade de mercado',acoes:['Publique posicionamento de autoridade em pelo menos 2 canais','Solicite depoimentos estratégicos que validam o seu padrão','Mapeie próximas oportunidades de parceria de alto valor']},{titulo:'Semana 12: Balanço e próximo ciclo',acoes:['Meça resultado dos 90 dias: faturamento, posicionamento, energia','Identifique o que funcionou e o que precisa de ajuste fino','Planeje próximos 90 dias com base no código anual '+(c.personalYear===9?1:c.personalYear+1)]}]}}}
 
 function testarURL(){const url=SHEETS_READ_URL+'&t='+Date.now();const win=window.open(url,'_blank');if(!win)alert('Cole esta URL:\n\n'+url);}
+function abrirPDF(){
+  const cl = currentClient;
+  if(!cl){ alert('Selecione um cliente primeiro.'); return; }
+  
+  // Collect all PDF page HTML
+  const pages = document.querySelectorAll('.pdf-page-wrap');
+  if(!pages.length){ alert('Gere o diagnóstico antes de salvar o PDF.'); return; }
+  
+  let pagesHTML = '';
+  pages.forEach(p => { pagesHTML += p.outerHTML + '\n'; });
+  
+  // Get all stylesheets content
+  const styles = Array.from(document.styleSheets)
+    .map(s => { try { return Array.from(s.cssRules).map(r => r.cssText).join('\n'); } catch(e){ return ''; } })
+    .join('\n');
+  
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Código de Carreira — ${cl.apelido||cl.nome}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:white;margin:0;padding:0}
+@page{margin:0;size:A4}
+${styles}
+.pdf-page-wrap{
+  width:210mm;margin:0 auto;
+  box-shadow:none!important;
+  page-break-after:always;
+  overflow:hidden;
+}
+.pdf-page-wrap:last-child{page-break-after:auto}
+</style>
+</head>
+<body>
+${pagesHTML}
+<script>
+window.onload = function(){
+  setTimeout(function(){ window.print(); }, 800);
+};
+<\/script>
+</body>
+</html>`;
+  
+  const win = window.open('', '_blank', 'width=900,height=700');
+  win.document.write(html);
+  win.document.close();
+}
+
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('login-pwd').addEventListener('keydown',e=>{if(e.key==='Enter')login();});});
 </script>
 </body>
