@@ -3,559 +3,888 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Código de Carreira — Formulário</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Código de Carreira — Painel Interno</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f9f6f0;--dark:#0f0e0a;--gold:#b5873a;--gold-lt:#d4a85a;
-  --gold-dim:rgba(181,135,58,.12);--cream:#f0ebe0;--border:#e0d8c8;
-  --text:#1c1a14;--muted:#7a7260;--white:#fff;
+  --bg:#f8f5ef;--dark:#0c0b08;--gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
+  --cream:#ede8de;--border:#ddd5c3;--text:#1a1810;--muted:#7a7060;--white:#fff;
+  --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;--page-w:210mm;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.6}
+body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;font-size:13px;line-height:1.65}
 
-/* HEADER */
-.hdr{background:var(--dark);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px}
-.hdr-brand{font-family:'Cinzel',serif;font-size:13px;letter-spacing:5px;color:var(--gold-lt)}
+/* ── LOGIN ── */
+#sc-login{background:var(--dark);min-height:100vh;display:flex;align-items:center;justify-content:center}
+.login-box{background:#161410;border:1px solid #2a2820;padding:56px 48px;max-width:380px;width:100%;text-align:center}
+.login-sigma{font-family:'Cinzel',serif;font-size:52px;color:var(--gold);margin-bottom:4px;letter-spacing:4px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#fff;margin-bottom:6px}
+.login-sub{font-size:10px;color:#444;letter-spacing:3px;text-transform:uppercase;margin-bottom:36px}
+.login-box input{width:100%;background:#0c0b08;border:1px solid #2a2820;color:#fff;padding:14px 16px;
+  font-family:'Lato',sans-serif;font-size:14px;outline:none;margin-bottom:12px;
+  transition:border-color .2s;text-align:center;letter-spacing:6px}
+.login-box input:focus{border-color:var(--gold)}
+.login-err{font-size:10px;color:#8b3a2a;margin-bottom:12px;display:none}
+
+/* ── HEADER ── */
+.hdr{background:var(--dark);height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;border-bottom:1px solid #1a1810;position:sticky;top:0;z-index:200}
+.hdr-brand{font-family:'Cinzel',serif;font-size:12px;letter-spacing:5px;color:var(--gold-lt)}
 .hdr-tag{font-size:9px;letter-spacing:3px;color:#444;text-transform:uppercase}
 
-/* SCREENS */
-.screen{display:none}
+/* ── SCREENS ── */
+.screen{display:none;min-height:calc(100vh - 56px)}
 .screen.active{display:block}
 
-/* HERO */
-.hero{background:var(--dark);padding:64px 40px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'Σ';position:absolute;right:-20px;top:50%;transform:translateY(-50%);
-  font-family:'Cinzel',serif;font-size:280px;color:rgba(255,255,255,.02);pointer-events:none;line-height:1}
-.hero-eye{font-size:9px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:20px}
-.hero-h{font-family:'Cormorant',serif;font-size:clamp(36px,5vw,64px);font-weight:300;color:#fff;margin-bottom:16px}
-.hero-h em{font-style:italic;color:var(--gold-lt)}
-.hero-body{font-size:12px;color:#666;max-width:520px;margin:0 auto;line-height:1.9}
-
-/* PROGRESS BAR */
-.prog-wrap{background:var(--cream);border-bottom:1px solid var(--border);padding:16px 40px}
-.prog-inner{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:0}
-.prog-step{flex:1;text-align:center;font-size:8px;letter-spacing:2px;text-transform:uppercase;
-  color:#bbb;padding:8px 4px;border-bottom:2px solid var(--border);transition:all .3s}
-.prog-step.active{color:var(--gold);border-color:var(--gold)}
-.prog-step.done{color:var(--muted);border-color:var(--muted)}
-
-/* FORM */
-.fw{max-width:700px;margin:0 auto;padding:48px 32px 80px}
-.fb{margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--border)}
-.fb:last-of-type{border-bottom:none}
-.fb-lbl{font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;
-  display:flex;align-items:center;gap:10px}
-.fb-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-.fg{margin-bottom:18px}
-.fg label{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:7px}
-.fg .hint{font-size:10px;color:var(--muted);margin-top:5px;font-style:italic}
-.fg input,.fg select,.fg textarea{width:100%;background:var(--white);border:1px solid var(--border);
-  color:var(--text);padding:13px 16px;font-family:'IBM Plex Mono',monospace;font-size:13px;
-  outline:none;transition:border-color .2s;appearance:none}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold)}
-.fg textarea{resize:vertical;min-height:80px}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.rg{display:flex;flex-direction:column;gap:8px}
-.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ro,.co{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;
-  border:1px solid var(--border);background:var(--white);cursor:pointer;transition:all .2s}
-.ro:hover,.co:hover{border-color:var(--gold)}
-.ro.sel,.co.sel{border-color:var(--gold);background:var(--gold-dim)}
-.ro input,.co input{display:none}
-.rdot{width:13px;height:13px;border:1.5px solid var(--border);border-radius:50%;
-  flex-shrink:0;margin-top:1px;transition:all .2s}
-.ro.sel .rdot{border-color:var(--gold);background:var(--gold)}
-.cbox{width:13px;height:13px;border:1.5px solid var(--border);flex-shrink:0;
-  margin-top:1px;transition:all .2s;position:relative}
-.co.sel .cbox{border-color:var(--gold);background:var(--gold)}
-.co.sel .cbox::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:10px;color:var(--dark)}
-.otxt{font-size:12px;color:var(--text);line-height:1.5}
-.scrow{display:flex;gap:6px;margin-top:6px}
-.scb{flex:1;aspect-ratio:1;border:1px solid var(--border);background:var(--white);
-  font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .2s}
-.scb:hover{border-color:var(--gold)}
-.scb.sel{background:var(--gold);color:var(--dark);border-color:var(--gold)}
-.scends{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px}
-.grow{display:flex;gap:8px}
-.gb{flex:1;padding:13px;border:1px solid var(--border);background:var(--white);
-  font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;transition:all .2s;color:var(--muted)}
-.gb.sel{border-color:var(--gold);background:var(--gold-dim);color:var(--gold)}
-
-/* NAV BUTTONS */
-.fnav{display:flex;gap:12px;align-items:center;margin-top:40px;padding-top:32px;border-top:1px solid var(--border)}
-.btn-gold{background:var(--gold);color:var(--dark);border:none;padding:15px 36px;
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;
-  cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:8px}
+/* ── BUTTONS ── */
+.btn-gold{background:var(--gold);color:var(--dark);border:none;padding:11px 24px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;
+  cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:6px}
 .btn-gold:hover{background:var(--gold-lt)}
-.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:13px 28px;
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:9px 20px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;
   cursor:pointer;transition:all .2s}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
-.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
+.btn-dark{background:var(--dark);color:var(--gold-lt);border:1px solid #2a2820;padding:11px 24px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
 
-/* SENDING */
-#sc-sending{background:var(--dark);min-height:calc(100vh - 60px);display:none;
-  flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px}
-#sc-sending.active{display:flex}
-.send-glyph{width:80px;height:80px;margin:0 auto 40px;animation:spin 8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.send-h{font-family:'Cormorant',serif;font-size:36px;font-weight:300;color:#fff;margin-bottom:8px}
-.send-h em{font-style:italic;color:var(--gold-lt)}
-.send-sub{font-size:11px;color:#444;letter-spacing:2px}
+/* ── DASHBOARD ── */
+#sc-dash{padding:40px}
+.dash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.dash-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--dark)}
+.dash-title em{font-style:italic;color:var(--gold)}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--white);border:1px solid var(--border);padding:24px 28px;border-top:3px solid var(--gold)}
+.stat-n{font-family:'Cinzel',serif;font-size:40px;color:var(--gold);line-height:1}
+.stat-l{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.tbl-wrap{background:var(--white);border:1px solid var(--border);overflow:hidden}
+.tbl-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.tbl-header-title{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;flex:1}
+.tbl-search{background:var(--bg);border:1px solid var(--border);padding:8px 12px;
+  font-family:'Lato',sans-serif;font-size:11px;outline:none;width:220px;color:var(--text)}
+.tbl-search:focus{border-color:var(--gold)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  padding:12px 16px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--gold-dim)}
+tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
+.td-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--dark)}
+.td-date{color:var(--muted);font-size:11px}
+.badge-new{display:inline-block;font-size:8px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;
+  background:rgba(30,92,53,.12);color:#2a7a4a;border:1px solid rgba(30,92,53,.25)}
+.empty-state{padding:60px;text-align:center;color:var(--muted)}
+.empty-state p{font-size:14px;margin-top:8px}
 
-/* CONFIRMATION */
-#sc-confirm{background:var(--dark);min-height:calc(100vh - 60px);display:none;
-  flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 40px}
-#sc-confirm.active{display:flex}
-.conf-icon{font-size:48px;margin-bottom:32px}
-.conf-h{font-family:'Cormorant',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:#fff;margin-bottom:16px}
-.conf-h em{font-style:italic;color:var(--gold-lt)}
-.conf-body{font-size:13px;color:#666;max-width:480px;line-height:1.9;margin-bottom:40px}
-.conf-box{background:#161410;border:1px solid #2a2820;padding:28px 36px;max-width:440px;margin-bottom:32px}
-.conf-box-title{font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
-.conf-box-text{font-size:12px;color:#888;line-height:1.8}
-.conf-name{font-family:'Cormorant',serif;font-size:22px;color:var(--gold-lt);margin-bottom:4px}
-.conf-small{font-size:10px;color:#444;margin-top:24px;letter-spacing:1px}
+/* ════════════════════════════════════════
+   PDF REPORT STYLES
+════════════════════════════════════════ */
 
-@media(max-width:640px){
-  .hdr{padding:0 20px}.hero{padding:48px 20px}
-  .fw{padding:32px 20px 60px}.prog-wrap{padding:12px 20px}
-  .frow,.cg{grid-template-columns:1fr}.prog-step{font-size:7px;letter-spacing:1px}
-  #sc-sending,#sc-confirm{padding:40px 24px}
+/* ── Cover ── */
+.pdf-cover{
+  width:var(--page-w);min-height:297mm;
+  background:#0c0b08;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+  page-break-after:always;
+}
+.cover-top-bar{
+  height:6px;
+  background:linear-gradient(90deg,var(--gold) 0%,var(--gold-lt) 50%,var(--gold) 100%);
+}
+.cover-body{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:60px 64px 40px;position:relative;
+}
+/* decorative circle */
+.cover-body::before{
+  content:'';position:absolute;
+  width:480px;height:480px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.08);
+  top:50%;right:-80px;transform:translateY(-50%);
+}
+.cover-body::after{
+  content:'';position:absolute;
+  width:320px;height:320px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.06);
+  top:50%;right:0px;transform:translateY(-50%);
+}
+.cover-sigma{
+  font-family:'Cinzel',serif;font-size:14px;letter-spacing:8px;
+  color:var(--gold);margin-bottom:80px;display:flex;align-items:center;gap:16px;
+}
+.cover-sigma::after{content:'';flex:1;max-width:120px;height:1px;background:rgba(176,138,62,.3);}
+.cover-label{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:5px;
+  color:rgba(176,138,62,.6);text-transform:uppercase;margin-bottom:20px;
+}
+.cover-client-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(48px,6vw,80px);
+  font-weight:300;color:#fff;line-height:1;
+  margin-bottom:12px;letter-spacing:-1px;
+}
+.cover-archetype{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(20px,3vw,32px);
+  font-style:italic;color:var(--gold-lt);
+  margin-bottom:32px;font-weight:300;
+}
+.cover-divider{width:60px;height:1px;background:var(--gold);margin-bottom:32px;}
+.cover-tagline{
+  font-family:'Lato',sans-serif;font-size:13px;
+  color:rgba(255,255,255,.35);line-height:1.8;
+  max-width:440px;letter-spacing:.3px;
+}
+.cover-bottom{
+  padding:36px 64px;
+  border-top:1px solid rgba(176,138,62,.12);
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.cover-bottom-brand{
+  font-family:'Cinzel',serif;font-size:11px;
+  letter-spacing:4px;color:rgba(176,138,62,.5);
+}
+.cover-bottom-date{
+  font-family:'Lato',sans-serif;font-size:10px;
+  color:rgba(255,255,255,.2);letter-spacing:2px;
+}
+
+/* ── INTRO PAGE ── */
+.pdf-page{
+  width:var(--page-w);
+  padding:60px 64px;
+  background:var(--white);
+  page-break-after:always;
+  page-break-inside:avoid;
+}
+.pdf-page-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:20px;border-bottom:1px solid var(--border);
+  margin-bottom:40px;
+}
+.pdf-page-brand{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:var(--gold)}
+.pdf-page-client{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+.intro-eyebrow{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.intro-title{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--dark);margin-bottom:8px;line-height:1.1}
+.intro-title em{font-style:italic;color:var(--gold)}
+.intro-divider{width:40px;height:2px;background:var(--gold);margin:24px 0}
+.intro-body{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.9;margin-bottom:20px}
+.intro-body strong{color:var(--dark);font-weight:700}
+.intro-how{background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--gold);padding:28px 32px;margin:32px 0}
+.intro-how-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--dark);margin-bottom:16px}
+.intro-how-list{list-style:none}
+.intro-how-list li{font-family:'Lato',sans-serif;font-size:12px;color:var(--text);padding:10px 0 10px 20px;border-bottom:1px solid var(--border);position:relative;line-height:1.6}
+.intro-how-list li:last-child{border-bottom:none}
+.intro-how-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.intro-how-list li strong{color:var(--dark);font-weight:700}
+.intro-quote{text-align:center;padding:36px;border:1px solid var(--border);margin-top:36px}
+.intro-quote-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--dark);line-height:1.6;margin-bottom:16px}
+.intro-quote-author{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+
+/* ── SECTION PAGES ── */
+.sec-page{
+  width:var(--page-w);
+  padding:0;background:var(--white);
+  page-break-after:always;page-break-inside:avoid;
+}
+.sec-page-hdr{
+  background:var(--dark);padding:36px 64px;
+  position:relative;overflow:hidden;
+}
+.sec-page-hdr::before{
+  content:attr(data-n);
+  position:absolute;right:40px;top:50%;transform:translateY(-50%);
+  font-family:'Cinzel',serif;font-size:140px;color:rgba(255,255,255,.025);line-height:1;
+}
+.sec-page-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.sec-page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:#fff;margin-bottom:4px}
+.sec-page-title em{font-style:italic;color:var(--gold-lt)}
+.sec-page-sub{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.5px}
+.sec-page-body{padding:40px 64px}
+
+/* ── CONTENT BLOCKS ── */
+.aib{background:var(--bg);border:1px solid var(--border);padding:32px;margin-bottom:20px;position:relative;overflow:hidden}
+.aib.loading::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);animation:sw 1.4s ease-in-out infinite}
+@keyframes sw{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.aib h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--dark);margin:24px 0 10px}
+.aib h3:first-child{margin-top:0}
+.aib p{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.85;margin-bottom:14px}
+.aib ul{list-style:none;margin:10px 0 18px}
+.aib ul li{font-family:'Lato',sans-serif;padding:8px 0 8px 20px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text);position:relative;line-height:1.6}
+.aib ul li:last-child{border-bottom:none}
+.aib ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.aib strong{color:var(--dark);font-weight:700}
+
+.ical{background:linear-gradient(135deg,rgba(176,138,62,.1),rgba(176,138,62,.05));
+  border:1px solid rgba(176,138,62,.25);border-left:4px solid var(--gold);padding:20px 24px;margin:20px 0}
+.ical-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.ical p{font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.7;margin:0}
+
+/* profile cards */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.rc{background:var(--white);padding:20px 24px;border-left:4px solid var(--border);border:1px solid var(--border);border-left:4px solid var(--border)}
+.rc.gold{border-left-color:var(--gold)}.rc.red{border-left-color:var(--red)}
+.rc.blue{border-left-color:var(--blue)}.rc.green{border-left-color:var(--green)}
+.rc.dk{background:var(--dark);border-color:var(--dark);border-left-color:var(--gold)}
+.rcl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.rcv{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--dark);margin-bottom:4px}
+.rc.dk .rcv{color:var(--gold-lt)}.rcd{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.6}
+.rc.dk .rcd{color:#555}
+
+/* timeline table */
+.tlt{width:100%;border-collapse:collapse;margin-top:16px}
+.tlt th{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;font-weight:700}
+.tlt td{font-family:'Lato',sans-serif;padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px}
+.tlt tr.cur td{background:var(--gold-dim);font-weight:700}
+.tltag{display:inline-block;font-size:8px;padding:2px 8px;background:var(--dark);color:var(--gold-lt);letter-spacing:1px;font-family:'Lato',sans-serif}
+
+/* monthly */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.mc{background:var(--bg);padding:14px;border-top:3px solid var(--border);border:1px solid var(--border);border-top:3px solid var(--border)}
+.mc.hl{border-top-color:var(--gold);background:var(--gold-dim)}
+.mn{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1}
+.mname{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.mtheme{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;color:var(--dark);margin-bottom:2px}
+.mact{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);line-height:1.4}
+
+/* plan */
+.pphase{background:var(--white);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.pph-hdr{background:var(--dark);padding:18px 24px;display:flex;align-items:center;gap:18px}
+.pph-n{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);line-height:1}
+.pph-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:#555;text-transform:uppercase;font-weight:700}
+.pph-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff}
+.pph-body{padding:22px 28px}
+.pw{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.pw:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.pwl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.pwt{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--dark);margin-bottom:6px}
+.pwa{list-style:none}
+.pwa li{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);padding:4px 0 4px 16px;position:relative;line-height:1.6}
+.pwa li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+
+/* skeleton */
+.sk{display:flex;flex-direction:column;gap:10px;padding:32px;background:var(--white);border:1px solid var(--border)}
+.skl{height:10px;background:linear-gradient(90deg,var(--border) 25%,var(--cream) 50%,var(--border) 75%);background-size:200% 100%;animation:sk 1.4s ease-in-out infinite}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* answers */
+.ans-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ans-item{background:var(--white);padding:14px 18px;border-left:2px solid var(--border);border:1px solid var(--border);border-left:2px solid var(--border)}
+.ans-item.gold{border-left-color:var(--gold)}
+.ai-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.ai-val{font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.5}
+.ans-full{background:var(--white);padding:16px 20px;border-left:2px solid var(--border);margin-bottom:6px;border:1px solid var(--border);border-left:2px solid var(--border)}
+.ans-full.gold{border-left-color:var(--gold)}
+
+/* client header (screen view) */
+.client-hdr{background:var(--dark);padding:40px 48px;position:relative;overflow:hidden}
+.client-hdr::before{content:attr(data-n);position:absolute;right:32px;top:50%;transform:translateY(-50%);
+  font-family:'Cinzel',serif;font-size:160px;color:rgba(255,255,255,.025);line-height:1;pointer-events:none}
+.client-meta{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.client-name{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,56px);font-weight:300;color:#fff;margin-bottom:4px}
+.client-arch{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2vw,24px);font-style:italic;color:var(--gold-lt);margin-bottom:16px}
+.client-nums{display:flex;gap:24px;margin-top:28px;padding-top:24px;border-top:1px solid #1e1c14;flex-wrap:wrap}
+.cn-item{display:flex;flex-direction:column;gap:2px}
+.cn-v{font-family:'Cinzel',serif;font-size:36px;color:var(--gold);line-height:1}
+.cn-l{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:#3a3830;text-transform:uppercase;font-weight:700}
+.cn-n{font-family:'Lato',sans-serif;font-size:10px;color:#555}
+.client-body{max-width:900px;margin:0 auto;padding:0 40px 80px}
+.client-actions{display:flex;gap:10px;padding:20px 40px;background:var(--cream);border-bottom:1px solid var(--border)}
+.client-sec{padding:36px 0;border-bottom:1px solid var(--border)}
+.client-sec:last-child{border-bottom:none}
+.cs-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.cs-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--dark);margin-bottom:4px}
+.cs-title em{font-style:italic;color:var(--gold)}
+.cs-sub{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);margin-bottom:20px}
+
+/* ── CTA PAGE ── */
+.cta-page{
+  width:var(--page-w);min-height:160mm;
+  background:var(--dark);
+  padding:64px;
+  page-break-inside:avoid;
+  position:relative;overflow:hidden;
+}
+.cta-page::before{
+  content:'';position:absolute;width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(176,138,62,.06) 0%,transparent 70%);
+  top:50%;right:-80px;transform:translateY(-50%);
+}
+.cta-overline{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;font-weight:700}
+.cta-h{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:#fff;margin-bottom:16px;line-height:1.1}
+.cta-h em{font-style:italic;color:var(--gold-lt)}
+.cta-divider{width:50px;height:1px;background:var(--gold);margin:24px 0}
+.cta-body{font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.5);max-width:500px;line-height:1.9;margin-bottom:36px}
+.cta-items{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px}
+.cta-item{background:rgba(255,255,255,.04);border:1px solid rgba(176,138,62,.15);padding:20px 24px}
+.cta-item-icon{font-size:20px;margin-bottom:10px}
+.cta-item-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff;margin-bottom:6px}
+.cta-item-desc{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.35);line-height:1.6}
+.cta-btn-area{text-align:center;padding-top:8px}
+.cta-btn{display:inline-block;background:var(--gold);color:var(--dark);padding:16px 40px;
+  font-family:'Lato',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;border:none;cursor:pointer}
+.cta-small{font-family:'Lato',sans-serif;font-size:10px;color:rgba(255,255,255,.2);margin-top:16px;letter-spacing:1px;text-align:center}
+
+/* ══ PRINT ══ */
+@media print{
+  .hdr,.client-actions,.no-print,#sc-login,#sc-dash{display:none!important}
+  body{background:white!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:11px}
+  .screen{display:none!important;min-height:0}
+  #sc-client{display:block!important;padding:0}
+  .client-hdr{display:none!important}
+  .client-body{padding:0!important;max-width:none!important}
+  .client-sec{display:none!important}
+  /* Show only PDF structure */
+  .pdf-cover,.pdf-page,.sec-page,.cta-page{display:block!important}
+  .pdf-cover{background:#0c0b08!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;page-break-after:always;min-height:0;padding-bottom:0}
+  .cover-top-bar{background:var(--gold)!important;-webkit-print-color-adjust:exact}
+  .pph-hdr{background:#0c0b08!important;-webkit-print-color-adjust:exact}
+  .pph-title{color:#fff!important}
+  .rc.dk{background:#0c0b08!important;-webkit-print-color-adjust:exact}
+  .rc.dk .rcv{color:#c9a55a!important}.rc.dk .rcd{color:#666!important}
+  .sec-page-hdr{background:#0c0b08!important;-webkit-print-color-adjust:exact}
+  .sec-page-title,.sec-page-eye,.sec-page-sub{color:inherit!important}
+  .tltag{background:#0c0b08!important;color:#c9a55a!important;-webkit-print-color-adjust:exact}
+  .ical{background:rgba(176,138,62,.06)!important;-webkit-print-color-adjust:exact}
+  .cta-page{background:#0c0b08!important;-webkit-print-color-adjust:exact}
+  .mc.hl{background:rgba(176,138,62,.08)!important;-webkit-print-color-adjust:exact}
+  .mgrid{grid-template-columns:repeat(4,1fr)!important}
+  *{box-shadow:none!important}
+  .cgrid{page-break-inside:avoid}
+  .pphase{page-break-inside:avoid}
+  .aib{page-break-inside:avoid}
+}
+
+@media(max-width:768px){
+  .hdr{padding:0 16px}.client-hdr{padding:32px 20px}
+  .client-body,.client-actions{padding-left:20px;padding-right:20px}
+  .dash-stats,.cgrid,.ans-grid{grid-template-columns:1fr}
+  .mgrid{grid-template-columns:repeat(2,1fr)}
+  #sc-dash{padding:20px}
+  .dash-top{flex-direction:column;align-items:flex-start;gap:12px}
+  .cta-items{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<header class="hdr">
+<!-- LOGIN -->
+<div id="sc-login">
+  <div class="login-box">
+    <div class="login-sigma">Σ</div>
+    <h2 class="login-title">Painel Interno</h2>
+    <p class="login-sub">Código de Carreira · Acesso Restrito</p>
+    <input type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+    <p class="login-err" id="login-err">Senha incorreta.</p>
+    <button class="btn-gold" style="width:100%;justify-content:center" onclick="login()">Entrar →</button>
+  </div>
+</div>
+
+<header class="hdr no-print" id="mainHdr" style="display:none">
   <div class="hdr-brand">Código de Carreira</div>
-  <div class="hdr-tag">Diagnóstico Estratégico</div>
+  <div style="display:flex;align-items:center;gap:20px">
+    <div class="hdr-tag">Painel Interno</div>
+    <button class="btn-ghost" onclick="goTo('dash')" style="padding:6px 14px;font-size:9px">← Clientes</button>
+  </div>
 </header>
 
-<!-- HERO -->
-<div class="hero">
-  <p class="hero-eye">Metodologia Proprietária</p>
-  <h1 class="hero-h">Preencha com <em>atenção.</em></h1>
-  <p class="hero-body">Cada resposta alimenta a construção do seu diagnóstico estratégico individual. Quanto mais preciso você for, mais certeiro será o resultado. Estimativa: 8–12 minutos.</p>
-</div>
-
-<!-- PROGRESS -->
-<div class="prog-wrap">
-  <div class="prog-inner">
-    <div class="prog-step active" id="ps1">Identidade</div>
-    <div class="prog-step" id="ps2">Carreira</div>
-    <div class="prog-step" id="ps3">Momento</div>
-    <div class="prog-step" id="ps4">Padrões</div>
-    <div class="prog-step" id="ps5">Dores</div>
-    <div class="prog-step" id="ps6">Energia</div>
+<!-- DASHBOARD -->
+<div id="sc-dash" class="screen" style="display:none">
+  <div class="dash-top">
+    <h2 class="dash-title">Seus <em>clientes</em></h2>
+    <button class="btn-gold" onclick="loadClients()">↻ Atualizar lista</button>
+  </div>
+  <div class="dash-stats">
+    <div class="stat-card"><div class="stat-n" id="stat-total">—</div><div class="stat-l">Total de clientes</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-week">—</div><div class="stat-l">Esta semana</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-pending">—</div><div class="stat-l">Diagnósticos pendentes</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-header">
+      <div class="tbl-header-title">Lista de clientes</div>
+      <input class="tbl-search" type="text" id="searchInput" placeholder="Buscar por nome..." oninput="filterClients()"/>
+    </div>
+    <div id="tbl-body"></div>
   </div>
 </div>
 
-<!-- FORM -->
-<div id="sc-form" class="screen active">
-  <div class="fw">
+<!-- CLIENT DETAIL -->
+<div id="sc-client" class="screen" style="display:none">
 
-    <!-- B1 -->
-    <div class="fb" id="bloco1">
-      <div class="fb-lbl">01 — Identidade</div>
-      <div class="fg">
-        <label>Nome completo de batismo (conforme certidão de nascimento)</label>
-        <input type="text" id="f_nome" placeholder="Exatamente como consta no registro civil"/>
-        <div class="hint">⚠ Use o nome completo original — sem apelidos, nomes sociais ou alterações. Isso é essencial para a precisão do diagnóstico.</div>
-      </div>
-      <div class="frow">
-        <div class="fg">
-          <label>Data de nascimento</label>
-          <input type="date" id="f_nasc"/>
-        </div>
-        <div class="fg">
-          <label>Como gosta de ser chamado(a)</label>
-          <input type="text" id="f_apelido" placeholder="Primeiro nome ou apelido"/>
-        </div>
-      </div>
-      <div class="fg">
-        <label>Gênero</label>
-        <div class="grow">
-          <button class="gb sel" id="g_m" onclick="setG('masculino')">Masculino</button>
-          <button class="gb" id="g_f" onclick="setG('feminino')">Feminino</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- B2 -->
-    <div class="fb" id="bloco2">
-      <div class="fb-lbl">02 — Situação de Carreira</div>
-      <div class="fg">
-        <label>Qual é a sua ocupação principal hoje?</label>
-        <input type="text" id="f_ocup" placeholder="Ex: Gerente de RH, coach, médica, empresária, professora..."/>
-      </div>
-      <div class="frow">
-        <div class="fg">
-          <label>Modelo de trabalho atual</label>
-          <select id="f_modelo">
-            <option value="">Selecione...</option>
-            <option value="CLT">CLT — trabalho para uma empresa</option>
-            <option value="PJ">PJ / Freelancer — prestação de serviços</option>
-            <option value="empresaria">Empresária / Sócia — tenho meu negócio</option>
-            <option value="transicao">Em transição de modelo</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Faturamento / renda mensal atual</label>
-          <select id="f_fat">
-            <option value="">Selecione...</option>
-            <option value="ate3k">Até R$ 3.000</option>
-            <option value="3k7k">R$ 3.000 – R$ 7.000</option>
-            <option value="7k15k">R$ 7.000 – R$ 15.000</option>
-            <option value="15k30k">R$ 15.000 – R$ 30.000</option>
-            <option value="acima30k">Acima de R$ 30.000</option>
-          </select>
-        </div>
-      </div>
-      <div class="fg">
-        <label>Qual faturamento seria justo para o que você entrega?</label>
-        <select id="f_fatd">
-          <option value="">Selecione...</option>
-          <option value="ate5k">Até R$ 5.000</option>
-          <option value="5k12k">R$ 5.000 – R$ 12.000</option>
-          <option value="12k25k">R$ 12.000 – R$ 25.000</option>
-          <option value="25k50k">R$ 25.000 – R$ 50.000</option>
-          <option value="acima50k">Acima de R$ 50.000</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- B3 -->
-    <div class="fb" id="bloco3">
-      <div class="fb-lbl">03 — Momento Atual</div>
-      <div class="fg">
-        <label>Como você descreveria seu estado atual com a carreira?</label>
-        <div class="rg" id="f_estado"></div>
-      </div>
-      <div class="frow">
-        <div class="fg">
-          <label>Há quanto tempo você está nesse estado?</label>
-          <select id="f_tempo">
-            <option value="">Selecione...</option>
-            <option value="menos6m">Menos de 6 meses</option>
-            <option value="6m1a">Entre 6 meses e 1 ano</option>
-            <option value="1a3a">Entre 1 e 3 anos</option>
-            <option value="mais3a">Mais de 3 anos</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>O que você já tentou para mudar? (marque todos)</label>
-          <div class="cg" id="f_tent"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- B4 -->
-    <div class="fb" id="bloco4">
-      <div class="fb-lbl">04 — Padrões e Comportamentos</div>
-      <div class="fg">
-        <label>Qual frase mais representa como você funciona no trabalho?</label>
-        <div class="rg" id="f_padrao"></div>
-      </div>
-      <div class="fg">
-        <label>O que mais te sabota profissionalmente? (1 ou 2 opções)</label>
-        <div class="cg" id="f_sab"></div>
-      </div>
-      <div class="fg">
-        <label>Com que frequência você se sente desvalorizada financeiramente pelo que entrega?</label>
-        <div class="scrow" id="sc_desv"></div>
-        <div class="scends"><span>Raramente</span><span>Constantemente</span></div>
-      </div>
-      <div class="fg">
-        <label>Qual é a sua relação com visibilidade e reconhecimento profissional?</label>
-        <div class="rg" id="f_visib"></div>
-      </div>
-    </div>
-
-    <!-- B5 -->
-    <div class="fb" id="bloco5">
-      <div class="fb-lbl">05 — Dores Reais e Sonhos</div>
-      <div class="fg">
-        <label>Qual é o maior problema profissional que você enfrenta HOJE?</label>
-        <textarea id="f_dor" placeholder="Seja específica. Quanto mais real e detalhada for sua resposta, mais certeiro será o diagnóstico..."></textarea>
-      </div>
-      <div class="fg">
-        <label>Descreva como seria sua vida profissional ideal daqui a 2 anos:</label>
-        <textarea id="f_sonho" placeholder="Onde você está, o que faz, com quem trabalha, quanto ganha, como se sente..."></textarea>
-      </div>
-      <div class="fg">
-        <label>Na sua percepção, o que está impedindo você de chegar lá?</label>
-        <textarea id="f_bloq" placeholder="O que você acredita que é o obstáculo real entre onde está e onde quer chegar..."></textarea>
-      </div>
-    </div>
-
-    <!-- B6 -->
-    <div class="fb" id="bloco6">
-      <div class="fb-lbl">06 — Energia e Relações</div>
-      <div class="fg">
-        <label>Como está sua energia e disposição para o trabalho nos últimos 3 meses?</label>
-        <div class="scrow" id="sc_en"></div>
-        <div class="scends"><span>Esgotada / sem ânimo</span><span>Plena / motivada</span></div>
-      </div>
-      <div class="fg">
-        <label>Suas relações profissionais (clientes, sócios, líderes) te impulsionam ou te drenam?</label>
-        <div class="rg" id="f_relac"></div>
-      </div>
-      <div class="fg">
-        <label>Você tem facilidade em cobrar o que vale pelo seu trabalho?</label>
-        <div class="scrow" id="sc_cob"></div>
-        <div class="scends"><span>Muita dificuldade</span><span>Total facilidade</span></div>
-      </div>
-    </div>
-
-    <!-- SUBMIT -->
-    <div class="fnav">
-      <button class="btn-gold" onclick="enviarFormulario()">
-        Concluir e enviar diagnóstico →
-      </button>
-    </div>
-    <p style="font-size:10px;color:var(--muted);margin-top:16px;line-height:1.7">
-      Ao enviar, suas respostas serão analisadas e você receberá seu diagnóstico completo em até <strong>3 dias úteis</strong> no seu e-mail.
-    </p>
-
+  <!-- SCREEN HEADER (hidden on print) -->
+  <div class="client-hdr no-print" id="cHdr">
+    <div class="client-meta" id="cMeta"></div>
+    <h2 class="client-name" id="cName"></h2>
+    <p class="client-arch" id="cArch"></p>
+    <div class="client-nums" id="cNums"></div>
   </div>
-</div>
 
-<!-- ENVIANDO -->
-<div id="sc-sending" class="screen">
-  <svg class="send-glyph" viewBox="0 0 80 80" fill="none">
-    <circle cx="40" cy="40" r="36" stroke="#b5873a" stroke-width=".5" opacity=".3"/>
-    <circle cx="40" cy="40" r="26" stroke="#b5873a" stroke-width=".5" opacity=".4"/>
-    <polygon points="40,6 62,34 54,70 26,70 18,34" stroke="#b5873a" stroke-width=".7" fill="none" opacity=".7"/>
-    <circle cx="40" cy="40" r="3" fill="#b5873a"/>
-  </svg>
-  <h2 class="send-h">Enviando seu <em>diagnóstico...</em></h2>
-  <p class="send-sub">Aguarde um momento</p>
-</div>
+  <div class="client-actions no-print">
+    <button class="btn-gold" onclick="window.print()">⬇ Salvar PDF</button>
+    <button class="btn-ghost" id="btnGenerate" onclick="gerarDiagnostico()">⚙ Gerar diagnóstico completo</button>
+    <button class="btn-ghost" onclick="goTo('dash')">← Voltar</button>
+  </div>
 
-<!-- CONFIRMAÇÃO -->
-<div id="sc-confirm" class="screen">
-  <div class="conf-icon">✦</div>
-  <h2 class="conf-h">Diagnóstico <em>recebido.</em></h2>
-  <p class="conf-body">Suas respostas foram registradas com sucesso. Seu diagnóstico estratégico personalizado está sendo preparado.</p>
-  <div class="conf-box">
-    <div class="conf-box-title">O que acontece agora</div>
-    <div class="conf-name" id="conf-nome"></div>
-    <div class="conf-box-text">
-      Seu diagnóstico completo será preparado com base nas informações que você forneceu e entregue em até <strong style="color:var(--gold-lt)">3 dias úteis</strong>.<br><br>
-      Você receberá um documento estratégico individual com seu perfil de funcionamento, direção de maior faturamento, pontos de bloqueio e um plano de 90 dias personalizado.
+  <!-- SCREEN SECTIONS (hidden on print) -->
+  <div class="client-body no-print">
+    <div class="client-sec">
+      <p class="cs-eye">Dados Recebidos</p>
+      <h3 class="cs-title">Respostas do <em>cliente</em></h3>
+      <p class="cs-sub">Informações preenchidas no formulário.</p>
+      <div id="c-answers"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">01 — Ativo Mais Rentável</p>
+      <h3 class="cs-title">Talento <em>Principal</em></h3>
+      <div id="c-tal"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Clique em "Gerar diagnóstico completo"</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">02 — Direção Estratégica</p>
+      <h3 class="cs-title">Direção <em>Estratégica</em></h3>
+      <div id="c-dir"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">03 — Bloqueios</p>
+      <h3 class="cs-title">Pontos de <em>Bloqueio</em></h3>
+      <div id="c-blq"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">04 — Timing</p>
+      <h3 class="cs-title">Linha do Tempo e <em>Ciclos</em></h3>
+      <div id="c-tl"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">05 — Mensal</p>
+      <h3 class="cs-title">Calendário <em>Pessoal</em></h3>
+      <div id="c-men"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">06 — Plano</p>
+      <h3 class="cs-title">Plano de <em>90 Dias</em></h3>
+      <div id="c-plan"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
     </div>
   </div>
-  <p class="conf-small">CÓDIGO DE CARREIRA · DIAGNÓSTICO ESTRATÉGICO INDIVIDUAL</p>
-</div>
+
+  <!-- ════════════════════════════════
+       PDF STRUCTURE (only visible on print)
+  ════════════════════════════════ -->
+
+  <!-- CAPA -->
+  <div class="pdf-cover" id="pdf-cover">
+    <div class="cover-top-bar"></div>
+    <div class="cover-body">
+      <div class="cover-sigma">CÓDIGO DE CARREIRA</div>
+      <div class="cover-label">Diagnóstico Estratégico Individual · Confidencial</div>
+      <h1 class="cover-client-name" id="pdf-name"></h1>
+      <p class="cover-archetype" id="pdf-archetype"></p>
+      <div class="cover-divider"></div>
+      <p class="cover-tagline" id="pdf-tagline"></p>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-bottom-brand">Código de Carreira</div>
+      <div class="cover-bottom-date" id="pdf-date"></div>
+    </div>
+  </div>
+
+  <!-- INTRODUÇÃO -->
+  <div class="pdf-page" id="pdf-intro">
+    <div class="pdf-page-header">
+      <div class="pdf-page-brand">Código de Carreira</div>
+      <div class="pdf-page-client" id="pdf-intro-client"></div>
+    </div>
+    <div class="intro-eyebrow">Bem-vindo ao seu diagnóstico</div>
+    <h2 class="intro-title">Entendendo o seu<br><em>Código de Carreira</em></h2>
+    <div class="intro-divider"></div>
+    <p class="intro-body">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direção profissional.</p>
+    <p class="intro-body">Ao longo de mais de 20.000 análises, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
+    <div class="intro-how">
+      <div class="intro-how-title">Como ler e usar este relatório</div>
+      <ul class="intro-how-list">
+        <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira ou posicionamento.</li>
+        <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro para o seu perfil. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória. Mostra em qual fase você está e o que o momento pede de você.</li>
+        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia dominante que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual. Execute com consistência.</li>
+      </ul>
+    </div>
+    <div class="intro-quote">
+      <div class="intro-quote-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
+      <div class="intro-quote-author">Código de Carreira · Diagnóstico Estratégico</div>
+    </div>
+  </div>
+
+  <!-- 01 TALENTO -->
+  <div class="sec-page" id="pdf-tal">
+    <div class="sec-page-hdr" data-n="01">
+      <div class="sec-page-eye">01 — Ativo Mais Rentável</div>
+      <h2 class="sec-page-title">Talento <em>Principal</em></h2>
+      <p class="sec-page-sub">O padrão que gera faturamento com menor desgaste.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-tal-body">
+      <div class="sk"><div class="skl" style="width:80%"></div><div class="skl" style="width:60%"></div><div class="skl" style="width:90%"></div></div>
+    </div>
+  </div>
+
+  <!-- 02 DIREÇÃO -->
+  <div class="sec-page" id="pdf-dir">
+    <div class="sec-page-hdr" data-n="02">
+      <div class="sec-page-eye">02 — Caminho de Maior Faturamento</div>
+      <h2 class="sec-page-title">Direção <em>Estratégica</em></h2>
+      <p class="sec-page-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-dir-body">
+      <div class="sk"><div class="skl" style="width:70%"></div><div class="skl" style="width:50%"></div><div class="skl" style="width:85%"></div></div>
+    </div>
+  </div>
+
+  <!-- 03 BLOQUEIO -->
+  <div class="sec-page" id="pdf-blq">
+    <div class="sec-page-hdr" data-n="03">
+      <div class="sec-page-eye">03 — O Que Está Travando o Faturamento</div>
+      <h2 class="sec-page-title">Pontos de <em>Bloqueio</em></h2>
+      <p class="sec-page-sub">Padrões que drenam esforço sem retorno proporcional.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-blq-body">
+      <div class="sk"><div class="skl" style="width:75%"></div><div class="skl" style="width:90%"></div></div>
+    </div>
+  </div>
+
+  <!-- 04 TIMELINE -->
+  <div class="sec-page" id="pdf-tl">
+    <div class="sec-page-hdr" data-n="04">
+      <div class="sec-page-eye">04 — Timing Estratégico</div>
+      <h2 class="sec-page-title">Linha do Tempo e <em>Ciclos</em></h2>
+      <p class="sec-page-sub">Fases ativas e o momento certo para cada decisão.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-tl-body"></div>
+  </div>
+
+  <!-- 05 MENSAL -->
+  <div class="sec-page" id="pdf-men">
+    <div class="sec-page-hdr" data-n="05">
+      <div class="sec-page-eye">05 — Termômetro Mensal</div>
+      <h2 class="sec-page-title">Código Pessoal e <em>Calendário</em></h2>
+      <p class="sec-page-sub">O que cada mês pede de você — planejamento tático.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-men-body"></div>
+  </div>
+
+  <!-- 06 PLANO -->
+  <div class="sec-page" id="pdf-plan">
+    <div class="sec-page-hdr" data-n="06">
+      <div class="sec-page-eye">06 — Execução Prática</div>
+      <h2 class="sec-page-title">Plano de <em>90 Dias</em></h2>
+      <p class="sec-page-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p>
+    </div>
+    <div class="sec-page-body" id="pdf-plan-body">
+      <div class="sk"><div class="skl" style="width:80%"></div><div class="skl" style="width:60%"></div><div class="skl" style="width:95%"></div></div>
+    </div>
+  </div>
+
+  <!-- CTA — MENTORIA -->
+  <div class="cta-page" id="pdf-cta">
+    <div class="cta-overline">O mapa está pronto. A execução é o próximo passo.</div>
+    <h2 class="cta-h">Pronto para <em>executar</em><br>com precisão?</h2>
+    <div class="cta-divider"></div>
+    <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
+    <div class="cta-items">
+      <div class="cta-item">
+        <div class="cta-item-icon">🎯</div>
+        <div class="cta-item-title">3 Encontros de Acompanhamento</div>
+        <div class="cta-item-desc">Sessões individuais e exclusivas, construídas em cima do seu diagnóstico. Cada encontro tem um objetivo claro e ações práticas para o período.</div>
+      </div>
+      <div class="cta-item">
+        <div class="cta-item-icon">⚡</div>
+        <div class="cta-item-title">Ajustes em Tempo Real</div>
+        <div class="cta-item-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div>
+      </div>
+      <div class="cta-item">
+        <div class="cta-item-icon">📈</div>
+        <div class="cta-item-title">Foco Total em Faturamento</div>
+        <div class="cta-item-desc">Cada decisão estratégica será validada com base no seu perfil. Sem achismo, sem estratégia genérica — só o que funciona para o seu código.</div>
+      </div>
+      <div class="cta-item">
+        <div class="cta-item-icon">🔒</div>
+        <div class="cta-item-title">Exclusividade e Confidencialidade</div>
+        <div class="cta-item-desc">Acompanhamento 100% individual. O que é discutido nas sessões permanece entre você e o consultor. Espaço seguro para crescer de verdade.</div>
+      </div>
+    </div>
+    <div class="cta-btn-area">
+      <div class="cta-btn">Quero aplicar meu Código de Carreira</div>
+      <p class="cta-small">Entre em contato para agendar sua primeira sessão</p>
+    </div>
+  </div>
+
+</div><!-- end sc-client -->
 
 <script>
 'use strict';
-
-/* ══ SHEETS URL ══ */
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxaV0xidYj_lPoRrbAchIEUZERlTkXf4FEhEMzR8DkvTxL9AMXuK7VTMuwoCvHTGjoeTQ/exec';
+const SENHA='codigo2025';
+const SHEETS_ID='1ZRlyq_7BAyAg0nzRX1wKsmqJjFH5kvytXmfpts2I_iE';
+const SHEETS_READ_URL=`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:json`;
+const SHEETS_CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/export?format=csv&gid=0`;
 
 /* ══ KABBALISTIC ENGINE ══ */
 const LV={a:1,b:2,c:3,d:4,e:5,f:8,g:3,h:5,i:1,j:1,k:2,l:3,m:4,n:5,o:7,p:8,q:1,r:2,s:3,t:4,u:6,v:6,w:6,x:6,y:1,z:7};
 const AM={'\u0301':2,'\u0300':1,'\u0308':1,'\u0302':7,'\u0303':3,'\u0327':0};
 const VOWELS=new Set(['a','e','i','o','u']);
+function getCV(str){const dec=str.normalize('NFD').toLowerCase();const res=[];let i=0;while(i<dec.length){const ch=dec[i];if(LV[ch]!==undefined){let val=LV[ch],j=i+1;while(j<dec.length&&dec.charCodeAt(j)>=0x0300&&dec.charCodeAt(j)<=0x036f){const cc=dec[j];if(cc==='\u0327')val=6;else if(AM[cc]!==undefined)val+=AM[cc];j++;}res.push({base:ch,value:val});i=j;}else i++;}return res;}
+function sumL(n,f){return getCV(n).reduce((a,{base:b,value:v})=>(!f||f(b))?a+v:a,0);}
+function red(n,k=true){if(n<0)n=Math.abs(n);while(n>9&&!(k&&(n===11||n===22))){n=String(n).split('').reduce((a,b)=>a+parseInt(b),0);}return n;}
+function calcExpr(name){return red(sumL(name));}
+function calcSoul(name){return red(sumL(name,ch=>VOWELS.has(ch)));}
+function calcDest(d,m,y){return red((String(d)+String(m)+String(y)).split('').reduce((a,b)=>a+parseInt(b),0));}
+function calcCycles(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;return[{num:red(m,false),label:'1º Ciclo (Formativo)',start:0,end:fe},{num:red(d,false),label:'2º Ciclo (Produtivo)',start:fe+1,end:fe+27},{num:red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false),label:'3º Ciclo (Colheita)',start:fe+28,end:null}];}
+function calcPinn(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;const M=red(m,false),D=red(d,false),Y=red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false);const p1=red(M+D,false),p2=red(D+Y,false),p3=red(p1+p2,false),p4=red(M+Y,false);return[{num:p1,label:'1º Pináculo',start:0,end:fe},{num:p2,label:'2º Pináculo',start:fe+1,end:fe+9},{num:p3,label:'3º Pináculo',start:fe+10,end:fe+18},{num:p4,label:'4º Pináculo',start:fe+19,end:null}];}
+function calcChall(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;const M=red(m,false),D=red(d,false),Y=red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false);const c1=Math.abs(M-D),c2=Math.abs(D-Y),c3=Math.abs(c1-c2),c4=Math.abs(M-Y);return[{num:c1,label:'1º Desafio',start:0,end:fe},{num:c2,label:'2º Desafio',start:fe+1,end:fe+9},{num:c3,label:'3º Desafio (Principal)',start:fe+10,end:fe+18},{num:c4,label:'4º Desafio',start:fe+19,end:null}];}
+function calcPY(d,m,curY){const now=new Date(),cm=now.getMonth()+1,cd=now.getDate();let yr=curY;if(cm<m||(cm===m&&cd<d))yr=curY-1;return red(red(d,false)+red(m,false)+red(String(yr).split('').reduce((a,b)=>a+parseInt(b),0),false),false);}
+function calcPM(py,cm){return red(py+cm,false);}
 
-function getCharValues(str){
-  const dec=str.normalize('NFD').toLowerCase();const res=[];let i=0;
-  while(i<dec.length){
-    const ch=dec[i];
-    if(LV[ch]!==undefined){
-      let val=LV[ch],j=i+1;
-      while(j<dec.length&&dec.charCodeAt(j)>=0x0300&&dec.charCodeAt(j)<=0x036f){
-        const cc=dec[j];if(cc==='\u0327')val=6;else if(AM[cc]!==undefined)val+=AM[cc];j++;
-      }
-      res.push({base:ch,value:val});i=j;
-    }else i++;
-  }
-  return res;
-}
-function sumLetters(name,filter){return getCharValues(name).reduce((a,{base:b,value:v})=>(!filter||filter(b))?a+v:a,0);}
-function reduceToDigit(n,keepM=true){
-  if(n<0)n=Math.abs(n);
-  while(n>9&&!(keepM&&(n===11||n===22))){n=String(n).split('').reduce((a,b)=>a+parseInt(b),0);}
-  return n;
-}
-function calcExpression(name){return reduceToDigit(sumLetters(name));}
-function calcSoul(name){return reduceToDigit(sumLetters(name,ch=>VOWELS.has(ch)));}
-function calcDestiny(d,m,y){
-  const s=(String(d)+String(m)+String(y)).split('').reduce((a,b)=>a+parseInt(b),0);
-  return reduceToDigit(s);
-}
-function calcPersonalYear(d,m,curY){
-  const now=new Date(),cm=now.getMonth()+1,cd=now.getDate();
-  let yr=curY;if(cm<m||(cm===m&&cd<d))yr=curY-1;
-  const dd=reduceToDigit(d,false),mm=reduceToDigit(m,false);
-  const yy=reduceToDigit(String(yr).split('').reduce((a,b)=>a+parseInt(b),0),false);
-  return reduceToDigit(dd+mm+yy,false);
+/* ══ MEANINGS ══ */
+const TN={1:'O Pioneiro',2:'O Parceiro Estratégico',3:'O Comunicador',4:'O Arquiteto',5:'O Catalisador',6:'O Harmonizador',7:'O Estrategista',8:'O Executivo',9:'O Visionário Humanista',11:'O Inspirador Mestre',22:'O Arquiteto Mestre'};
+const DN={1:'A Rota da Iniciativa e Liderança',2:'A Rota da Parceria e Influência',3:'A Rota da Expressão e Comunicação',4:'A Rota da Construção e Consistência',5:'A Rota do Visionário Inspirador',6:'A Rota do Serviço de Alto Valor',7:'A Rota da Especialização Profunda',8:'A Rota da Autoridade e Escala',9:'A Rota do Legado e Impacto',11:'A Rota da Inspiração Mestre',22:'A Rota da Grandiosidade Concreta'};
+const MN2={1:'Conquista e Autonomia',2:'Harmonia e Cooperação',3:'Expressão e Alegria',4:'Segurança e Estrutura',5:'Liberdade e Variedade',6:'Amor e Responsabilidade',7:'Conhecimento e Profundidade',8:'Poder e Realizações',9:'Propósito e Legado',11:'Visão e Espiritualidade',22:'Impacto Concreto em Escala'};
+const CT={1:'Início — Plantio e Iniciativa',2:'Gestação — Parceria e Paciência',3:'Expansão — Comunicação e Criatividade',4:'Consolidação — Trabalho e Método',5:'Movimento — Mudança e Oportunidade',6:'Responsabilidade — Família e Serviço',7:'Introspecção — Análise e Espiritualidade',8:'Colheita — Autoridade e Faturamento',9:'Conclusão — Fechamento e Entrega'};
+const MT={1:'Início e Novos Começos',2:'Colaboração e Ajuste',3:'Comunicação e Networking',4:'Execução e Disciplina',5:'Movimento e Oportunidade',6:'Responsabilidade e Equilíbrio',7:'Estratégia e Planejamento',8:'Resultados e Autoridade',9:'Finalização e Balanço'};
+const MA={1:'Lance, comece, marque presença.',2:'Ouça, negocie, construa parcerias.',3:'Marketing, vendas, visibilidade.',4:'Organize processos, finanças e entregas.',5:'Aceite o inesperado. Flexibilidade gera faturamento.',6:'Qualidade de serviço. Confiança gera indicações.',7:'Planeje e estude. Refine a oferta.',8:'Cobranças, resultados, autoridade.',9:'Conclua, solte o velho. Espaço para o novo.'};
+const CH={0:'O Equilíbrio Total',1:'A Independência sem Isolamento',2:'A Diplomacia sem Dependência',3:'A Expressão sem Dispersão',4:'A Disciplina sem Rigidez',5:'A Liberdade sem Instabilidade',6:'A Responsabilidade sem Autossacrifício',7:'O Conhecimento sem Isolamento',8:'O Poder sem Controle',9:'O Ideal sem Fuga da Realidade'};
+const MNS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let allClients=[],currentClient=null;
+
+/* ══ LOGIN ══ */
+function login(){
+  const pwd=document.getElementById('login-pwd').value;
+  if(pwd===SENHA){document.getElementById('sc-login').style.display='none';document.getElementById('mainHdr').style.display='flex';goTo('dash');loadClients();}
+  else{document.getElementById('login-err').style.display='block';document.getElementById('login-pwd').value='';}
 }
 
-/* ══ STATE ══ */
-let gend='masculino';
+/* ══ NAV ══ */
+function goTo(sc){document.querySelectorAll('.screen').forEach(s=>{s.style.display='none';s.classList.remove('active');});const el=document.getElementById('sc-'+sc);if(el){el.style.display='block';el.classList.add('active');}window.scrollTo(0,0);}
 
-/* ══ FORM BUILDERS ══ */
-function bRadio(cid,opts,name){
-  document.getElementById(cid).innerHTML=opts.map(o=>`<label class="ro" onclick="selR(this,'${name}')"><input type="radio" name="${name}" value="${o.v}"><div class="rdot"></div><div class="otxt">${o.l}</div></label>`).join('');
-}
-function bCheck(cid,opts){
-  const c=document.getElementById(cid);
-  c.innerHTML=opts.map(o=>`<label class="co"><input type="checkbox" value="${o.v}"><div class="cbox"></div><div class="otxt">${o.l}</div></label>`).join('');
-  c.querySelectorAll('.co').forEach(el=>{
-    el.addEventListener('click',function(e){
-      e.preventDefault();this.classList.toggle('sel');
-      this.querySelector('input').checked=this.classList.contains('sel');
-    });
-  });
-}
-function bScale(cid){
-  document.getElementById(cid).innerHTML=Array.from({length:10},(_,i)=>`<button class="scb" onclick="selSc(this,'${cid}')">${i+1}</button>`).join('');
-}
-function selR(el,name){document.querySelectorAll(`[name="${name}"]`).forEach(r=>r.closest('.ro').classList.remove('sel'));el.classList.add('sel');el.querySelector('input').checked=true;}
-function selSc(btn,id){document.querySelectorAll(`#${id} .scb`).forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');}
-function setG(g){gend=g;document.getElementById('g_m').classList.toggle('sel',g==='masculino');document.getElementById('g_f').classList.toggle('sel',g==='feminino');}
-function gSc(id){const s=document.querySelector(`#${id} .scb.sel`);return s?parseInt(s.textContent):5;}
-function gRad(name){const s=document.querySelector(`[name="${name}"].sel input`);return s?s.value:'';}
-function gChk(id){return Array.from(document.querySelectorAll(`#${id} .co.sel input`)).map(i=>i.value);}
-
-function goTo(sc){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(sc).classList.add('active');
-  window.scrollTo(0,0);
+/* ══ CSV PARSER ══ */
+function parseCSV(text){
+  const lines=text.trim().split('\n');if(lines.length<2)return[];
+  function pLine(line){const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){r.push(cur.trim());cur='';}else cur+=ch;}r.push(cur.trim());return r;}
+  return lines.slice(1).filter(l=>l.trim()).map((line,idx)=>{const cols=pLine(line);const v=(i)=>(cols[i]||'').replace(/^"|"$/g,'').trim();return{idx,timestamp:v(0),nome:v(1),nasc:v(2),apelido:v(3),gender:v(4),ocup:v(5),modelo:v(6),fat:v(7),fatd:v(8),estado:v(9),tempo:v(10),tent:v(11),padrao:v(12),sab:v(13),desv:v(14),visib:v(15),dor:v(16),sonho:v(17),bloq:v(18),en:v(19),relac:v(20),cob:v(21),expression:parseInt(v(22))||0,destiny:parseInt(v(23))||0,soul:parseInt(v(24))||0,mission:parseInt(v(25))||0,personalYear:parseInt(v(26))||0,age:parseInt(v(27))||0};});
 }
 
-function initForm(){
-  bRadio('f_estado',[
-    {v:'estagnada',l:'Estagnada — trabalho muito mas não avanço'},
-    {v:'perdida',l:'Perdida — não sei qual direção seguir'},
-    {v:'insatisfeita',l:'Crescendo, mas insatisfeita — vai bem mas algo falta'},
-    {v:'transicao',l:'Em transição — sei que preciso mudar, mas travo'},
-    {v:'pronta',l:'Pronta para escalar — tenho base, quero crescer'},
-  ],'estado');
-  bCheck('f_tent',[
-    {v:'cursos',l:'Cursos e formações'},{v:'terapia',l:'Terapia ou coaching'},
-    {v:'networking',l:'Networking / eventos'},{v:'empreender',l:'Empreendedorismo'},
-    {v:'mudouarea',l:'Mudou de área ou empresa'},{v:'nada',l:'Ainda não tentei nada'},
-  ]);
-  bRadio('f_padrao',[
-    {v:'D',l:'Decido rápido, prefiro liderar e não espero aprovação de ninguém'},
-    {v:'I',l:'Inspiro, conecto pessoas e crio energia nos ambientes que chego'},
-    {v:'S',l:'Sustento, apoio e garanto que tudo funcione de forma consistente'},
-    {v:'C',l:'Analiso, organizo e entrego com qualidade e precisão acima da média'},
-  ],'padrao');
-  bCheck('f_sab',[
-    {v:'perfeccionismo',l:'Perfeccionismo — nunca está bom o suficiente'},
-    {v:'procrastinacao',l:'Procrastinação — sei o que fazer mas não faço'},
-    {v:'dispersao',l:'Dispersão — começo muito, termino pouco'},
-    {v:'medo',l:'Medo de arriscar — prefiro segurança'},
-    {v:'comparacao',l:'Comparação — me sinto menor que outros'},
-    {v:'autossabotagem',l:'Autossabotagem — quando vai bem, trava'},
-  ]);
-  bScale('sc_desv');bScale('sc_en');bScale('sc_cob');
-  bRadio('f_visib',[
-    {v:'busca',l:'Busco reconhecimento ativamente — me exponho bem'},
-    {v:'misto',l:'Quero reconhecimento mas tenho dificuldade de me mostrar'},
-    {v:'evita',l:'Evito exposição — prefiro fazer bem feito no silêncio'},
-  ],'visib');
-  bRadio('f_relac',[
-    {v:'impulsionam',l:'Principalmente me impulsionam'},
-    {v:'misto',l:'Misto — algumas constroem, outras drenam'},
-    {v:'drenam',l:'Principalmente me drenam'},
-  ],'relac');
-}
-
-/* ══ SUBMIT ══ */
-async function enviarFormulario(){
-  const nome=document.getElementById('f_nome').value.trim();
-  const nasc=document.getElementById('f_nasc').value;
-  if(!nome||!nasc){
-    alert('Por favor, preencha o nome completo de batismo e a data de nascimento.');return;
-  }
-  if(nome.split(' ').length<2){
-    alert('Por favor, informe o nome COMPLETO de batismo (nome e sobrenome).');return;
-  }
-
-  // Calculate numerology
-  const bd=new Date(nasc+'T00:00:00');
-  const d=bd.getDate(),m=bd.getMonth()+1,y=bd.getFullYear();
-  const expression=calcExpression(nome);
-  const destiny=calcDestiny(d,m,y);
-  const soul=calcSoul(nome);
-  const mission=reduceToDigit(expression+destiny);
-  const personalYear=calcPersonalYear(d,m,new Date().getFullYear());
-  const now=new Date();
-  let age=now.getFullYear()-y;
-  if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;
-
-  const payload={
-    timestamp: new Date().toLocaleString('pt-BR'),
-    nome,
-    nasc,
-    apelido: document.getElementById('f_apelido').value.trim()||nome.split(' ')[0],
-    gender: gend,
-    ocup: document.getElementById('f_ocup').value.trim(),
-    modelo: document.getElementById('f_modelo').value,
-    fat: document.getElementById('f_fat').value,
-    fatd: document.getElementById('f_fatd').value,
-    estado: gRad('estado'),
-    tempo: document.getElementById('f_tempo').value,
-    tent: gChk('f_tent').join(', '),
-    padrao: gRad('padrao'),
-    sab: gChk('f_sab').join(', '),
-    desv: gSc('sc_desv'),
-    visib: gRad('visib'),
-    dor: document.getElementById('f_dor').value.trim(),
-    sonho: document.getElementById('f_sonho').value.trim(),
-    bloq: document.getElementById('f_bloq').value.trim(),
-    en: gSc('sc_en'),
-    relac: gRad('relac'),
-    cob: gSc('sc_cob'),
-    // Calculated
-    expression, destiny, soul, mission, personalYear, age
-  };
-
-  goTo('sc-sending');
-
-  // Apps Script requer text/plain para funcionar com no-cors
+/* ══ LOAD CLIENTS ══ */
+async function loadClients(){
+  const tbl=document.getElementById('tbl-body');
+  tbl.innerHTML=`<div class="empty-state"><p>Carregando clientes...</p></div>`;
   try{
-    await fetch(SHEETS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.error('Fetch error:', e);
-  }
-
-  setTimeout(()=>{
-    document.getElementById('conf-nome').textContent=payload.apelido+',';
-    goTo('sc-confirm');
-  },1800);
+    let rows=null,parseOk=false;
+    try{const url=SHEETS_READ_URL+'&t='+Date.now();const res=await fetch(url);if(res.ok){const text=await res.text();const f=text.indexOf('{'),l=text.lastIndexOf('}');if(f!==-1){const json=JSON.parse(text.substring(f,l+1));rows=json.table?json.table.rows:null;if(rows)parseOk=true;}}}catch(e){console.warn('gviz:',e.message);}
+    if(!parseOk){const csvRes=await fetch(SHEETS_CSV_URL+'&t='+Date.now());if(!csvRes.ok)throw new Error('HTTP '+csvRes.status+' — verifique o compartilhamento da planilha.');rows=parseCSV(await csvRes.text());parseOk=true;}
+    if(!rows||!rows.length){tbl.innerHTML=`<div class="empty-state"><p>Nenhum cliente ainda.</p></div>`;updateStats([]);return;}
+    if(parseOk&&rows[0]&&rows[0].c!==undefined){const isHdr=rows[0].c&&rows[0].c[1]&&(rows[0].c[1].v||'').toString().toLowerCase().includes('nome');const dr=isHdr?rows.slice(1):rows;allClients=dr.map((row,idx)=>{const v=(i)=>{if(!row.c||!row.c[i])return'';const cell=row.c[i];if(cell.v instanceof Date)return cell.f||cell.v.toLocaleDateString('pt-BR');return String(cell.f||cell.v||'');};return{idx,timestamp:v(0),nome:v(1),nasc:v(2),apelido:v(3),gender:v(4),ocup:v(5),modelo:v(6),fat:v(7),fatd:v(8),estado:v(9),tempo:v(10),tent:v(11),padrao:v(12),sab:v(13),desv:v(14),visib:v(15),dor:v(16),sonho:v(17),bloq:v(18),en:v(19),relac:v(20),cob:v(21),expression:parseInt(v(22))||0,destiny:parseInt(v(23))||0,soul:parseInt(v(24))||0,mission:parseInt(v(25))||0,personalYear:parseInt(v(26))||0,age:parseInt(v(27))||0};}).reverse();}
+    else allClients=rows.reverse();
+    updateStats(allClients);renderTable(allClients);
+  }catch(err){console.error(err);tbl.innerHTML=`<div class="empty-state"><p style="color:var(--red)">Erro: ${err.message}</p><div style="margin-top:16px"><button class="btn-gold" onclick="loadClients()">↻ Tentar novamente</button></div></div>`;}
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  initForm();
-  // Update progress bar on scroll / interaction
-  ['bloco1','bloco2','bloco3','bloco4','bloco5','bloco6'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    if(!el)return;
-    const obs=new IntersectionObserver(entries=>{
-      if(entries[0].isIntersecting){
-        document.querySelectorAll('.prog-step').forEach((s,si)=>{
-          s.classList.toggle('active',si===i);
-          s.classList.toggle('done',si<i);
-        });
-      }
-    },{threshold:0.3});
-    obs.observe(el);
-  });
-});
+function updateStats(cl){const now=new Date(),wa=new Date(now-7*24*60*60*1000);document.getElementById('stat-total').textContent=cl.length||'0';document.getElementById('stat-week').textContent=cl.filter(c=>{try{return new Date(c.timestamp)>=wa;}catch(e){return false;}}).length||'0';document.getElementById('stat-pending').textContent=cl.length||'0';}
+
+function renderTable(clients){
+  if(!clients.length){document.getElementById('tbl-body').innerHTML=`<div class="empty-state"><p>Nenhum cliente encontrado.</p></div>`;return;}
+  document.getElementById('tbl-body').innerHTML=`<table><thead><tr><th>Cliente</th><th>Nascimento</th><th>Talento</th><th>Direção</th><th>Ocupação</th><th>Recebido em</th></tr></thead><tbody>${clients.map(c=>`<tr onclick="openClient(${c.idx})"><td><div class="td-name">${c.apelido||c.nome||'—'}</div><div style="font-size:10px;color:var(--muted)">${c.nome||''}</div></td><td class="td-date">${c.nasc||'—'}</td><td>${TN[c.expression]||c.expression||'—'}</td><td style="font-size:11px">${DN[c.destiny]||c.destiny||'—'}</td><td>${c.ocup||'—'}</td><td class="td-date">${c.timestamp||'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function filterClients(){const q=document.getElementById('searchInput').value.toLowerCase();renderTable(allClients.filter(c=>(c.nome||'').toLowerCase().includes(q)||(c.apelido||'').toLowerCase().includes(q)));}
+
+/* ══ OPEN CLIENT ══ */
+function openClient(idx){
+  const c=allClients.find(x=>x.idx===idx);if(!c)return;
+  currentClient=c;
+  // Recalculate from raw data
+  if(c.nome&&c.nasc){
+    const bd=new Date(c.nasc.includes('-')?c.nasc+'T00:00:00':c.nasc);
+    if(!isNaN(bd)){
+      const d=bd.getDate(),m=bd.getMonth()+1,y=bd.getFullYear();
+      c.expression=calcExpr(c.nome);c.destiny=calcDest(d,m,y);
+      c.soul=calcSoul(c.nome);c.mission=red(c.expression+c.destiny);
+      c.personalYear=calcPY(d,m,new Date().getFullYear());
+      c.cycles=calcCycles(d,m,y);c.pinnacles=calcPinn(d,m,y);c.challenges=calcChall(d,m,y);
+      const now=new Date();let age=now.getFullYear()-y;if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;c.age=age;
+      c.personalMonths=MNS.map((n,i)=>({month:i+1,name:n,personalMonth:calcPM(c.personalYear,i+1)}));
+    }
+  }
+  const tn=TN[c.expression]||'—',dn=DN[c.destiny]||'—';
+  // Screen header
+  document.getElementById('cHdr').setAttribute('data-n',c.expression||'');
+  document.getElementById('cMeta').textContent=`CÓDIGO DE CARREIRA · ${(c.apelido||c.nome||'').toUpperCase()} · CONFIDENCIAL`;
+  document.getElementById('cName').textContent=c.apelido||c.nome||'—';
+  document.getElementById('cArch').textContent=tn;
+  document.getElementById('cNums').innerHTML=[{v:c.expression,l:'Talento',n:tn},{v:c.destiny,l:'Direção',n:dn},{v:c.soul,l:'Motivação',n:MN2[c.soul]||'—'},{v:c.mission,l:'Missão',n:'Código de Vida'},{v:c.personalYear,l:'Código Anual',n:CT[c.personalYear]||'—'}].map(x=>`<div class="cn-item"><div class="cn-v">${x.v||'—'}</div><div class="cn-l">${x.l}</div><div class="cn-n">${x.n}</div></div>`).join('');
+  // PDF cover
+  document.getElementById('pdf-name').textContent=c.apelido||c.nome||'—';
+  document.getElementById('pdf-archetype').textContent=tn;
+  document.getElementById('pdf-tagline').textContent=`${dn}. Motivação central: ${MN2[c.soul]||'—'}. Código anual: ${CT[c.personalYear]||'—'}.`;
+  document.getElementById('pdf-date').textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
+  document.getElementById('pdf-intro-client').textContent=(c.apelido||c.nome||'').toUpperCase();
+  // Render answers
+  renderAnswers(c);
+  // Static sections
+  if(c.cycles)buildTL(c);
+  if(c.personalMonths)buildMen(c);
+  // Reset AI
+  ['c-tal','c-dir','c-blq','c-plan','pdf-tal-body','pdf-dir-body','pdf-blq-body','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Clique em "Gerar diagnóstico completo".</div>`;});
+  document.getElementById('btnGenerate').disabled=false;
+  document.getElementById('btnGenerate').textContent='⚙ Gerar diagnóstico completo';
+  goTo('client');
+}
+
+function renderAnswers(c){
+  const fl={ate3k:'Até R$3k','3k7k':'R$3k–7k','7k15k':'R$7k–15k','15k30k':'R$15k–30k',acima30k:'Acima R$30k'};
+  const fd={ate5k:'Até R$5k','5k12k':'R$5k–12k','12k25k':'R$12k–25k','25k50k':'R$25k–50k',acima50k:'Acima R$50k'};
+  document.getElementById('c-answers').innerHTML=`
+    <div class="ans-grid">
+      <div class="ans-item gold"><div class="ai-lbl">Nome de batismo</div><div class="ai-val">${c.nome||'—'}</div></div>
+      <div class="ans-item gold"><div class="ai-lbl">Data de nascimento</div><div class="ai-val">${c.nasc||'—'} (${c.age} anos)</div></div>
+      <div class="ans-item"><div class="ai-lbl">Gênero</div><div class="ai-val">${c.gender||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Ocupação</div><div class="ai-val">${c.ocup||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Modelo</div><div class="ai-val">${c.modelo||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Faturamento atual</div><div class="ai-val">${fl[c.fat]||c.fat||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Faturamento desejado</div><div class="ai-val">${fd[c.fatd]||c.fatd||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Estado atual</div><div class="ai-val">${c.estado||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Há quanto tempo</div><div class="ai-val">${c.tempo||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Já tentou</div><div class="ai-val">${c.tent||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Padrão comportamental</div><div class="ai-val">${c.padrao||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Sabotadores</div><div class="ai-val">${c.sab||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Desvalorização</div><div class="ai-val">${c.desv||'—'}/10</div></div>
+      <div class="ans-item"><div class="ai-lbl">Visibilidade</div><div class="ai-val">${c.visib||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Energia</div><div class="ai-val">${c.en||'—'}/10</div></div>
+      <div class="ans-item"><div class="ai-lbl">Cobrança</div><div class="ai-val">${c.cob||'—'}/10</div></div>
+    </div>
+    <div class="ans-full gold"><div class="ai-lbl">Maior problema hoje</div><div class="ai-val" style="margin-top:4px">${c.dor||'—'}</div></div>
+    <div class="ans-full"><div class="ai-lbl">Vida ideal em 2 anos</div><div class="ai-val" style="margin-top:4px">${c.sonho||'—'}</div></div>
+    <div class="ans-full"><div class="ai-lbl">O que acredita que impede</div><div class="ai-val" style="margin-top:4px">${c.bloq||'—'}</div></div>`;
+}
+
+/* ══ TIMELINE ══ */
+function buildTL(c){
+  const ag=c.age;
+  const cc=c.cycles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cp=c.pinnacles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cch=c.challenges.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const intro=`<div style="background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--gold);padding:24px 28px;margin-bottom:20px"><div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Como ler esta seção</div><p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.8;margin-bottom:10px">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p><ul style="list-style:none"><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos: Formativo, Produtivo e Colheita.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li></ul><p style="font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);margin-top:10px;font-style:italic">Itens marcados como <strong>ATUAL</strong> estão ativos para você hoje, com ${ag} anos.</p></div>`;
+  const cards=`<div class="cgrid"><div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">${cc?TN[cc.num]||cc.num:'—'}</div><div class="rcd">${cc?cc.label+' · '+cc.start+'–'+(cc.end||'∞')+' anos':''}</div></div><div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">${cp?TN[cp.num]||cp.num:'—'}</div><div class="rcd">${cp?cp.label:''}</div></div></div><div class="cgrid"><div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">${cch?CH[cch.num]||cch.num:'—'}</div><div class="rcd">${cch?cch.label:''}</div></div><div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">${TN[c.mission]||c.mission||'—'}</div><div class="rcd">Talento (${c.expression}) + Direção (${c.destiny})</div></div></div>`;
+  let tbl=`<table class="tlt"><thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead><tbody>`;
+  [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{const isc=ag>=x.start&&(x.end===null||ag<=x.end);const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';tbl+=`<tr class="${isc?'cur':''}"><td>${isc?'<span class="tltag">ATUAL</span> ':''}${x.label}</td><td>${t}</td><td>${TN[x.num]||CH[x.num]||x.num}</td><td>${x.start}–${x.end??'∞'} anos</td></tr>`;});
+  tbl+='</tbody></table>';
+  const html=intro+cards+tbl;
+  document.getElementById('c-tl').innerHTML=html;
+  document.getElementById('pdf-tl-body').innerHTML=html;
+}
+
+function buildMen(c){
+  const cm=new Date().getMonth()+1;
+  const header=`<div class="rc dk" style="margin-bottom:16px"><div class="rcl">Código Anual Ativo</div><div class="rcv">${CT[c.personalYear]||'—'}</div><div class="rcd">Próximo código: ${CT[c.personalYear===9?1:c.personalYear+1]||'—'}</div></div>`;
+  let grid=`<div class="mgrid">`;
+  c.personalMonths.forEach(m=>{grid+=`<div class="mc ${m.month===cm?'hl':''}"><div class="mn">${m.personalMonth}</div><div class="mname">${m.name}${m.month===cm?' ◀':''}</div><div class="mtheme">${MT[m.personalMonth]||''}</div><div class="mact">${MA[m.personalMonth]||''}</div></div>`;});
+  grid+='</div>';
+  const html=header+grid;
+  document.getElementById('c-men').innerHTML=html;
+  document.getElementById('pdf-men-body').innerHTML=html;
+}
+
+/* ══ GENERATE ══ */
+async function gerarDiagnostico(){
+  const c=currentClient;if(!c)return;
+  document.getElementById('btnGenerate').disabled=true;
+  document.getElementById('btnGenerate').textContent='Gerando...';
+  await Promise.all([aiTalento(c),aiDirecao(c),aiBloquio(c),aiPlano(c)]);
+  document.getElementById('btnGenerate').textContent='✓ Diagnóstico gerado';
+}
+
+async function callAPI(sys,usr){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1800,system:sys,messages:[{role:'user',content:usr}]})});
+  const data=await r.json();return data.content?.[0]?.text||'';
+}
+
+const SYS=`Você é um consultor especialista em diagnóstico estratégico de carreira com metodologia proprietária. NUNCA mencione "numerologia", "cabalística", "místico" ou termos esotéricos. Use: "padrão", "perfil", "código", "análise".
+
+REGRAS CRÍTICAS:
+- SEMPRE 2ª pessoa: "Você tem...", "Seu padrão é...", "Você tende a..."
+- NUNCA 3ª pessoa como "esta pessoa" ou "[nome] gosta de"
+- Linguagem estratégica, voltada a resultado e faturamento
+- Tom McKinsey — premium, direto, sem autoajuda
+- Adapte pronomes ao gênero indicado
+- Formato HTML: <h3>, <p>, <ul><li>, <strong> — sem markdown
+- Assertivo: sem "talvez", "pode ser", "possivelmente"
+- Mínimo 3 frases por parágrafo`;
+
+function ctxC(c){const cc=c.cycles?c.cycles.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;return`PERFIL:
+Nome: ${c.nome} | Apelido: ${c.apelido} | Idade: ${c.age} | Gênero: ${c.gender}
+Talento (expressão): ${c.expression} — ${TN[c.expression]||'—'}
+Direção (destino): ${c.destiny} — ${DN[c.destiny]||'—'}
+Motivação (alma): ${c.soul} — ${MN2[c.soul]||'—'}
+Código de vida (missão): ${c.mission}
+Código anual: ${c.personalYear} — ${CT[c.personalYear]||'—'}
+Ciclo ativo: ${cc?cc.num+' '+cc.label:'—'}
+Desafio atual: ${cch?cch.num+' '+(CH[cch.num]||''):' —'}
+
+FORMULÁRIO:
+Ocupação: ${c.ocup||'—'} | Modelo: ${c.modelo||'—'}
+Faturamento: ${c.fat||'—'} | Desejado: ${c.fatd||'—'}
+Estado: ${c.estado||'—'} | Há quanto tempo: ${c.tempo||'—'}
+Tentativas: ${c.tent||'—'} | Padrão: ${c.padrao||'—'}
+Sabotadores: ${c.sab||'—'} | Desvalorização: ${c.desv}/10 | Cobrança: ${c.cob}/10
+Energia: ${c.en}/10 | Relações: ${c.relac||'—'} | Visibilidade: ${c.visib||'—'}
+Dor: ${c.dor||'—'}
+Sonho: ${c.sonho||'—'}
+Bloqueio percebido: ${c.bloq||'—'}`;}
+
+function setContent(ids,html){ids.forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<div class="aib">${html}</div>`;});}
+
+async function aiTalento(c){
+  ['c-tal','pdf-tal-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Analisando talento principal...</p></div>';});
+  const tn=TN[c.expression]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Talento Principal" em 2ª pessoa.\n\n1. <h3>${tn}</h3>\n<p>2 parágrafos. "Você funciona como...", "Seu padrão é...". Use o nome "${c.apelido}". Relacione com ocupação "${c.ocup}" e estado "${c.estado}".</p>\n\n2. <h3>Sua Diretriz de Faturamento</h3>\n<p>Como seu talento gera faturamento com menos desgaste. Concreto e específico para o perfil ${c.expression}.</p>\n\n3. <h3>Seu Posicionamento de Autoridade</h3>\n<p>Como você deve se posicionar. O que o mercado enxerga quando você opera no padrão natural.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Uma ação concreta esta semana.</p></div>`);if(t&&t.trim().length>50)setContent(['c-tal','pdf-tal-body'],t);else setContent(['c-tal','pdf-tal-body'],fbT(c));}
+  catch(e){setContent(['c-tal','pdf-tal-body'],fbT(c));}
+}
+
+async function aiDirecao(c){
+  ['c-dir','pdf-dir-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Mapeando direção estratégica...</p></div>';});
+  const dn=DN[c.destiny]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Direção Estratégica" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${dn}</h3>\n<p>2 parágrafos. "Sua direção aponta para...", "Quando você trabalha alinhada com...". Estado: "${c.estado}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>Cenário de Retorno Financeiro</h3>\n<p>Como essa direção gera faturamento para você. Modelos e nichos concretos.</p>\n\n3. <h3>Sua Diretriz de Transição</h3>\n<p>O que você para e o que prioriza. Baseado na sua dor e sonho.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Um passo concreto nos próximos 7 dias.</p></div>`);if(t&&t.trim().length>50)setContent(['c-dir','pdf-dir-body'],t);else setContent(['c-dir','pdf-dir-body'],fbD(c));}
+  catch(e){setContent(['c-dir','pdf-dir-body'],fbD(c));}
+}
+
+async function aiBloquio(c){
+  ['c-blq','pdf-blq-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Identificando bloqueios...</p></div>';});
+  const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Pontos de Bloqueio" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${cn}</h3>\n<p>2-3 parágrafos. "Seu bloqueio opera...", "Você tende a...". Sabotadores: "${c.sab||'—'}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>O Impacto no Seu Faturamento</h3>\n<p>Custo real. Desvalorização ${c.desv}/10 e cobrança ${c.cob}/10.</p>\n\n3. <h3>Seu Protocolo de Superação</h3>\n<ul><li>3-5 ações concretas baseadas no perfil ${c.expression}</li></ul>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Última decisão onde o bloqueio apareceu. O que você faz diferente agora.</p></div>`);if(t&&t.trim().length>50)setContent(['c-blq','pdf-blq-body'],t);else setContent(['c-blq','pdf-blq-body'],fbB(c));}
+  catch(e){setContent(['c-blq','pdf-blq-body'],fbB(c));}
+}
+
+async function aiPlano(c){
+  ['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="sk"><div class="skl" style="width:80%"></div><div class="skl" style="width:60%"></div><div class="skl" style="width:90%"></div></div>';});
+  const tn=TN[c.expression]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Plano de 90 Dias. Retorne APENAS JSON puro:\n{"fase1":{"titulo":"título fase 1","semanas":[{"titulo":"Semana 1: título","acoes":["ação1","ação2","ação3"]},{"titulo":"Semana 2: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 3: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 4: título","acoes":["a1","a2","a3"]}]},"fase2":{"titulo":"título fase 2","semanas":[{"titulo":"Semana 5: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 6: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 7: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 8: título","acoes":["a1","a2","a3"]}]},"fase3":{"titulo":"título fase 3","semanas":[{"titulo":"Semana 9: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 10: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 11: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 12: título","acoes":["a1","a2","a3"]}]}}\nAções específicas para: perfil ${c.expression} (${tn}), ocupação "${c.ocup}", estado "${c.estado}", sonho "${c.sonho||'crescer'}". Use o nome "${c.apelido}". Verbos de ação, concreto e mensurável.`);
+    const plan=JSON.parse(t.replace(/```json|```/g,'').trim());
+    const html=renderPlan(plan);
+    ['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
+  }catch(e){const html=renderPlan(fbPlan(c));['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+}
+
+function renderPlan(p){return[{k:'fase1',l:'Fase 1',per:'Dias 1–30'},{k:'fase2',l:'Fase 2',per:'Dias 31–60'},{k:'fase3',l:'Fase 3',per:'Dias 61–90'}].map((f,fi)=>{const fase=p[f.k];if(!fase)return'';const wks=(fase.semanas||[]).map((s,si)=>`<div class="pw"><div class="pwl">Semana ${fi*4+si+1}</div><div class="pwt">${s.titulo}</div><ul class="pwa">${(s.acoes||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>`).join('');return`<div class="pphase"><div class="pph-hdr"><div class="pph-n">${fi+1}</div><div><div class="pph-lbl">${f.l} · ${f.per}</div><div class="pph-title">${fase.titulo}</div></div></div><div class="pph-body">${wks}</div></div>`;}).join('');}
+
+/* FALLBACKS */
+function fbT(c){const tn=TN[c.expression]||'';return`<h3>${tn}</h3><p>Você funciona como <strong>${tn}</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você, ${c.apelido}, tem uma forma específica de gerar valor que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia fora do seu padrão natural.</p><p>Quando você opera dentro do seu perfil natural, sua entrega é exponencialmente superior à média. Trabalhar contra esse padrão — assumindo funções que não o refletem, aceitando qualquer trabalho ou tentando ser o que não é — é a principal causa de estagnação de faturamento.</p><h3>Sua Diretriz de Faturamento</h3><p>O mercado paga mais por especialistas posicionados com clareza. Você gera valor máximo como ${tn} quando filtra suas atividades por alinhamento com o seu padrão — não quando aceita tudo que chega. Cada vez que você diz sim para algo fora do seu perfil, está dizendo não para o faturamento que te pertence.</p><h3>Seu Posicionamento de Autoridade</h3><p>Sua autoridade se constrói pela consistência de entrega dentro do seu padrão. O mercado reconhece especialistas — não generalistas. Posicione-se como referência onde o seu perfil é o diferencial competitivo.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Audite sua agenda desta semana: quantas horas refletem o seu padrão como ${tn}? Se menos de 50%, reposicione imediatamente. O faturamento segue o alinhamento.</p></div>`;}
+function fbD(c){const dn=DN[c.destiny]||'';return`<h3>${dn}</h3><p>Sua direção estratégica aponta para <strong>${dn}</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico, ${c.apelido}. Quando você trabalha alinhada com essa direção, o faturamento vem com mais naturalidade e menos desgaste. Quando você trabalha contra ela, gasta o dobro de energia para metade do resultado.</p><p>No seu estado atual de <strong>${c.estado||'transição'}</strong>, alinhar suas ações com essa direção é a diferença entre remar contra a maré e surfar a onda certa. Você não está faltando esforço — está faltando direção. E direção certa muda tudo.</p><h3>Cenário de Retorno Financeiro</h3><p>O retorno mais previsível para você, com essa direção, vem de posicionamentos onde você atua como referência dentro do seu padrão. Antes de tentar escalar, construa autoridade percebida. O mercado não paga pelo seu esforço — paga pela sua direção estratégica.</p><h3>Sua Diretriz de Transição</h3><p>Você precisa eliminar serviços e clientes que não refletem sua direção. Concentre sua energia apenas no que ativa seu padrão natural. Essa transição exige a coragem de recusar o que não cabe.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Qual nicho específico maximiza o seu perfil e a sua direção? Foque nele e recuse o restante nos próximos 30 dias.</p></div>`;}
+function fbB(c){const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';return`<h3>${cn}</h3><p>Seu padrão de bloqueio opera de forma sutil, ${c.apelido} — frequentemente mascarado de perfeccionismo, excesso de cuidado ou indecisão estratégica. O risco não é você travar de forma óbvia, mas repetir comportamentos antigos exatamente nos momentos de pressão ou de decisão financeira importante.</p><p>Os sabotadores que você reconhece em si mesmo — <strong>${c.sab||'identificados na análise'}</strong> — são manifestações desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência.</p><h3>O Impacto no Seu Faturamento</h3><p>Com sua desvalorização em <strong>${c.desv}/10</strong> e facilidade de cobrança em <strong>${c.cob}/10</strong>, esse bloqueio está custando faturamento real todo mês. Sua estagnação não é falta de esforço — é desalinhamento somado a esse padrão de bloqueio.</p><h3>Seu Protocolo de Superação</h3><ul><li>Identifique a última decisão onde esse padrão surgiu e mapeie o gatilho específico que o ativou</li><li>Crie sua regra de decisão: "Se não ativa o meu padrão principal, eu recuso"</li><li>Revisão semanal de 15 minutos: o que operou dentro do padrão? O que ficou fora?</li><li>Encontre um par de responsabilidade que te confronte quando o bloqueio ressurgir</li></ul><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Identifique agora: qual projeto ou cliente está ativando esse bloqueio hoje? Alinhe ou elimine. Não existe meio-termo quando o seu faturamento está em jogo.</p></div>`;}
+function fbPlan(c){const tn=TN[c.expression]||'seu perfil';return{fase1:{titulo:'Limpeza e Foco — Eliminar o que drena, ativar o que gera',semanas:[{titulo:'Semana 1: Auditoria de alinhamento',acoes:['Liste todas as atividades: ativa ou não o padrão '+tn,'Identifique os 3 projetos que mais consomem energia sem retorno','Mapeie decisões pendentes que o bloqueio adiou']},{titulo:'Semana 2: Eliminação estratégica',acoes:['Encerre ou renegocie pelo menos 1 contrato desalinhado com o padrão '+tn,'Reposicione sua oferta principal para refletir o seu talento natural','Defina nicho prioritário baseado na sua direção estratégica']},{titulo:'Semana 3: Posicionamento inicial',acoes:['Reescreva sua bio profissional alinhada ao seu padrão como '+tn,'Atualize proposta de valor com linguagem de autoridade','Mapeie 5 oportunidades alinhadas com sua direção']},{titulo:'Semana 4: Consolidação da base',acoes:['Organize processos que liberam tempo para trabalho de alto valor','Defina política de preços alinhada ao valor do seu padrão','Planeje o mês 2 com base no seu código anual '+c.personalYear]}]},fase2:{titulo:'Execução e Posicionamento — Construir autoridade percebida',semanas:[{titulo:'Semana 5: Lançamento de autoridade',acoes:['Crie e distribua conteúdo de autoridade alinhado ao seu padrão','Faça 5 conversas estratégicas com potenciais clientes ideais','Apresente nova oferta posicionada para pelo menos 3 pessoas']},{titulo:'Semana 6: Expansão de relacionamentos',acoes:['Mapeie sua rede: quem impulsiona e quem drena o seu padrão','Agende reuniões com 3 parceiros estratégicos potenciais','Implemente processo de indicação ativa com clientes alinhados']},{titulo:'Semana 7: Refinamento da oferta',acoes:['Colete feedback sobre o valor percebido','Ajuste preço baseado no posicionamento do seu padrão','Crie um caso de sucesso documentado para uso em vendas']},{titulo:'Semana 8: Revisão e aceleração',acoes:['Meça resultados das semanas 5–7: o que gerou mais retorno?','Duplique esforço no canal mais efetivo','Prepare estratégia de escala para o mês 3']}]},fase3:{titulo:'Escala e Consolidação — Faturamento previsível e autoridade sólida',semanas:[{titulo:'Semana 9: Escala da oferta principal',acoes:['Lance versão de maior valor da oferta principal','Implemente processo de vendas estruturado para o seu padrão','Defina meta de faturamento específica para os próximos 90 dias']},{titulo:'Semana 10: Sistemas de crescimento',acoes:['Documente processos que mais geram resultado','Delegue atividades operacionais que não ativam seu talento principal','Crie ritmo semanal de prospecção alinhado ao seu código anual '+c.personalYear]},{titulo:'Semana 11: Autoridade de mercado',acoes:['Publique posicionamento de autoridade em pelo menos 2 canais','Solicite depoimentos estratégicos que validam o seu padrão','Mapeie próximas oportunidades de parceria de alto valor']},{titulo:'Semana 12: Balanço e próximo ciclo',acoes:['Meça resultado dos 90 dias: faturamento, posicionamento, energia','Identifique o que funcionou e o que precisa de ajuste fino','Planeje próximos 90 dias com base no código anual '+(c.personalYear===9?1:c.personalYear+1)]}]}}}
+
+function testarURL(){const url=SHEETS_READ_URL+'&t='+Date.now();const win=window.open(url,'_blank');if(!win)alert('Cole esta URL:\n\n'+url);}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('login-pwd').addEventListener('keydown',e=>{if(e.key==='Enter')login();});});
 </script>
 </body>
 </html>
