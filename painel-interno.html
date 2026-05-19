@@ -1436,14 +1436,20 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 /* PAGE - each is one A4 */
 .pg{
   width:210mm;
+  height:297mm;
   margin:0 auto 20px;
   background:white;
   box-shadow:0 4px 24px rgba(0,0,0,.25);
   overflow:hidden;
-  page-break-after:always;
-  page-break-inside:avoid;
+  position:relative;
+  display:block;
+  flex-shrink:0;
 }
-.pg:last-child{page-break-after:auto;margin-bottom:0}
+/* Screen: show pages stacked */
+/* Print: each .pg = one A4 page */
+@media screen{
+  .pg{page-break-after:always;break-after:page}
+}
 
 /* COVER */
 .cov{background:var(--dark);min-height:297mm;display:flex;flex-direction:column;
@@ -1635,9 +1641,21 @@ body{background:#d8d4cc;padding:52px 20px 40px}
   -webkit-print-color-adjust:exact}
 
 @media print{
-  body{background:white!important;padding:0!important}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{margin:0!important;padding:0!important;background:white!important}
   .pbar{display:none!important}
-  .pg{width:100%!important;margin:0!important;box-shadow:none!important}
+  .pg{
+    width:100vw!important;
+    height:100vh!important;
+    margin:0!important;
+    padding:0!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    page-break-after:always!important;
+    break-after:page!important;
+    display:block!important;
+  }
+  .pg:last-child{page-break-after:auto!important;break-after:auto!important}
 }
 </style>
 </head>
