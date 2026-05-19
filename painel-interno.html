@@ -1211,7 +1211,7 @@ function openClient(idx){
   if(_a)_a.textContent=tn;
   if(_t)_t.innerHTML='Direcao: '+dn+'<br>Motivacao central: '+(MN2[c.soul]||'--')+'<br>Codigo anual: '+(CT[c.personalYear]||'--');
   if(_d)_d.textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
-  if(_ic)_ic.textContent=(c.apelido||c.nome||'').toUpperCase()+' · DIAGNOSTICO ESTRATEGICO';
+  if(_ic)_ic.textContent=(c.apelido||c.nome||'').toUpperCase()+' · DIAGNÓSTICO ESTRATÉGICO';
   // Update all page headers
   document.querySelectorAll('.ph-client').forEach(function(el){
     var parts=el.textContent.split('·');
@@ -1410,7 +1410,7 @@ function abrirPDF(){
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Codigo de Carreira - ${nome}</title>
+<title>Código de Carreira - ${nome}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1644,9 +1644,9 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 <body>
 
 <div class="pbar">
-  <div class="pbar-title">CODIGO DE CARREIRA — ${nome.toUpperCase()}</div>
-  <button class="pbar-btn" onclick="window.print()">Salvar como PDF</button>
-  <div class="pbar-note">Desative cabecalhos e rodapes no dialogo de impressao</div>
+  <div class="pbar-title">CÓDIGO DE CARREIRA — ${nome.toUpperCase()}</div>
+  <button class="pbar-btn" onclick="window.print()">⬇ Salvar como PDF</button>
+  <div class="pbar-note">Desative cabeçalhos e rodapés no diálogo de impressão</div>
 </div>
 
 <!-- CAPA -->
@@ -1654,15 +1654,15 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 <div class="cov">
   <div class="cov-bar"></div>
   <div class="cov-body">
-    <div class="cov-brand">CODIGO DE CARREIRA</div>
-    <div class="cov-sub">Diagnostico Estrategico Individual · Confidencial</div>
+    <div class="cov-brand">CÓDIGO DE CARREIRA</div>
+    <div class="cov-sub">Diagnóstico Estratégico Individual · Confidencial</div>
     <h1 class="cov-name">${nome}</h1>
     <p class="cov-arch">${tn}</p>
     <div class="cov-line"></div>
     <p class="cov-tag">Direcao: ${dn}<br>Motivacao central: ${mn}<br>Codigo anual: ${py}</p>
   </div>
   <div class="cov-foot">
-    <div class="cov-foot-brand">Codigo de Carreira</div>
+    <div class="cov-foot-brand">Código de Carreira</div>
     <div class="cov-foot-date">${mes}</div>
   </div>
 </div>
@@ -1670,89 +1670,89 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 
 <!-- INTRO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · DIAGNOSTICO ESTRATEGICO</div></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · DIAGNÓSTICO ESTRATÉGICO</div></div>
   <div class="sbody">
-    <div class="intro-eye">Bem-vindo ao seu diagnostico</div>
-    <h2 class="intro-h">Entendendo o seu<br><em>Codigo de Carreira</em></h2>
+    <div class="intro-eye">Bem-vindo ao seu diagnóstico</div>
+    <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
     <div class="intro-div"></div>
-    <p class="intro-p">Este documento e o resultado de uma analise individual e exclusiva. Ele nao e um teste generico nem um relatorio automatico — e um <strong>mapa estrategico</strong> construido a partir dos seus padroes unicos de funcionamento, comportamento e direcao profissional.</p>
-    <p class="intro-p">Ao longo de mais de 20.000 analises, identificamos que pessoas com determinados perfis tendem a tomar decisoes parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnostico foi construido para revelar esses padroes com clareza — e mostrar o caminho de menor resistencia para o seu crescimento.</p>
+    <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direcao profissional.</p>
+    <p class="intro-p">Ao longo de mais de 20.000 analises, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
     <div class="intro-box">
-      <div class="intro-box-title">Como ler e usar este relatorio</div>
+      <div class="intro-box-title">Como ler e usar este relatório</div>
       <ul class="intro-list">
         <li><strong>Talento Principal</strong> — Seu padrao de maior geracao de valor. E o ponto de partida para qualquer decisao de carreira.</li>
         <li><strong>Direcao Estrategica</strong> — A trajetoria com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
         <li><strong>Pontos de Bloqueio</strong> — Os padroes que estao travando seu faturamento. Identificar e o primeiro passo para superar.</li>
-        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetoria e o que o momento pede de voce agora.</li>
-        <li><strong>Calendario Pessoal</strong> — O termometro mensal. Cada mes tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
-        <li><strong>Plano de 90 Dias</strong> — Um roteiro pratico, semana a semana, baseado no seu perfil e momento atual.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de voce agora.</li>
+        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mes tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
       </ul>
     </div>
     <div class="intro-quote">
-      <div class="intro-quote-text">"Direcao estrategica nao e privilegio.<br>E uma escolha."</div>
-      <div class="intro-quote-author">Codigo de Carreira · Diagnostico Estrategico</div>
+      <div class="intro-quote-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
+      <div class="intro-quote-author">Código de Carreira · Diagnostico Estrategico</div>
     </div>
   </div>
 </div>
 
 <!-- 01 TALENTO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 01 — TALENTO PRINCIPAL</div></div>
-  <div class="shdr"><div class="shdr-eye">01 — Ativo Mais Rentavel</div><h2 class="shdr-title">Talento <em>Principal</em></h2><p class="shdr-sub">O padrao que gera faturamento com menor desgaste.</p></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 01 — TALENTO PRINCIPAL</div></div>
+  <div class="shdr"><div class="shdr-eye">01 — Ativo Mais Rentável</div><h2 class="shdr-title">Talento <em>Principal</em></h2><p class="shdr-sub">O padrão que gera faturamento com menor desgaste.</p></div>
   <div class="sbody">${talBody}</div>
 </div>
 
 <!-- 02 DIRECAO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 02 — DIRECAO ESTRATEGICA</div></div>
-  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direcao <em>Estrategica</em></h2><p class="shdr-sub">A trajetoria com maior probabilidade de retorno para o seu perfil.</p></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 02 — DIREÇÃO ESTRATÉGICA</div></div>
+  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direcao <em>Estrategica</em></h2><p class="shdr-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p></div>
   <div class="sbody">${dirBody}</div>
 </div>
 
 <!-- 03 BLOQUEIO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 03 — PONTOS DE BLOQUEIO</div></div>
-  <div class="shdr"><div class="shdr-eye">03 — O Que Esta Travando o Faturamento</div><h2 class="shdr-title">Pontos de <em>Bloqueio</em></h2><p class="shdr-sub">Padroes que drenam esforca sem retorno proporcional.</p></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 03 — PONTOS DE BLOQUEIO</div></div>
+  <div class="shdr"><div class="shdr-eye">03 — O Que Está Travando o Faturamento</div><h2 class="shdr-title">Pontos de <em>Bloqueio</em></h2><p class="shdr-sub">Padrões que drenam esforço sem retorno proporcional.</p></div>
   <div class="sbody">${blqBody}</div>
 </div>
 
 <!-- 04 LINHA DO TEMPO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04 — LINHA DO TEMPO E CICLOS</div></div>
-  <div class="shdr"><div class="shdr-eye">04 — Timing Estrategico</div><h2 class="shdr-title">Linha do Tempo e <em>Ciclos</em></h2><p class="shdr-sub">Fases ativas e o momento certo para cada decisao.</p></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04 — LINHA DO TEMPO E CICLOS</div></div>
+  <div class="shdr"><div class="shdr-eye">04 — Timing Estratégico</div><h2 class="shdr-title">Linha do Tempo e <em>Ciclos</em></h2><p class="shdr-sub">Fases ativas e o momento certo para cada decisão.</p></div>
   <div class="sbody">${tlBody}</div>
 </div>
 
 <!-- 05 CALENDARIO -->
 <div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 05 — CALENDARIO PESSOAL</div></div>
-  <div class="shdr"><div class="shdr-eye">05 — Termometro Mensal</div><h2 class="shdr-title">Codigo Pessoal e <em>Calendario</em></h2><p class="shdr-sub">O que cada mes pede de voce — planejamento tatico.</p></div>
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 05 — CALENDÁRIO PESSOAL</div></div>
+  <div class="shdr"><div class="shdr-eye">05 — Termômetro Mensal</div><h2 class="shdr-title">Codigo Pessoal e <em>Calendario</em></h2><p class="shdr-sub">O que cada mês pede de você — planejamento tático.</p></div>
   <div class="sbody">${menBody}</div>
 </div>
 
-<!-- 06 PLANO -->
-<div class="pg">
-  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS</div></div>
-  <div class="shdr"><div class="shdr-eye">06 — Execucao Pratica</div><h2 class="shdr-title">Plano de <em>90 Dias</em></h2><p class="shdr-sub">Semana a semana. Acoes concretas baseadas no seu perfil e momento.</p></div>
-  <div class="sbody">${planBody}</div>
+<!-- 06 PLANO - dynamically split -->
+<div class="pg" id="plan-pg-1">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS</div></div>
+  <div class="shdr"><div class="shdr-eye">06 — Execução Prática</div><h2 class="shdr-title">Plano de <em>90 Dias</em></h2><p class="shdr-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p></div>
+  <div class="sbody" id="plan-inject">${planBody}</div>
 </div>
 
 <!-- CTA -->
-<div class="pg">
+<div class="pg" style="height:auto">
   <div class="cta">
-    <div class="cta-eye">O diagnostico esta pronto. A execucao e o proximo passo.</div>
-    <h2 class="cta-h">Pronto para <em>executar</em><br>com precisao?</h2>
+    <div class="cta-eye">O diagnóstico está pronto. A execução é o próximo passo.</div>
+    <h2 class="cta-h">Pronto para <em>executar</em><br>com precisão?</h2>
     <div class="cta-div"></div>
-    <p class="cta-body">Voce agora tem o diagnostico mais preciso que ja teve sobre sua carreira. Mas clareza sem execucao vira frustracao. A maioria das pessoas le um relatorio como este e volta para o piloto automatico em 7 dias. A mentoria existe para garantir que isso nao aconteca com voce.</p>
+    <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
     <div class="cta-grid">
-      <div class="cta-card"><div class="cta-icon">🎯</div><div class="cta-card-title">3 Encontros Individuais</div><div class="cta-card-desc">Sessoes exclusivas construidas em cima do seu diagnostico. Cada encontro tem objetivo claro e acoes praticas baseadas no seu perfil especifico.</div></div>
-      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrao de bloqueio ressurgir — e ele vai — voce tera suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
-      <div class="cta-card"><div class="cta-icon">📈</div><div class="cta-card-title">Foco Total em Faturamento</div><div class="cta-card-desc">Cada decisao sera validada com base no seu perfil. Sem estrategia generica — so o que funciona para o seu codigo especifico.</div></div>
-      <div class="cta-card"><div class="cta-icon">🔒</div><div class="cta-card-title">Exclusividade Total</div><div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaco seguro para trabalhar os pontos mais profundos do seu padrao de crescimento.</div></div>
+      <div class="cta-card"><div class="cta-icon">🎯</div><div class="cta-card-title">3 Encontros Individuais</div><div class="cta-card-desc">Sessões exclusivas construídas em cima do seu diagnóstico. Cada encontro tem objetivo claro e ações práticas baseadas no seu perfil específico.</div></div>
+      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
+      <div class="cta-card"><div class="cta-icon">📈</div><div class="cta-card-title">Foco Total em Faturamento</div><div class="cta-card-desc">Cada decisão será validada com base no seu perfil. Sem estratégia genérica — só o que funciona para o seu código específico.</div></div>
+      <div class="cta-card"><div class="cta-icon">🔒</div><div class="cta-card-title">Exclusividade Total</div><div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaço seguro para trabalhar os pontos mais profundos do seu padrão de crescimento.</div></div>
     </div>
     <div class="cta-bottom">
-      <div class="cta-btn">Quero aplicar meu Codigo de Carreira</div>
-      <p class="cta-note">Entre em contato para agendar sua primeira sessao</p>
+      <div class="cta-btn">Quero aplicar meu Código de Carreira</div>
+      <p class="cta-note">Entre em contato para agendar sua primeira sessão</p>
     </div>
   </div>
   <div class="cta-bar"></div>
