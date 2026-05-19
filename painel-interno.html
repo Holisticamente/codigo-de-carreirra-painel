@@ -1386,75 +1386,386 @@ function testarURL(){const url=SHEETS_READ_URL+'&t='+Date.now();const win=window
 function abrirPDF(){
   const cl = currentClient;
   if(!cl){ alert('Selecione um cliente primeiro.'); return; }
-  
-  // Collect all PDF page HTML
-  const pages = document.querySelectorAll('.pdf-page-wrap');
-  if(!pages.length){ alert('Gere o diagnóstico antes de salvar o PDF.'); return; }
-  
-  let pagesHTML = '';
-  pages.forEach(p => { pagesHTML += p.outerHTML + '\n'; });
-  
-  // Get all stylesheets content
-  const styles = Array.from(document.styleSheets)
-    .map(s => { try { return Array.from(s.cssRules).map(r => r.cssText).join('\n'); } catch(e){ return ''; } })
-    .join('\n');
-  
+
+  // Helper to get text content safely
+  const gt = (id) => { const el = document.getElementById(id); return el ? el.innerHTML : ''; };
+  const gs = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
+
+  const nome = cl.apelido || cl.nome || '—';
+  const tn = TN[cl.expression] || '—';
+  const dn = DN[cl.destiny] || '—';
+  const mn = MN2[cl.soul] || '—';
+  const py = CT[cl.personalYear] || '—';
+  const mes = new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
+
+  // Get AI-generated content
+  const talBody = gt('pdf-tal-body') || gt('c-tal') || '';
+  const dirBody = gt('pdf-dir-body') || gt('c-dir') || '';
+  const blqBody = gt('pdf-blq-body') || gt('c-blq') || '';
+  const tlBody  = gt('pdf-tl-body')  || gt('c-tl')  || '';
+  const menBody = gt('pdf-men-body') || gt('c-men')  || '';
+  const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
+
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Código de Carreira — ${cl.apelido||cl.nome}</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<title>Codigo de Carreira - ${nome}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{background:#e8e4dc;margin:0;padding:80px 20px 40px}
-@page{margin:0;size:A4}
-.print-bar{
-  position:fixed;top:0;left:0;right:0;z-index:999;
-  background:#0c0b08;padding:14px 32px;
-  display:flex;align-items:center;justify-content:space-between;
+html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{margin:0;size:A4 portrait}
+:root{
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
+  --dark:#0c0b08;--bg:#f8f5ef;--border:#ddd5c3;--text:#1a1810;--muted:#6a6050;
+  --white:#fff;--red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
 }
-.print-bar-title{font-family:'Lato',sans-serif;font-size:12px;letter-spacing:3px;color:#c9a55a}
-.print-bar-btn{
-  background:#b08a3e;color:#0c0b08;border:none;
-  padding:10px 28px;font-family:'Lato',sans-serif;
-  font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:700;
-  cursor:pointer;
+
+/* PRINT BAR - hidden on print */
+.pbar{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--dark);
+  padding:12px 32px;display:flex;align-items:center;justify-content:space-between;}
+.pbar-title{font-family:'Lato',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold-lt)}
+.pbar-btn{background:var(--gold);color:var(--dark);border:none;padding:10px 28px;
+  font-family:'Lato',sans-serif;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
+.pbar-note{font-family:'Lato',sans-serif;font-size:10px;color:#555;letter-spacing:1px}
+
+/* SCREEN */
+body{background:#d8d4cc;padding:52px 20px 40px}
+
+/* PAGE - each is one A4 */
+.pg{
+  width:210mm;
+  margin:0 auto 20px;
+  background:white;
+  box-shadow:0 4px 24px rgba(0,0,0,.25);
+  overflow:hidden;
+  page-break-after:always;
+  page-break-inside:avoid;
 }
-.print-bar-note{font-family:'Lato',sans-serif;font-size:10px;color:#555;letter-spacing:1px}
-.pdf-page-wrap{
-  width:210mm;margin:0 auto 20px;
-  box-shadow:0 4px 20px rgba(0,0,0,.25);
-  page-break-after:always;overflow:hidden;
-}
-.pdf-page-wrap:last-child{page-break-after:auto;margin-bottom:0}
+.pg:last-child{page-break-after:auto;margin-bottom:0}
+
+/* COVER */
+.cov{background:var(--dark);min-height:297mm;display:flex;flex-direction:column;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cov-bar{height:7px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold));
+  flex-shrink:0;-webkit-print-color-adjust:exact}
+.cov-body{flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:72px 60px 48px;position:relative;overflow:hidden}
+.cov-body::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.08);top:50%;right:-100px;transform:translateY(-50%)}
+.cov-brand{font-family:'Cinzel',serif;font-size:11px;letter-spacing:9px;color:var(--gold-lt);
+  margin-bottom:72px;display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+.cov-brand::after{content:'';width:64px;height:1px;background:rgba(201,165,90,.35)}
+.cov-sub{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:5px;
+  color:rgba(201,165,90,.65);text-transform:uppercase;margin-bottom:24px;position:relative;z-index:1}
+.cov-name{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;
+  color:#ffffff;line-height:.92;margin-bottom:18px;letter-spacing:-2px;position:relative;z-index:1}
+.cov-arch{font-family:'Cormorant Garamond',serif;font-size:30px;font-style:italic;
+  color:#e8c870;margin-bottom:36px;font-weight:300;position:relative;z-index:1}
+.cov-line{width:54px;height:2px;background:var(--gold-lt);margin-bottom:28px;position:relative;z-index:1}
+.cov-tag{font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.5);
+  line-height:1.9;max-width:420px;position:relative;z-index:1}
+.cov-foot{padding:26px 60px;border-top:1px solid rgba(176,138,62,.12);
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;
+  -webkit-print-color-adjust:exact}
+.cov-foot-brand{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:rgba(201,165,90,.45)}
+.cov-foot-date{font-family:'Lato',sans-serif;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px}
+
+/* PAGE HEADER */
+.phdr{display:flex;justify-content:space-between;align-items:center;
+  padding:18px 56px;border-bottom:1px solid var(--border)}
+.phdr-brand{font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold)}
+.phdr-client{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+/* SECTION HEADER - stays with content using display:contents trick */
+.shdr{background:var(--dark);padding:32px 56px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.shdr-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:9px;font-weight:700}
+.shdr-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#fff;margin-bottom:4px}
+.shdr-title em{font-style:italic;color:#e8c870}
+.shdr-sub{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
+
+/* SECTION BODY */
+.sbody{padding:36px 56px 48px}
+
+/* CONTENT */
+.aib{background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:14px}
+.aib h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;
+  color:var(--text);margin:22px 0 10px}
+.aib h3:first-child{margin-top:0}
+.aib p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px}
+.aib strong{font-weight:700}
+.aib ul{list-style:none;margin:8px 0 14px}
+.aib ul li{font-family:'Lato',sans-serif;padding:7px 0 7px 20px;
+  border-bottom:1px solid var(--border);font-size:13px;position:relative;line-height:1.6}
+.aib ul li:last-child{border-bottom:none}
+.aib ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.ical{background:rgba(176,138,62,.08);border:1px solid rgba(176,138,62,.2);
+  border-left:4px solid var(--gold);padding:16px 20px;margin:14px 0;
+  -webkit-print-color-adjust:exact}
+.ical-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.ical p{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.7;margin:0}
+
+/* INTRO */
+.intro-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.intro-h{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;
+  color:var(--text);line-height:1.05;margin-bottom:6px}
+.intro-h em{font-style:italic;color:var(--gold)}
+.intro-div{width:40px;height:2px;background:var(--gold);margin:20px 0}
+.intro-p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:16px}
+.intro-p strong{font-weight:700}
+.intro-box{background:var(--bg);border:1px solid var(--border);
+  border-left:4px solid var(--gold);padding:24px 28px;margin:24px 0}
+.intro-box-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;
+  color:var(--text);margin-bottom:14px}
+.intro-list{list-style:none}
+.intro-list li{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);
+  padding:9px 0 9px 20px;border-bottom:1px solid var(--border);position:relative;line-height:1.6}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.intro-list li strong{font-weight:700}
+.intro-quote{text-align:center;padding:32px;border:1px solid var(--border);
+  margin-top:28px;background:var(--bg)}
+.intro-quote-text{font-family:'Cormorant Garamond',serif;font-size:22px;
+  font-style:italic;color:var(--text);line-height:1.6;margin-bottom:12px}
+.intro-quote-author{font-family:'Lato',sans-serif;font-size:8px;
+  letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.rc{padding:18px 22px;border:1px solid var(--border);border-left:4px solid var(--border)}
+.rc.gold{border-left-color:var(--gold)}.rc.red{border-left-color:var(--red)}
+.rc.blue{border-left-color:var(--blue)}.rc.green{border-left-color:var(--green)}
+.rc.dk{background:var(--dark);border-color:var(--dark);border-left-color:var(--gold);
+  -webkit-print-color-adjust:exact}
+.rcl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.rcv{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;
+  color:var(--text);margin-bottom:3px}
+.rc.dk .rcv{color:#e8c870}
+.rcd{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.5}
+.rc.dk .rcd{color:#666}
+
+/* TL BOX */
+.tl-intro{background:var(--bg);border:1px solid var(--border);
+  border-left:4px solid var(--gold);padding:20px 24px;margin-bottom:16px}
+.tl-intro-title{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700}
+.tl-intro-body{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.8;margin-bottom:10px}
+.tl-list{list-style:none}
+.tl-list li{font-family:'Lato',sans-serif;padding:6px 0 6px 18px;
+  border-bottom:1px solid var(--border);font-size:12px;position:relative}
+.tl-list li:last-child{border-bottom:none}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.tl-note{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* TABLE */
+.tlt{width:100%;border-collapse:collapse;margin-top:14px}
+.tlt th{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);padding:9px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700}
+.tlt td{font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px}
+.tlt tr.cur td{background:rgba(176,138,62,.08);font-weight:700;-webkit-print-color-adjust:exact}
+.tltag{display:inline-block;font-size:8px;padding:2px 7px;background:var(--dark);
+  color:#e8c870;letter-spacing:1px;-webkit-print-color-adjust:exact}
+
+/* MONTHLY */
+.men-hdr{background:var(--dark);padding:16px 20px;margin-bottom:12px;
+  -webkit-print-color-adjust:exact}
+.men-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.men-val{font-family:'Cormorant Garamond',serif;font-size:19px;color:#e8c870;margin-bottom:2px}
+.men-next{font-family:'Lato',sans-serif;font-size:11px;color:#555}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mc{padding:12px 10px;background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--border)}
+.mc.hl{border-top-color:var(--gold);background:rgba(176,138,62,.07);-webkit-print-color-adjust:exact}
+.mn{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1;margin-bottom:2px}
+.mname{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.mtheme{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;
+  color:var(--text);margin-bottom:2px}
+.mact{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);line-height:1.4}
+
+/* PLAN */
+.pphase{border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
+.pph-hdr{background:var(--dark);padding:15px 20px;display:flex;align-items:center;gap:16px;
+  -webkit-print-color-adjust:exact}
+.pph-n{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);line-height:1}
+.pph-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:#666;text-transform:uppercase;font-weight:700;margin-bottom:2px}
+.pph-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff}
+.pph-body{padding:18px 22px;background:white}
+.pw{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.pw:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.pwl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.pwt{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:6px}
+.pwa{list-style:none}
+.pwa li{font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);
+  padding:4px 0 4px 14px;position:relative;line-height:1.55}
+.pwa li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+
+/* CTA */
+.cta{background:var(--dark);padding:56px 60px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cta-eye{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:16px;font-weight:700}
+.cta-h{font-family:'Cormorant Garamond',serif;font-size:50px;font-weight:300;
+  color:#fff;margin-bottom:14px;line-height:1.02}
+.cta-h em{font-style:italic;color:#e8c870}
+.cta-div{width:48px;height:2px;background:var(--gold-lt);margin:20px 0}
+.cta-body{font-family:'Lato',sans-serif;font-size:14px;color:rgba(255,255,255,.45);
+  max-width:520px;line-height:1.9;margin-bottom:32px}
+.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px}
+.cta-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,165,90,.18);padding:20px}
+.cta-icon{font-size:22px;margin-bottom:10px}
+.cta-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;margin-bottom:6px}
+.cta-card-desc{font-family:'Lato',sans-serif;font-size:12px;color:rgba(255,255,255,.33);line-height:1.6}
+.cta-bottom{text-align:center}
+.cta-btn{display:inline-block;background:var(--gold);color:var(--dark);
+  padding:16px 48px;font-family:'Lato',sans-serif;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.cta-note{font-family:'Lato',sans-serif;font-size:10px;color:rgba(255,255,255,.2);
+  margin-top:14px;letter-spacing:1px}
+.cta-bar{height:5px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold));
+  -webkit-print-color-adjust:exact}
+
 @media print{
   body{background:white!important;padding:0!important}
-  .print-bar{display:none!important}
-  .pdf-page-wrap{
-    width:100%!important;margin:0!important;
-    box-shadow:none!important;
-    page-break-after:always;
-  }
+  .pbar{display:none!important}
+  .pg{width:100%!important;margin:0!important;box-shadow:none!important}
 }
-${styles}
 </style>
 </head>
 <body>
-<div class="print-bar">
-  <div class="print-bar-title">CÓDIGO DE CARREIRA — ${cl.apelido||cl.nome}</div>
-  <button class="print-bar-btn" onclick="window.print()">⬇ Salvar como PDF</button>
-  <div class="print-bar-note">Ctrl+P também funciona</div>
+
+<div class="pbar">
+  <div class="pbar-title">CODIGO DE CARREIRA — ${nome.toUpperCase()}</div>
+  <button class="pbar-btn" onclick="window.print()">Salvar como PDF</button>
+  <div class="pbar-note">Desative cabecalhos e rodapes no dialogo de impressao</div>
 </div>
-${pagesHTML}
-</body>
-</html>`;
-  
-  const win = window.open('', '_blank', 'width=900,height=700');
+
+<!-- CAPA -->
+<div class="pg">
+<div class="cov">
+  <div class="cov-bar"></div>
+  <div class="cov-body">
+    <div class="cov-brand">CODIGO DE CARREIRA</div>
+    <div class="cov-sub">Diagnostico Estrategico Individual · Confidencial</div>
+    <h1 class="cov-name">${nome}</h1>
+    <p class="cov-arch">${tn}</p>
+    <div class="cov-line"></div>
+    <p class="cov-tag">Direcao: ${dn}<br>Motivacao central: ${mn}<br>Codigo anual: ${py}</p>
+  </div>
+  <div class="cov-foot">
+    <div class="cov-foot-brand">Codigo de Carreira</div>
+    <div class="cov-foot-date">${mes}</div>
+  </div>
+</div>
+</div>
+
+<!-- INTRO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · DIAGNOSTICO ESTRATEGICO</div></div>
+  <div class="sbody">
+    <div class="intro-eye">Bem-vindo ao seu diagnostico</div>
+    <h2 class="intro-h">Entendendo o seu<br><em>Codigo de Carreira</em></h2>
+    <div class="intro-div"></div>
+    <p class="intro-p">Este documento e o resultado de uma analise individual e exclusiva. Ele nao e um teste generico nem um relatorio automatico — e um <strong>mapa estrategico</strong> construido a partir dos seus padroes unicos de funcionamento, comportamento e direcao profissional.</p>
+    <p class="intro-p">Ao longo de mais de 20.000 analises, identificamos que pessoas com determinados perfis tendem a tomar decisoes parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnostico foi construido para revelar esses padroes com clareza — e mostrar o caminho de menor resistencia para o seu crescimento.</p>
+    <div class="intro-box">
+      <div class="intro-box-title">Como ler e usar este relatorio</div>
+      <ul class="intro-list">
+        <li><strong>Talento Principal</strong> — Seu padrao de maior geracao de valor. E o ponto de partida para qualquer decisao de carreira.</li>
+        <li><strong>Direcao Estrategica</strong> — A trajetoria com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong> — Os padroes que estao travando seu faturamento. Identificar e o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetoria e o que o momento pede de voce agora.</li>
+        <li><strong>Calendario Pessoal</strong> — O termometro mensal. Cada mes tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong> — Um roteiro pratico, semana a semana, baseado no seu perfil e momento atual.</li>
+      </ul>
+    </div>
+    <div class="intro-quote">
+      <div class="intro-quote-text">"Direcao estrategica nao e privilegio.<br>E uma escolha."</div>
+      <div class="intro-quote-author">Codigo de Carreira · Diagnostico Estrategico</div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 TALENTO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 01 — TALENTO PRINCIPAL</div></div>
+  <div class="shdr"><div class="shdr-eye">01 — Ativo Mais Rentavel</div><h2 class="shdr-title">Talento <em>Principal</em></h2><p class="shdr-sub">O padrao que gera faturamento com menor desgaste.</p></div>
+  <div class="sbody">${talBody}</div>
+</div>
+
+<!-- 02 DIRECAO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 02 — DIRECAO ESTRATEGICA</div></div>
+  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direcao <em>Estrategica</em></h2><p class="shdr-sub">A trajetoria com maior probabilidade de retorno para o seu perfil.</p></div>
+  <div class="sbody">${dirBody}</div>
+</div>
+
+<!-- 03 BLOQUEIO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 03 — PONTOS DE BLOQUEIO</div></div>
+  <div class="shdr"><div class="shdr-eye">03 — O Que Esta Travando o Faturamento</div><h2 class="shdr-title">Pontos de <em>Bloqueio</em></h2><p class="shdr-sub">Padroes que drenam esforca sem retorno proporcional.</p></div>
+  <div class="sbody">${blqBody}</div>
+</div>
+
+<!-- 04 LINHA DO TEMPO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04 — LINHA DO TEMPO E CICLOS</div></div>
+  <div class="shdr"><div class="shdr-eye">04 — Timing Estrategico</div><h2 class="shdr-title">Linha do Tempo e <em>Ciclos</em></h2><p class="shdr-sub">Fases ativas e o momento certo para cada decisao.</p></div>
+  <div class="sbody">${tlBody}</div>
+</div>
+
+<!-- 05 CALENDARIO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 05 — CALENDARIO PESSOAL</div></div>
+  <div class="shdr"><div class="shdr-eye">05 — Termometro Mensal</div><h2 class="shdr-title">Codigo Pessoal e <em>Calendario</em></h2><p class="shdr-sub">O que cada mes pede de voce — planejamento tatico.</p></div>
+  <div class="sbody">${menBody}</div>
+</div>
+
+<!-- 06 PLANO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Codigo de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS</div></div>
+  <div class="shdr"><div class="shdr-eye">06 — Execucao Pratica</div><h2 class="shdr-title">Plano de <em>90 Dias</em></h2><p class="shdr-sub">Semana a semana. Acoes concretas baseadas no seu perfil e momento.</p></div>
+  <div class="sbody">${planBody}</div>
+</div>
+
+<!-- CTA -->
+<div class="pg">
+  <div class="cta">
+    <div class="cta-eye">O diagnostico esta pronto. A execucao e o proximo passo.</div>
+    <h2 class="cta-h">Pronto para <em>executar</em><br>com precisao?</h2>
+    <div class="cta-div"></div>
+    <p class="cta-body">Voce agora tem o diagnostico mais preciso que ja teve sobre sua carreira. Mas clareza sem execucao vira frustracao. A maioria das pessoas le um relatorio como este e volta para o piloto automatico em 7 dias. A mentoria existe para garantir que isso nao aconteca com voce.</p>
+    <div class="cta-grid">
+      <div class="cta-card"><div class="cta-icon">🎯</div><div class="cta-card-title">3 Encontros Individuais</div><div class="cta-card-desc">Sessoes exclusivas construidas em cima do seu diagnostico. Cada encontro tem objetivo claro e acoes praticas baseadas no seu perfil especifico.</div></div>
+      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrao de bloqueio ressurgir — e ele vai — voce tera suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
+      <div class="cta-card"><div class="cta-icon">📈</div><div class="cta-card-title">Foco Total em Faturamento</div><div class="cta-card-desc">Cada decisao sera validada com base no seu perfil. Sem estrategia generica — so o que funciona para o seu codigo especifico.</div></div>
+      <div class="cta-card"><div class="cta-icon">🔒</div><div class="cta-card-title">Exclusividade Total</div><div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaco seguro para trabalhar os pontos mais profundos do seu padrao de crescimento.</div></div>
+    </div>
+    <div class="cta-bottom">
+      <div class="cta-btn">Quero aplicar meu Codigo de Carreira</div>
+      <p class="cta-note">Entre em contato para agendar sua primeira sessao</p>
+    </div>
+  </div>
+  <div class="cta-bar"></div>
+</div>
+
+</body></html>`;
+
+  const win = window.open('','_blank','width=960,height=800,scrollbars=yes');
+  if(!win){ alert('Pop-up bloqueado. Habilite pop-ups para este site.'); return; }
   win.document.write(html);
   win.document.close();
 }
+
 
 document.addEventListener('DOMContentLoaded',()=>{document.getElementById('login-pwd').addEventListener('keydown',e=>{if(e.key==='Enter')login();});});
 </script>
