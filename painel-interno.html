@@ -1,1 +1,1773 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Código de Carreira — Painel Interno</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
 
+:root{
+  --bg:#f8f5ef;--dark:#0c0b08;--gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
+  --cream:#ede8de;--border:#ddd5c3;--text:#1a1810;--muted:#7a7060;--white:#fff;
+  --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;--page-w:210mm;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Lato',sans-serif;font-size:13px;line-height:1.65}
+
+/* ── LOGIN ── */
+#sc-login{background:var(--dark);min-height:100vh;display:flex;align-items:center;justify-content:center}
+.login-box{background:#161410;border:1px solid #2a2820;padding:56px 48px;max-width:380px;width:100%;text-align:center}
+.login-sigma{font-family:'Cinzel',serif;font-size:52px;color:var(--gold);margin-bottom:4px;letter-spacing:4px}
+.login-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#fff;margin-bottom:6px}
+.login-sub{font-size:10px;color:#444;letter-spacing:3px;text-transform:uppercase;margin-bottom:36px}
+.login-box input{width:100%;background:#0c0b08;border:1px solid #2a2820;color:#fff;padding:14px 16px;
+  font-family:'Lato',sans-serif;font-size:14px;outline:none;margin-bottom:12px;
+  transition:border-color .2s;text-align:center;letter-spacing:6px}
+.login-box input:focus{border-color:var(--gold)}
+.login-err{font-size:10px;color:#8b3a2a;margin-bottom:12px;display:none}
+
+/* ── HEADER ── */
+.hdr{background:var(--dark);height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;border-bottom:1px solid #1a1810;position:sticky;top:0;z-index:200}
+.hdr-brand{font-family:'Cinzel',serif;font-size:12px;letter-spacing:5px;color:var(--gold-lt)}
+.hdr-tag{font-size:9px;letter-spacing:3px;color:#444;text-transform:uppercase}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:calc(100vh - 56px)}
+.screen.active{display:block}
+
+/* ── BUTTONS ── */
+.btn-gold{background:var(--gold);color:var(--dark);border:none;padding:11px 24px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;
+  cursor:pointer;transition:background .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-gold:hover{background:var(--gold-lt)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:9px 20px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:all .2s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn-dark{background:var(--dark);color:var(--gold-lt);border:1px solid #2a2820;padding:11px 24px;
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+
+/* ── DASHBOARD ── */
+#sc-dash{padding:40px}
+.dash-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+.dash-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--dark)}
+.dash-title em{font-style:italic;color:var(--gold)}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--white);border:1px solid var(--border);padding:24px 28px;border-top:3px solid var(--gold)}
+.stat-n{font-family:'Cinzel',serif;font-size:40px;color:var(--gold);line-height:1}
+.stat-l{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:6px}
+.tbl-wrap{background:var(--white);border:1px solid var(--border);overflow:hidden}
+.tbl-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.tbl-header-title{font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;flex:1}
+.tbl-search{background:var(--bg);border:1px solid var(--border);padding:8px 12px;
+  font-family:'Lato',sans-serif;font-size:11px;outline:none;width:220px;color:var(--text)}
+.tbl-search:focus{border-color:var(--gold)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  padding:12px 16px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--gold-dim)}
+tbody td{padding:14px 16px;font-size:12px;vertical-align:middle}
+.td-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--dark)}
+.td-date{color:var(--muted);font-size:11px}
+.badge-new{display:inline-block;font-size:8px;letter-spacing:1px;padding:3px 8px;text-transform:uppercase;
+  background:rgba(30,92,53,.12);color:#2a7a4a;border:1px solid rgba(30,92,53,.25)}
+.empty-state{padding:60px;text-align:center;color:var(--muted)}
+.empty-state p{font-size:14px;margin-top:8px}
+
+
+/* ════════════════════════════════════════
+   PDF REPORT STYLES — v2 approved layout
+════════════════════════════════════════ */
+:root{
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.12);
+  --dark:#0c0b08;--bg:#f8f5ef;--cream:#ede8de;
+  --border:#ddd5c3;--text:#1a1810;--muted:#6a6050;--white:#fff;
+  --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
+  --pad:56px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+
+:root{
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.12);
+  --dark:#0c0b08;--bg:#f8f5ef;--cream:#ede8de;
+  --border:#ddd5c3;--text:#1a1810;--muted:#6a6050;--white:#fff;
+  --red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
+  --pad:56px; /* consistent horizontal padding across all pages */
+}
+
+/* ── PREVIEW BAR ── */
+
+.preview-bar strong{font-size:13px;letter-spacing:3px}
+
+
+/* ── PAGE ── */
+.page{
+  width:210mm;
+  margin:0 auto 28px;
+  box-shadow:0 6px 32px rgba(0,0,0,.3);
+  background:var(--white);
+  overflow:hidden;
+}
+
+/* ══════════════════════════════════
+   CAPA
+══════════════════════════════════ */
+.cover{
+  background:var(--dark);
+  min-height:297mm;
+  display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.cover-bar{
+  height:7px;
+  background:linear-gradient(90deg,var(--gold) 0%,#e8c870 50%,var(--gold) 100%);
+  flex-shrink:0;
+}
+.cover-body{
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:72px var(--pad) 48px;
+  position:relative;
+}
+/* Geometric decoration */
+.cover-body::before{
+  content:'';position:absolute;
+  width:520px;height:520px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.09);
+  top:50%;right:-120px;transform:translateY(-50%);pointer-events:none;
+}
+.cover-body::after{
+  content:'';position:absolute;
+  width:360px;height:360px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.07);
+  top:50%;right:-30px;transform:translateY(-50%);pointer-events:none;
+}
+.cover-brand{
+  font-family:'Cinzel',serif;
+  font-size:12px;letter-spacing:9px;
+  color:var(--gold-lt); /* lighter for visibility */
+  margin-bottom:72px;
+  display:flex;align-items:center;gap:18px;
+  position:relative;z-index:1;
+}
+.cover-brand::after{content:'';width:64px;height:1px;background:rgba(201,165,90,.4)}
+.cover-sublabel{
+  font-family:'Lato',sans-serif;
+  font-size:10px;letter-spacing:5px;
+  color:rgba(201,165,90,.7); /* brighter */
+  text-transform:uppercase;
+  margin-bottom:28px;position:relative;z-index:1;
+}
+.cover-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:88px;font-weight:300;
+  color:#ffffff; /* pure white for max contrast */
+  line-height:.92;margin-bottom:20px;
+  letter-spacing:-2px;position:relative;z-index:1;
+}
+.cover-archetype{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-style:italic;
+  color:#e8c870; /* golden yellow, high contrast */
+  margin-bottom:40px;font-weight:300;
+  position:relative;z-index:1;
+}
+.cover-line{
+  width:56px;height:2px;
+  background:var(--gold-lt);
+  margin-bottom:32px;position:relative;z-index:1;
+}
+.cover-tagline{
+  font-family:'Lato',sans-serif;
+  font-size:14px; /* larger */
+  color:rgba(255,255,255,.55); /* brighter */
+  line-height:1.85;max-width:440px;
+  position:relative;z-index:1;
+  letter-spacing:.3px;
+}
+.cover-footer{
+  padding:28px var(--pad);
+  border-top:1px solid rgba(176,138,62,.15);
+  display:flex;justify-content:space-between;align-items:center;
+  flex-shrink:0;
+}
+.cf-brand{
+  font-family:'Cinzel',serif;font-size:11px;
+  letter-spacing:4px;color:rgba(201,165,90,.5);
+}
+.cf-date{
+  font-family:'Lato',sans-serif;font-size:10px;
+  color:rgba(255,255,255,.25);letter-spacing:2px;
+}
+
+/* ══════════════════════════════════
+   PAGE HEADER (top of each page)
+══════════════════════════════════ */
+.page-hdr{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:20px var(--pad) 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--white);
+}
+.ph-brand{font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold)}
+.ph-client{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+/* ══════════════════════════════════
+   INTRO PAGE
+══════════════════════════════════ */
+.intro-body-wrap{padding:44px var(--pad) 52px}
+
+.intro-eye{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700;
+}
+.intro-h{
+  font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;
+  color:var(--dark);line-height:1.05;margin-bottom:8px;
+}
+.intro-h em{font-style:italic;color:var(--gold)}
+.intro-div{width:44px;height:2px;background:var(--gold);margin:24px 0}
+.intro-p{
+  font-family:'Lato',sans-serif;font-size:15px; /* larger */
+  color:var(--text);line-height:1.9;margin-bottom:20px;
+}
+.intro-p strong{font-weight:700;color:var(--dark)}
+
+.intro-box{
+  background:var(--bg);border:1px solid var(--border);
+  border-left:5px solid var(--gold);padding:28px 32px;margin:28px 0;
+}
+.ib-title{
+  font-family:'Cormorant Garamond',serif;font-size:21px;
+  font-weight:600;color:var(--dark);margin-bottom:18px;
+}
+.ib-list{list-style:none}
+.ib-list li{
+  font-family:'Lato',sans-serif;font-size:14px; /* larger */
+  color:var(--text);padding:11px 0 11px 22px;
+  border-bottom:1px solid var(--border);
+  position:relative;line-height:1.65;
+}
+.ib-list li:last-child{border-bottom:none}
+.ib-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.ib-list li strong{font-weight:700;color:var(--dark)}
+
+.intro-quote{
+  text-align:center;padding:36px 32px;
+  border:1px solid var(--border);margin-top:32px;
+  background:var(--bg);
+}
+.iq-text{
+  font-family:'Cormorant Garamond',serif;font-size:24px;
+  font-style:italic;color:var(--dark);line-height:1.6;margin-bottom:14px;
+}
+.iq-author{
+  font-family:'Lato',sans-serif;font-size:9px;
+  letter-spacing:3px;color:var(--gold);text-transform:uppercase;
+}
+
+/* ══════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════ */
+.sec-hdr{
+  background:var(--dark);padding:36px var(--pad);
+  position:relative;overflow:hidden;
+}
+.sec-hdr::before{
+  content:attr(data-n);
+  position:absolute;right:40px;top:50%;transform:translateY(-50%);
+  font-family:'Cinzel',serif;font-size:140px;color:rgba(255,255,255,.03);
+  line-height:1;pointer-events:none;
+}
+.sh-eye{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:10px;font-weight:700;
+}
+.sh-title{
+  font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;
+  color:#fff;margin-bottom:5px;
+}
+.sh-title em{font-style:italic;color:#e8c870}
+.sh-sub{font-family:'Lato',sans-serif;font-size:12px;color:rgba(255,255,255,.35)}
+
+/* ══════════════════════════════════
+   SECTION BODY
+══════════════════════════════════ */
+.sec-body{padding:40px var(--pad) 52px}
+
+/* Content blocks */
+.aib{
+  background:var(--bg);border:1px solid var(--border);
+  padding:32px 36px;margin-bottom:16px;
+}
+.aib h3{
+  font-family:'Cormorant Garamond',serif;font-size:25px;
+  font-weight:600;color:var(--dark);margin:26px 0 12px;
+}
+.aib h3:first-child{margin-top:0}
+.aib p{
+  font-family:'Lato',sans-serif;font-size:15px; /* larger */
+  color:var(--text);line-height:1.9;margin-bottom:14px;
+}
+.aib strong{font-weight:700;color:var(--dark)}
+.aib ul{list-style:none;margin:10px 0 18px}
+.aib ul li{
+  font-family:'Lato',sans-serif;
+  padding:9px 0 9px 22px;border-bottom:1px solid var(--border);
+  font-size:14px;position:relative;line-height:1.65;
+}
+.aib ul li:last-child{border-bottom:none}
+.aib ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+
+.ical{
+  background:linear-gradient(135deg,rgba(176,138,62,.1),rgba(176,138,62,.04));
+  border:1px solid rgba(176,138,62,.2);border-left:5px solid var(--gold);
+  padding:20px 24px;margin:18px 0;
+}
+.ical-lbl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:8px;font-weight:700;
+}
+.ical p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.75;margin:0}
+
+/* Cards 2-col */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rc{padding:20px 24px;border:1px solid var(--border);border-left:5px solid var(--border)}
+.rc.gold{border-left-color:var(--gold)}
+.rc.red{border-left-color:var(--red)}
+.rc.blue{border-left-color:var(--blue)}
+.rc.green{border-left-color:var(--green)}
+.rc.dk{background:var(--dark);border-color:var(--dark);border-left-color:var(--gold)}
+.rcl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700;
+}
+.rcv{
+  font-family:'Cormorant Garamond',serif;font-size:20px;
+  font-weight:600;color:var(--dark);margin-bottom:4px;
+}
+.rc.dk .rcv{color:#e8c870}
+.rcd{font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);line-height:1.5}
+.rc.dk .rcd{color:#666}
+
+/* Timeline intro box */
+.tl-intro{
+  background:var(--bg);border:1px solid var(--border);
+  border-left:5px solid var(--gold);padding:24px 28px;margin-bottom:20px;
+}
+.tl-intro-title{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700;
+}
+.tl-intro-body{
+  font-family:'Lato',sans-serif;font-size:14px;
+  color:var(--text);line-height:1.85;margin-bottom:12px;
+}
+.tl-list{list-style:none}
+.tl-list li{
+  font-family:'Lato',sans-serif;padding:7px 0 7px 20px;
+  border-bottom:1px solid var(--border);font-size:13px;
+  position:relative;line-height:1.6;
+}
+.tl-list li:last-child{border-bottom:none}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.tl-note{
+  font-family:'Lato',sans-serif;font-size:11px;
+  color:var(--muted);margin-top:10px;font-style:italic;
+}
+
+/* Timeline table */
+.tlt{width:100%;border-collapse:collapse;margin-top:16px}
+.tlt th{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;font-weight:700;
+}
+.tlt td{
+  font-family:'Lato',sans-serif;padding:10px 14px;
+  border-bottom:1px solid var(--border);font-size:13px;
+}
+.tlt tr.cur td{background:var(--gold-dim);font-weight:700}
+.tltag{
+  display:inline-block;font-size:9px;padding:2px 8px;
+  background:var(--dark);color:#e8c870;letter-spacing:1px;
+}
+
+/* Monthly grid */
+.men-header{
+  background:var(--dark);padding:18px 24px;margin-bottom:14px;
+  border:1px solid var(--border);
+}
+.mh-lbl{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.mh-val{font-family:'Cormorant Garamond',serif;font-size:21px;color:#e8c870;margin-bottom:3px}
+.mh-next{font-family:'Lato',sans-serif;font-size:12px;color:#555}
+
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mc{
+  padding:14px 12px;background:var(--bg);
+  border:1px solid var(--border);border-top:3px solid var(--border);
+}
+.mc.hl{border-top-color:var(--gold);background:var(--gold-dim)}
+.mn{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);line-height:1;margin-bottom:2px}
+.mname{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:7px;font-weight:700;
+}
+.mtheme{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--dark);margin-bottom:3px}
+.mact{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.45}
+
+/* Plan */
+.pphase{border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.pph-hdr{
+  background:var(--dark);padding:18px 24px;
+  display:flex;align-items:center;gap:18px;
+}
+.pph-n{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);line-height:1}
+.pph-lbl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:#666;text-transform:uppercase;font-weight:700;margin-bottom:2px;
+}
+.pph-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff}
+.pph-body{padding:22px 28px;background:var(--white)}
+
+.pw{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.pw:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.pwl{
+  font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:5px;font-weight:700;
+}
+.pwt{
+  font-family:'Cormorant Garamond',serif;font-size:18px;
+  font-weight:600;color:var(--dark);margin-bottom:8px;
+}
+.pwa{list-style:none}
+.pwa li{
+  font-family:'Lato',sans-serif;font-size:13px;color:var(--muted);
+  padding:5px 0 5px 16px;position:relative;line-height:1.6;
+}
+.pwa li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+
+/* ══════════════════════════════════
+   CTA PAGE
+══════════════════════════════════ */
+.cta-page{
+  background:var(--dark);
+  padding:64px var(--pad);
+  position:relative;overflow:hidden;
+}
+.cta-page::before{
+  content:'';position:absolute;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(176,138,62,.06) 0%,transparent 70%);
+  top:50%;right:-100px;transform:translateY(-50%);
+}
+.cta-eye{
+  font-family:'Lato',sans-serif;font-size:10px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:20px;
+  font-weight:700;position:relative;z-index:1;
+}
+.cta-h{
+  font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;
+  color:#fff;margin-bottom:16px;line-height:1.02;
+  position:relative;z-index:1;
+}
+.cta-h em{font-style:italic;color:#e8c870}
+.cta-div{width:52px;height:2px;background:var(--gold-lt);margin:24px 0;position:relative;z-index:1}
+.cta-body{
+  font-family:'Lato',sans-serif;font-size:15px;
+  color:rgba(255,255,255,.5);max-width:540px;
+  line-height:1.9;margin-bottom:36px;position:relative;z-index:1;
+}
+.cta-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:44px;position:relative;z-index:1;
+}
+.cta-card{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(201,165,90,.2);
+  padding:24px 22px;
+}
+.cta-icon{font-size:24px;margin-bottom:12px}
+.cta-card-title{
+  font-family:'Cormorant Garamond',serif;font-size:19px;
+  color:#fff;margin-bottom:8px;font-weight:400;
+}
+.cta-card-desc{
+  font-family:'Lato',sans-serif;font-size:13px;
+  color:rgba(255,255,255,.38);line-height:1.65;
+}
+.cta-bottom{text-align:center;position:relative;z-index:1}
+.cta-btn{
+  display:inline-block;background:var(--gold);color:var(--dark);
+  padding:18px 52px;font-family:'Lato',sans-serif;
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
+}
+.cta-note{
+  font-family:'Lato',sans-serif;font-size:11px;
+  color:rgba(255,255,255,.2);margin-top:16px;letter-spacing:1px;
+}
+.cta-bar{height:5px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold))}
+
+/* ══════════════════════════════════
+   PRINT
+══════════════════════════════════ */
+@media print{
+  .preview-bar,
+  body{background:white!important;padding:0}
+  .page{
+    width:100%!important;margin:0!important;
+    box-shadow:none!important;page-break-after:always;
+  }
+  .cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cover-bar,.cta-bar{-webkit-print-color-adjust:exact}
+  .sec-hdr,.pph-hdr,.men-header,.cta-page{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .aib,.cgrid,.pphase,.tl-intro,.ical{page-break-inside:avoid}
+  .mgrid{-webkit-print-color-adjust:exact}
+}
+
+/* pdf-page-wrap: screen shadow, removed in print */
+.pdf-page-wrap{
+  width:210mm;margin:0 auto 24px;
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  overflow:hidden;
+}
+@media print{
+  .hdr,.client-actions,.no-print,#sc-login,#sc-dash{display:none!important}
+  body{background:white!important;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .screen{display:none!important;min-height:0}
+  #sc-client{display:block!important;padding:0}
+  .client-hdr,.client-body{display:none!important}
+  .pdf-page-wrap{
+    display:block!important;width:100%!important;
+    margin:0!important;box-shadow:none!important;
+    page-break-after:always;
+  }
+  .cover,.cta-page,.sec-hdr,.pph-hdr,.men-header{
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .cover-bar,.cta-bar,.cover-line,.intro-div{-webkit-print-color-adjust:exact}
+  .aib,.cgrid,.pphase,.tl-intro,.ical{page-break-inside:avoid}
+  .mgrid{-webkit-print-color-adjust:exact;grid-template-columns:repeat(4,1fr)!important}
+  *{box-shadow:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="sc-login">
+  <div class="login-box">
+    <div class="login-sigma">Σ</div>
+    <h2 class="login-title">Painel Interno</h2>
+    <p class="login-sub">Código de Carreira · Acesso Restrito</p>
+    <input type="password" id="login-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+    <p class="login-err" id="login-err">Senha incorreta.</p>
+    <button class="btn-gold" style="width:100%;justify-content:center" onclick="login()">Entrar →</button>
+  </div>
+</div>
+
+<header class="hdr no-print" id="mainHdr" style="display:none">
+  <div class="hdr-brand">Código de Carreira</div>
+  <div style="display:flex;align-items:center;gap:20px">
+    <div class="hdr-tag">Painel Interno</div>
+    <button class="btn-ghost" onclick="goTo('dash')" style="padding:6px 14px;font-size:9px">← Clientes</button>
+  </div>
+</header>
+
+<!-- DASHBOARD -->
+<div id="sc-dash" class="screen" style="display:none">
+  <div class="dash-top">
+    <h2 class="dash-title">Seus <em>clientes</em></h2>
+    <button class="btn-gold" onclick="loadClients()">↻ Atualizar lista</button>
+  </div>
+  <div class="dash-stats">
+    <div class="stat-card"><div class="stat-n" id="stat-total">—</div><div class="stat-l">Total de clientes</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-week">—</div><div class="stat-l">Esta semana</div></div>
+    <div class="stat-card"><div class="stat-n" id="stat-pending">—</div><div class="stat-l">Diagnósticos pendentes</div></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-header">
+      <div class="tbl-header-title">Lista de clientes</div>
+      <input class="tbl-search" type="text" id="searchInput" placeholder="Buscar por nome..." oninput="filterClients()"/>
+    </div>
+    <div id="tbl-body"></div>
+  </div>
+</div>
+
+<!-- CLIENT DETAIL -->
+<div id="sc-client" class="screen" style="display:none">
+
+  <!-- SCREEN HEADER (hidden on print) -->
+  <div class="client-hdr no-print" id="cHdr">
+    <div class="client-meta" id="cMeta"></div>
+    <h2 class="client-name" id="cName"></h2>
+    <p class="client-arch" id="cArch"></p>
+    <div class="client-nums" id="cNums"></div>
+  </div>
+
+  <div class="client-actions no-print">
+    <button class="btn-gold" onclick="abrirPDF()">⬇ Salvar PDF</button>
+    <button class="btn-ghost" id="btnGenerate" onclick="gerarDiagnostico()">⚙ Gerar diagnóstico completo</button>
+    <button class="btn-ghost" onclick="goTo('dash')">← Voltar</button>
+  </div>
+
+  <!-- SCREEN SECTIONS (hidden on print) -->
+  <div class="client-body no-print">
+    <div class="client-sec">
+      <p class="cs-eye">Dados Recebidos</p>
+      <h3 class="cs-title">Respostas do <em>cliente</em></h3>
+      <p class="cs-sub">Informações preenchidas no formulário.</p>
+      <div id="c-answers"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">01 — Ativo Mais Rentável</p>
+      <h3 class="cs-title">Talento <em>Principal</em></h3>
+      <div id="c-tal"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Clique em "Gerar diagnóstico completo"</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">02 — Direção Estratégica</p>
+      <h3 class="cs-title">Direção <em>Estratégica</em></h3>
+      <div id="c-dir"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">03 — Bloqueios</p>
+      <h3 class="cs-title">Pontos de <em>Bloqueio</em></h3>
+      <div id="c-blq"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">04 — Timing</p>
+      <h3 class="cs-title">Linha do Tempo e <em>Ciclos</em></h3>
+      <div id="c-tl"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">05 — Mensal</p>
+      <h3 class="cs-title">Calendário <em>Pessoal</em></h3>
+      <div id="c-men"></div>
+    </div>
+    <div class="client-sec">
+      <p class="cs-eye">06 — Plano</p>
+      <h3 class="cs-title">Plano de <em>90 Dias</em></h3>
+      <div id="c-plan"><div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Aguardando geração.</div></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════
+       PDF STRUCTURE — v2 approved layout
+  ════════════════════════ -->
+
+  <!-- ══════════════════════════════════
+     P1 — CAPA
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="cover">
+    <div class="cover-bar"></div>
+    <div class="cover-body">
+      <div class="cover-brand">CÓDIGO DE CARREIRA</div>
+      <div class="cover-sublabel">Diagnóstico Estratégico Individual · Confidencial</div>
+      <h1 class="cover-name" id="pdf-name">Janaina</h1>
+      <p class="cover-archetype" id="pdf-archetype">O Parceiro Estratégico</p>
+      <div class="cover-line"></div>
+      <p class="cover-tagline" id="pdf-tagline">
+        Direção: A Rota da Parceria e Influência<br>
+        Motivação central: Harmonia e Cooperação<br>
+        Código anual: Início — Plantio e Iniciativa
+      </p>
+    </div>
+    <div class="cover-footer">
+      <div class="cf-brand">Código de Carreira</div>
+      <div class="cf-date" id="pdf-date">MAIO DE 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P2 — INTRODUÇÃO
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client" id="pdf-intro-client">JANAINA · DIAGNÓSTICO ESTRATÉGICO</div>
+  </div>
+  <div class="intro-body-wrap">
+    <div class="intro-eye">Bem-vindo ao seu diagnóstico</div>
+    <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
+    <div class="intro-div"></div>
+    <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direção profissional.</p>
+    <p class="intro-p">Ao longo de mais de 20.000 análises, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
+    <div class="intro-box">
+      <div class="ib-title">Como ler e usar este relatório</div>
+      <ul class="ib-list">
+        <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira ou posicionamento.</li>
+        <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de você agora.</li>
+        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
+      </ul>
+    </div>
+    <div class="intro-quote">
+      <div class="iq-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
+      <div class="iq-author">Código de Carreira · Diagnóstico Estratégico</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P3 — TALENTO PRINCIPAL
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 01 — TALENTO PRINCIPAL</div>
+  </div>
+  <div class="sec-hdr" data-n="01" id="pdf-sec-01">
+    <div class="sh-eye">01 — Ativo Mais Rentável</div>
+    <h2 class="sh-title">Talento <em>Principal</em></h2>
+    <p class="sh-sub">O padrão que gera faturamento com menor desgaste.</p>
+  </div>
+  <div class="sec-body" id="pdf-tal-body">
+    <div class="aib">
+      <h3>O Parceiro Estratégico</h3>
+      <p>Você funciona como <strong>O Parceiro Estratégico</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você tem uma forma específica de gerar valor através da diplomacia, da cooperação e do ajuste fino de detalhes que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia em atividades que exigem isolamento ou força bruta, quando o seu padrão natural é a influência e a mediação.</p>
+      <p>Quando você opera dentro do perfil de O Parceiro Estratégico, sua entrega é exponencialmente superior à média. Você transforma conflitos em cooperação, desorganização em harmonia, e ambientes complexos em estruturas que funcionam. Trabalhar contra esse padrão — assumindo posições de liderança solitária ou aceitando qualquer trabalho que chega — é a principal causa de estagnação de faturamento.</p>
+      <h3>Sua Diretriz de Faturamento</h3>
+      <p>O mercado paga mais por especialistas posicionados com clareza. Como O Parceiro Estratégico, você gera valor máximo quando filtra suas atividades por alinhamento com seu padrão de mediação e influência. Sua força reside no "nós": onde houver conflito ou desorganização interpessoal, existe uma oportunidade de valorização para você.</p>
+      <h3>Seu Posicionamento de Autoridade</h3>
+      <p>Busque parcerias e sociedades onde a sensibilidade estratégica e a gestão de relacionamentos sejam o centro. Posicione-se como a referência que une partes divergentes e faz projetos complexos funcionarem em harmonia — esse é o seu diferencial competitivo inimitável.</p>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Audite sua agenda desta semana: quantas horas estão em atividades que ativam seu padrão de mediação, cooperação e influência? Se menos de 50%, reposicione imediatamente — o faturamento segue o alinhamento.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P4 — DIREÇÃO ESTRATÉGICA
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 02 — DIREÇÃO ESTRATÉGICA</div>
+  </div>
+  <div class="sec-hdr" data-n="02">
+    <div class="sh-eye">02 — Caminho de Maior Faturamento</div>
+    <h2 class="sh-title">Direção <em>Estratégica</em></h2>
+    <p class="sh-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p>
+  </div>
+  <div class="sec-body" id="pdf-dir-body">
+    <div class="aib">
+      <h3>A Rota do Visionário Inspirador</h3>
+      <p>Sua direção estratégica aponta para <strong>A Rota do Visionário Inspirador</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico. Quando você trabalha alinhada com essa direção, liderando através da visão estratégica e da inspiração — não da força bruta —, o faturamento vem com mais naturalidade e menos desgaste. Quando você trabalha contra ela, gasta o dobro de energia para metade do resultado.</p>
+      <p>Você encontrará resistência se tentar ser "normal" nesse percurso — seu faturamento real vem de se posicionar como referência visionária no seu nicho. O mercado não paga pelo seu esforço, paga pela sua direção estratégica e pelo seu posicionamento de autoridade. Essa é a diferença entre esforço sem retorno e crescimento consistente.</p>
+      <h3>Cenário de Retorno Financeiro</h3>
+      <p>O retorno mais previsível para você, com a direção de Visionário Inspirador, vem de posicionamentos como consultora estratégica, mentora ou especialista em nichos de inovação e transformação. Antes de tentar escalar, construa autoridade percebida — torne-se um recurso escasso e de alto valor no seu mercado.</p>
+      <h3>Sua Diretriz de Transição</h3>
+      <p>Abandone projetos e clientes que exigem conformidade. Sua transição deve ser para espaços onde sua visão de futuro e capacidade de inspirar sejam o diferencial competitivo. Elimine serviços que não refletem seu padrão de excelência e concentre-se no que gera autoridade percebida.</p>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Defina agora: qual nicho específico maximiza o seu perfil de O Parceiro Estratégico e a sua direção como Visionário Inspirador? Foque nele e recuse o restante nos próximos 30 dias. Essa decisão vale mais do que qualquer curso.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P5 — BLOQUEIO
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 03 — PONTOS DE BLOQUEIO</div>
+  </div>
+  <div class="sec-hdr" data-n="03">
+    <div class="sh-eye">03 — O Que Está Travando o Faturamento</div>
+    <h2 class="sh-title">Pontos de <em>Bloqueio</em></h2>
+    <p class="sh-sub">Padrões que drenam esforço sem retorno proporcional.</p>
+  </div>
+  <div class="sec-body" id="pdf-blq-body">
+    <div class="aib">
+      <h3>A Liberdade sem Instabilidade</h3>
+      <p>Seu padrão de bloqueio opera de forma sutil — frequentemente mascarado de busca por variedade, necessidade de novas experiências ou insatisfação com o atual. Para o seu perfil de O Parceiro Estratégico, o risco não é você travar de forma óbvia, mas sim mudar de direção constantemente nos momentos em que as coisas estão prestes a decolar. Você tende à instabilidade excessiva — muda de ideia quando está sob pressão financeira, exatamente quando mais precisa de consistência.</p>
+      <p>Os sabotadores que você reconhece em si mesma — <strong>dispersão e medo de arriscar</strong> — são manifestações diretas desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência: é o padrão de bloqueio operando para mantê-la onde está, disfarçado de prudência ou de busca por algo melhor.</p>
+      <h3>O Impacto no Seu Faturamento</h3>
+      <p>Com sua desvalorização financeira em <strong>5/10</strong> e facilidade de cobrança em <strong>5/10</strong>, esse bloqueio está custando faturamento real todo mês. Cada vez que você muda de direção antes do resultado aparecer, perde o investimento já feito e recomeça do zero — gastando energia que deveria estar convertendo em receita consistente.</p>
+      <h3>Seu Protocolo de Superação</h3>
+      <ul>
+        <li>Identifique a última decisão onde você mudou de direção antes do resultado — esse é o gatilho do padrão</li>
+        <li>Crie uma regra: "Antes de mudar, preciso de 90 dias de execução consistente no caminho atual"</li>
+        <li>Revisão semanal de 15 minutos: o que operou dentro do seu padrão? O que ficou fora?</li>
+        <li>Encontre um par de responsabilidade que te confronte quando o padrão de instabilidade ressurgir</li>
+      </ul>
+      <div class="ical">
+        <div class="ical-lbl">⚡ Insight para Ação</div>
+        <p>Identifique agora: qual projeto ou decisão você está postergando ou prestes a abandonar? Antes de mudar, execute por mais 30 dias com total comprometimento. O faturamento está do outro lado da consistência.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P6 — LINHA DO TEMPO (intro + cards)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 04 — LINHA DO TEMPO E CICLOS</div>
+  </div>
+  <div class="sec-hdr" data-n="04">
+    <div class="sh-eye">04 — Timing Estratégico</div>
+    <h2 class="sh-title">Linha do Tempo e <em>Ciclos</em></h2>
+    <p class="sh-sub">Fases ativas e o momento certo para cada decisão.</p>
+  </div>
+  <div class="sec-body" id="pdf-tl-body">
+    <div class="tl-intro">
+      <div class="tl-intro-title">Como ler esta seção</div>
+      <p class="tl-intro-body">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p>
+      <ul class="tl-list">
+        <li><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos ao longo da vida: Formativo, Produtivo e Colheita.</li>
+        <li><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li>
+        <li><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li>
+      </ul>
+      <p class="tl-note">Os itens marcados como <strong>ATUAL</strong> estão ativos para você hoje, com 44 anos.</p>
+    </div>
+    <div class="cgrid">
+      <div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">O Estrategista</div><div class="rcd">2º Ciclo (Produtivo) · 26–52 anos</div></div>
+      <div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">O Arquiteto</div><div class="rcd">4º Pináculo · 44–∞ anos</div></div>
+    </div>
+    <div class="cgrid">
+      <div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">A Liberdade sem Instabilidade</div><div class="rcd">3º Desafio (Principal)</div></div>
+      <div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">O Catalisador</div><div class="rcd">Talento + Direção</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P7 — LINHA DO TEMPO (tabela completa)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 04 — HISTÓRICO COMPLETO</div>
+  </div>
+  <div class="sec-body" id="pdf-tl-table"> style="padding-top:36px">
+    <p style="font-family:'Lato',sans-serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;font-weight:700">Histórico Completo de Ciclos e Pináculos</p>
+    <table class="tlt">
+      <thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead>
+      <tbody>
+        <tr><td>1º Ciclo (Formativo)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>0–25 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 2º Ciclo (Produtivo)</td><td>Ciclo</td><td>O Estrategista</td><td>26–52 anos</td></tr>
+        <tr><td>3º Ciclo (Colheita)</td><td>Ciclo</td><td>O Parceiro Estratégico</td><td>53–∞ anos</td></tr>
+        <tr><td>1º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>0–25 anos</td></tr>
+        <tr><td>2º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>26–34 anos</td></tr>
+        <tr><td>3º Pináculo</td><td>Pináculo</td><td>O Catalisador</td><td>35–43 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 4º Pináculo</td><td>Pináculo</td><td>O Arquiteto</td><td>44–∞ anos</td></tr>
+        <tr><td>1º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>0–25 anos</td></tr>
+        <tr><td>2º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>26–34 anos</td></tr>
+        <tr class="cur"><td><span class="tltag">ATUAL</span> 3º Desafio (Principal)</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>35–43 anos</td></tr>
+        <tr><td>4º Desafio</td><td>Desafio</td><td>A Liberdade sem Instabilidade</td><td>44–∞ anos</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P8 — CALENDÁRIO PESSOAL
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 05 — CALENDÁRIO PESSOAL</div>
+  </div>
+  <div class="sec-hdr" data-n="05">
+    <div class="sh-eye">05 — Termômetro Mensal</div>
+    <h2 class="sh-title">Código Pessoal e <em>Calendário</em></h2>
+    <p class="sh-sub">O que cada mês pede de você — planejamento tático.</p>
+  </div>
+  <div class="sec-body" id="pdf-men-body">
+    <div class="men-header">
+      <div class="mh-lbl">Código Anual Ativo</div>
+      <div class="mh-val">Início — Plantio e Iniciativa</div>
+      <div class="mh-next">Próximo código: Gestação — Parceria e Paciência</div>
+    </div>
+    <div class="mgrid">
+      <div class="mc"><div class="mn">2</div><div class="mname">Janeiro</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, construa parcerias.</div></div>
+      <div class="mc"><div class="mn">3</div><div class="mname">Fevereiro</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing, vendas, visibilidade.</div></div>
+      <div class="mc"><div class="mn">4</div><div class="mname">Março</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Organize processos e finanças.</div></div>
+      <div class="mc"><div class="mn">5</div><div class="mname">Abril</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Aceite o inesperado.</div></div>
+      <div class="mc hl"><div class="mn">1</div><div class="mname">Maio ◀</div><div class="mtheme">Início e Novos Começos</div><div class="mact">Lance, comece, marque presença.</div></div>
+      <div class="mc"><div class="mn">2</div><div class="mname">Junho</div><div class="mtheme">Colaboração e Ajuste</div><div class="mact">Ouça, negocie, parcerias.</div></div>
+      <div class="mc"><div class="mn">3</div><div class="mname">Julho</div><div class="mtheme">Comunicação e Networking</div><div class="mact">Marketing e vendas.</div></div>
+      <div class="mc"><div class="mn">4</div><div class="mname">Agosto</div><div class="mtheme">Execução e Disciplina</div><div class="mact">Foco no método e entrega.</div></div>
+      <div class="mc"><div class="mn">5</div><div class="mname">Setembro</div><div class="mtheme">Movimento e Oportunidade</div><div class="mact">Flexibilidade gera faturamento.</div></div>
+      <div class="mc"><div class="mn">6</div><div class="mname">Outubro</div><div class="mtheme">Responsabilidade e Equilíbrio</div><div class="mact">Qualidade gera indicações.</div></div>
+      <div class="mc"><div class="mn">7</div><div class="mname">Novembro</div><div class="mtheme">Estratégia e Planejamento</div><div class="mact">Planeje e refine a oferta.</div></div>
+      <div class="mc"><div class="mn">8</div><div class="mname">Dezembro</div><div class="mtheme">Resultados e Autoridade</div><div class="mact">Cobranças e autoridade.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P9 — PLANO 90 DIAS (Fase 1)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 06 — PLANO DE 90 DIAS</div>
+  </div>
+  <div class="sec-hdr" data-n="06">
+    <div class="sh-eye">06 — Execução Prática</div>
+    <h2 class="sh-title">Plano de <em>90 Dias</em></h2>
+    <p class="sh-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p>
+  </div>
+  <div class="sec-body" id="pdf-plan-body">
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">1</div>
+        <div>
+          <div class="pph-lbl">Fase 1 · Dias 1–30</div>
+          <div class="pph-title">Limpeza e Foco — Eliminar o que drena, ativar o que gera</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semana 1</div>
+          <div class="pwt">Auditoria de alinhamento</div>
+          <ul class="pwa">
+            <li>Liste todas as atividades atuais: ativa ou não o seu padrão de O Parceiro Estratégico</li>
+            <li>Identifique os 3 projetos que mais consomem energia sem retorno proporcional</li>
+            <li>Mapeie decisões pendentes que o padrão de instabilidade adiou</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 2</div>
+          <div class="pwt">Eliminação estratégica</div>
+          <ul class="pwa">
+            <li>Encerre ou renegocie pelo menos 1 contrato desalinhado com o seu padrão natural</li>
+            <li>Reposicione sua oferta principal como Parceiro Estratégico e Visionário Inspirador</li>
+            <li>Defina nicho prioritário onde mediação e visão estratégica são o diferencial</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 3</div>
+          <div class="pwt">Posicionamento inicial</div>
+          <ul class="pwa">
+            <li>Reescreva sua bio profissional alinhada ao seu padrão de O Parceiro Estratégico</li>
+            <li>Atualize proposta de valor com linguagem de autoridade e impacto</li>
+            <li>Mapeie 5 oportunidades onde seu padrão gera valor máximo</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 4</div>
+          <div class="pwt">Consolidação da base</div>
+          <ul class="pwa">
+            <li>Organize processos que liberam tempo para trabalho de alto impacto</li>
+            <li>Defina política de preços alinhada ao valor do seu padrão estratégico</li>
+            <li>Planeje o mês 2 com base no timing do seu código anual atual</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P10 — PLANO 90 DIAS (Fases 2 e 3)
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="page-hdr">
+    <div class="ph-brand">Código de Carreira</div>
+    <div class="ph-client">JANAINA · 06 — PLANO DE 90 DIAS (continuação)</div>
+  </div>
+  <div class="sec-body" id="pdf-plan-body2"> style="padding-top:36px">
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">2</div>
+        <div>
+          <div class="pph-lbl">Fase 2 · Dias 31–60</div>
+          <div class="pph-title">Execução e Posicionamento — Construir autoridade percebida</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semana 5</div>
+          <div class="pwt">Lançamento de autoridade</div>
+          <ul class="pwa">
+            <li>Crie e distribua conteúdo que demonstre sua capacidade visionária e estratégica</li>
+            <li>Faça 5 conversas com potenciais clientes que precisam de mediação e visão</li>
+            <li>Apresente nova oferta posicionada para pelo menos 3 parceiros estratégicos</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semana 6</div>
+          <div class="pwt">Expansão de relacionamentos</div>
+          <ul class="pwa">
+            <li>Mapeie sua rede: quem impulsiona seu padrão e quem drena</li>
+            <li>Agende reuniões com 3 parceiros estratégicos potenciais</li>
+            <li>Implemente processo de indicação ativa com clientes alinhados</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semanas 7 e 8</div>
+          <div class="pwt">Refinamento e aceleração</div>
+          <ul class="pwa">
+            <li>Ajuste preço baseado no posicionamento de autoridade conquistado</li>
+            <li>Crie um caso de sucesso documentado para uso em vendas</li>
+            <li>Duplique esforço no canal que mais gerou retorno nas semanas anteriores</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="pphase">
+      <div class="pph-hdr">
+        <div class="pph-n">3</div>
+        <div>
+          <div class="pph-lbl">Fase 3 · Dias 61–90</div>
+          <div class="pph-title">Escala e Consolidação — Faturamento previsível e autoridade sólida</div>
+        </div>
+      </div>
+      <div class="pph-body">
+        <div class="pw">
+          <div class="pwl">Semanas 9 e 10</div>
+          <div class="pwt">Escala e sistemas de crescimento</div>
+          <ul class="pwa">
+            <li>Lance versão de maior valor da oferta principal como Parceiro Estratégico de referência</li>
+            <li>Delegue atividades operacionais que não ativam o seu padrão natural</li>
+            <li>Defina meta de faturamento específica e mensurável para os próximos 90 dias</li>
+          </ul>
+        </div>
+        <div class="pw">
+          <div class="pwl">Semanas 11 e 12</div>
+          <div class="pwt">Autoridade de mercado e balanço</div>
+          <ul class="pwa">
+            <li>Publique posicionamento de autoridade em pelo menos 2 canais estratégicos</li>
+            <li>Solicite depoimentos que validam o seu padrão como O Parceiro Estratégico</li>
+            <li>Meça resultado dos 90 dias: faturamento, posicionamento e energia — e planeje o próximo ciclo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     P11 — CTA MENTORIA
+══════════════════════════════════ -->
+<div class="pdf-page-wrap">
+  <div class="cta-page">
+    <div class="cta-eye">O diagnóstico está pronto. A execução é o próximo passo.</div>
+    <h2 class="cta-h">Pronta para <em>executar</em><br>com precisão?</h2>
+    <div class="cta-div"></div>
+    <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
+    <div class="cta-grid">
+      <div class="cta-card">
+        <div class="cta-icon">🎯</div>
+        <div class="cta-card-title">3 Encontros Individuais</div>
+        <div class="cta-card-desc">Sessões exclusivas construídas em cima do seu diagnóstico. Cada encontro tem objetivo claro e ações práticas baseadas no seu perfil específico.</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-icon">⚡</div>
+        <div class="cta-card-title">Ajustes em Tempo Real</div>
+        <div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-icon">📈</div>
+        <div class="cta-card-title">Foco Total em Faturamento</div>
+        <div class="cta-card-desc">Cada decisão será validada com base no seu perfil. Sem estratégia genérica — só o que funciona para o seu código específico.</div>
+      </div>
+      <div class="cta-card">
+        <div class="cta-icon">🔒</div>
+        <div class="cta-card-title">Exclusividade Total</div>
+        <div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaço seguro para trabalhar os pontos mais profundos do seu padrão de crescimento.</div>
+      </div>
+    </div>
+    <div class="cta-bottom">
+      <div class="cta-btn">Quero aplicar meu Código de Carreira</div>
+      <p class="cta-note">Entre em contato para agendar sua primeira sessão</p>
+    </div>
+  </div>
+  <div class="cta-bar"></div>
+</div>
+
+
+</div><!-- end sc-client -->
+
+<script>
+'use strict';
+const SENHA='codigo2025';
+const SHEETS_ID='1ZRlyq_7BAyAg0nzRX1wKsmqJjFH5kvytXmfpts2I_iE';
+const SHEETS_READ_URL=`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:json`;
+const SHEETS_CSV_URL=`https://docs.google.com/spreadsheets/d/${SHEETS_ID}/export?format=csv&gid=0`;
+
+/* ══ KABBALISTIC ENGINE ══ */
+const LV={a:1,b:2,c:3,d:4,e:5,f:8,g:3,h:5,i:1,j:1,k:2,l:3,m:4,n:5,o:7,p:8,q:1,r:2,s:3,t:4,u:6,v:6,w:6,x:6,y:1,z:7};
+const AM={'\u0301':2,'\u0300':1,'\u0308':1,'\u0302':7,'\u0303':3,'\u0327':0};
+const VOWELS=new Set(['a','e','i','o','u']);
+function getCV(str){const dec=str.normalize('NFD').toLowerCase();const res=[];let i=0;while(i<dec.length){const ch=dec[i];if(LV[ch]!==undefined){let val=LV[ch],j=i+1;while(j<dec.length&&dec.charCodeAt(j)>=0x0300&&dec.charCodeAt(j)<=0x036f){const cc=dec[j];if(cc==='\u0327')val=6;else if(AM[cc]!==undefined)val+=AM[cc];j++;}res.push({base:ch,value:val});i=j;}else i++;}return res;}
+function sumL(n,f){return getCV(n).reduce((a,{base:b,value:v})=>(!f||f(b))?a+v:a,0);}
+function red(n,k=true){if(n<0)n=Math.abs(n);while(n>9&&!(k&&(n===11||n===22))){n=String(n).split('').reduce((a,b)=>a+parseInt(b),0);}return n;}
+function calcExpr(name){return red(sumL(name));}
+function calcSoul(name){return red(sumL(name,ch=>VOWELS.has(ch)));}
+function calcDest(d,m,y){return red((String(d)+String(m)+String(y)).split('').reduce((a,b)=>a+parseInt(b),0));}
+function calcCycles(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;return[{num:red(m,false),label:'1º Ciclo (Formativo)',start:0,end:fe},{num:red(d,false),label:'2º Ciclo (Produtivo)',start:fe+1,end:fe+27},{num:red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false),label:'3º Ciclo (Colheita)',start:fe+28,end:null}];}
+function calcPinn(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;const M=red(m,false),D=red(d,false),Y=red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false);const p1=red(M+D,false),p2=red(D+Y,false),p3=red(p1+p2,false),p4=red(M+Y,false);return[{num:p1,label:'1º Pináculo',start:0,end:fe},{num:p2,label:'2º Pináculo',start:fe+1,end:fe+9},{num:p3,label:'3º Pináculo',start:fe+10,end:fe+18},{num:p4,label:'4º Pináculo',start:fe+19,end:null}];}
+function calcChall(d,m,y){const dest=calcDest(d,m,y),fe=36-dest;const M=red(m,false),D=red(d,false),Y=red(String(y).split('').reduce((a,b)=>a+parseInt(b),0),false);const c1=Math.abs(M-D),c2=Math.abs(D-Y),c3=Math.abs(c1-c2),c4=Math.abs(M-Y);return[{num:c1,label:'1º Desafio',start:0,end:fe},{num:c2,label:'2º Desafio',start:fe+1,end:fe+9},{num:c3,label:'3º Desafio (Principal)',start:fe+10,end:fe+18},{num:c4,label:'4º Desafio',start:fe+19,end:null}];}
+function calcPY(d,m,curY){const now=new Date(),cm=now.getMonth()+1,cd=now.getDate();let yr=curY;if(cm<m||(cm===m&&cd<d))yr=curY-1;return red(red(d,false)+red(m,false)+red(String(yr).split('').reduce((a,b)=>a+parseInt(b),0),false),false);}
+function calcPM(py,cm){return red(py+cm,false);}
+
+/* ══ MEANINGS ══ */
+const TN={1:'O Pioneiro',2:'O Parceiro Estratégico',3:'O Comunicador',4:'O Arquiteto',5:'O Catalisador',6:'O Harmonizador',7:'O Estrategista',8:'O Executivo',9:'O Visionário Humanista',11:'O Inspirador Mestre',22:'O Arquiteto Mestre'};
+const DN={1:'A Rota da Iniciativa e Liderança',2:'A Rota da Parceria e Influência',3:'A Rota da Expressão e Comunicação',4:'A Rota da Construção e Consistência',5:'A Rota do Visionário Inspirador',6:'A Rota do Serviço de Alto Valor',7:'A Rota da Especialização Profunda',8:'A Rota da Autoridade e Escala',9:'A Rota do Legado e Impacto',11:'A Rota da Inspiração Mestre',22:'A Rota da Grandiosidade Concreta'};
+const MN2={1:'Conquista e Autonomia',2:'Harmonia e Cooperação',3:'Expressão e Alegria',4:'Segurança e Estrutura',5:'Liberdade e Variedade',6:'Amor e Responsabilidade',7:'Conhecimento e Profundidade',8:'Poder e Realizações',9:'Propósito e Legado',11:'Visão e Espiritualidade',22:'Impacto Concreto em Escala'};
+const CT={1:'Início — Plantio e Iniciativa',2:'Gestação — Parceria e Paciência',3:'Expansão — Comunicação e Criatividade',4:'Consolidação — Trabalho e Método',5:'Movimento — Mudança e Oportunidade',6:'Responsabilidade — Família e Serviço',7:'Introspecção — Análise e Espiritualidade',8:'Colheita — Autoridade e Faturamento',9:'Conclusão — Fechamento e Entrega'};
+const MT={1:'Início e Novos Começos',2:'Colaboração e Ajuste',3:'Comunicação e Networking',4:'Execução e Disciplina',5:'Movimento e Oportunidade',6:'Responsabilidade e Equilíbrio',7:'Estratégia e Planejamento',8:'Resultados e Autoridade',9:'Finalização e Balanço'};
+const MA={1:'Lance, comece, marque presença.',2:'Ouça, negocie, construa parcerias.',3:'Marketing, vendas, visibilidade.',4:'Organize processos, finanças e entregas.',5:'Aceite o inesperado. Flexibilidade gera faturamento.',6:'Qualidade de serviço. Confiança gera indicações.',7:'Planeje e estude. Refine a oferta.',8:'Cobranças, resultados, autoridade.',9:'Conclua, solte o velho. Espaço para o novo.'};
+const CH={0:'O Equilíbrio Total',1:'A Independência sem Isolamento',2:'A Diplomacia sem Dependência',3:'A Expressão sem Dispersão',4:'A Disciplina sem Rigidez',5:'A Liberdade sem Instabilidade',6:'A Responsabilidade sem Autossacrifício',7:'O Conhecimento sem Isolamento',8:'O Poder sem Controle',9:'O Ideal sem Fuga da Realidade'};
+const MNS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let allClients=[],currentClient=null;
+
+/* ══ LOGIN ══ */
+function login(){
+  const pwd=document.getElementById('login-pwd').value;
+  if(pwd===SENHA){document.getElementById('sc-login').style.display='none';document.getElementById('mainHdr').style.display='flex';goTo('dash');loadClients();}
+  else{document.getElementById('login-err').style.display='block';document.getElementById('login-pwd').value='';}
+}
+
+/* ══ NAV ══ */
+function goTo(sc){document.querySelectorAll('.screen').forEach(s=>{s.style.display='none';s.classList.remove('active');});const el=document.getElementById('sc-'+sc);if(el){el.style.display='block';el.classList.add('active');}window.scrollTo(0,0);}
+
+/* ══ CSV PARSER ══ */
+function parseCSV(text){
+  const lines=text.trim().split('\n');if(lines.length<2)return[];
+  function pLine(line){const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){r.push(cur.trim());cur='';}else cur+=ch;}r.push(cur.trim());return r;}
+  return lines.slice(1).filter(l=>l.trim()).map((line,idx)=>{const cols=pLine(line);const v=(i)=>(cols[i]||'').replace(/^"|"$/g,'').trim();return{idx,timestamp:v(0),nome:v(1),nasc:v(2),apelido:v(3),gender:v(4),ocup:v(5),modelo:v(6),fat:v(7),fatd:v(8),estado:v(9),tempo:v(10),tent:v(11),padrao:v(12),sab:v(13),desv:v(14),visib:v(15),dor:v(16),sonho:v(17),bloq:v(18),en:v(19),relac:v(20),cob:v(21),expression:parseInt(v(22))||0,destiny:parseInt(v(23))||0,soul:parseInt(v(24))||0,mission:parseInt(v(25))||0,personalYear:parseInt(v(26))||0,age:parseInt(v(27))||0};});
+}
+
+/* ══ LOAD CLIENTS ══ */
+async function loadClients(){
+  const tbl=document.getElementById('tbl-body');
+  tbl.innerHTML=`<div class="empty-state"><p>Carregando clientes...</p></div>`;
+  try{
+    let rows=null,parseOk=false;
+    try{const url=SHEETS_READ_URL+'&t='+Date.now();const res=await fetch(url);if(res.ok){const text=await res.text();const f=text.indexOf('{'),l=text.lastIndexOf('}');if(f!==-1){const json=JSON.parse(text.substring(f,l+1));rows=json.table?json.table.rows:null;if(rows)parseOk=true;}}}catch(e){console.warn('gviz:',e.message);}
+    if(!parseOk){const csvRes=await fetch(SHEETS_CSV_URL+'&t='+Date.now());if(!csvRes.ok)throw new Error('HTTP '+csvRes.status+' — verifique o compartilhamento da planilha.');rows=parseCSV(await csvRes.text());parseOk=true;}
+    if(!rows||!rows.length){tbl.innerHTML=`<div class="empty-state"><p>Nenhum cliente ainda.</p></div>`;updateStats([]);return;}
+    if(parseOk&&rows[0]&&rows[0].c!==undefined){const isHdr=rows[0].c&&rows[0].c[1]&&(rows[0].c[1].v||'').toString().toLowerCase().includes('nome');const dr=isHdr?rows.slice(1):rows;allClients=dr.map((row,idx)=>{const v=(i)=>{if(!row.c||!row.c[i])return'';const cell=row.c[i];if(cell.v instanceof Date)return cell.f||cell.v.toLocaleDateString('pt-BR');return String(cell.f||cell.v||'');};return{idx,timestamp:v(0),nome:v(1),nasc:v(2),apelido:v(3),gender:v(4),ocup:v(5),modelo:v(6),fat:v(7),fatd:v(8),estado:v(9),tempo:v(10),tent:v(11),padrao:v(12),sab:v(13),desv:v(14),visib:v(15),dor:v(16),sonho:v(17),bloq:v(18),en:v(19),relac:v(20),cob:v(21),expression:parseInt(v(22))||0,destiny:parseInt(v(23))||0,soul:parseInt(v(24))||0,mission:parseInt(v(25))||0,personalYear:parseInt(v(26))||0,age:parseInt(v(27))||0};}).reverse();}
+    else allClients=rows.reverse();
+    updateStats(allClients);renderTable(allClients);
+  }catch(err){console.error(err);tbl.innerHTML=`<div class="empty-state"><p style="color:var(--red)">Erro: ${err.message}</p><div style="margin-top:16px"><button class="btn-gold" onclick="loadClients()">↻ Tentar novamente</button></div></div>`;}
+}
+
+function updateStats(cl){const now=new Date(),wa=new Date(now-7*24*60*60*1000);document.getElementById('stat-total').textContent=cl.length||'0';document.getElementById('stat-week').textContent=cl.filter(c=>{try{return new Date(c.timestamp)>=wa;}catch(e){return false;}}).length||'0';document.getElementById('stat-pending').textContent=cl.length||'0';}
+
+function renderTable(clients){
+  if(!clients.length){document.getElementById('tbl-body').innerHTML=`<div class="empty-state"><p>Nenhum cliente encontrado.</p></div>`;return;}
+  document.getElementById('tbl-body').innerHTML=`<table><thead><tr><th>Cliente</th><th>Nascimento</th><th>Talento</th><th>Direção</th><th>Ocupação</th><th>Recebido em</th></tr></thead><tbody>${clients.map(c=>`<tr onclick="openClient(${c.idx})"><td><div class="td-name">${c.apelido||c.nome||'—'}</div><div style="font-size:10px;color:var(--muted)">${c.nome||''}</div></td><td class="td-date">${c.nasc||'—'}</td><td>${TN[c.expression]||c.expression||'—'}</td><td style="font-size:11px">${DN[c.destiny]||c.destiny||'—'}</td><td>${c.ocup||'—'}</td><td class="td-date">${c.timestamp||'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function filterClients(){const q=document.getElementById('searchInput').value.toLowerCase();renderTable(allClients.filter(c=>(c.nome||'').toLowerCase().includes(q)||(c.apelido||'').toLowerCase().includes(q)));}
+
+/* ══ OPEN CLIENT ══ */
+function openClient(idx){
+  const c=allClients.find(x=>x.idx===idx);if(!c)return;
+  currentClient=c;
+  // Recalculate from raw data
+  if(c.nome&&c.nasc){
+    const bd=new Date(c.nasc.includes('-')?c.nasc+'T00:00:00':c.nasc);
+    if(!isNaN(bd)){
+      const d=bd.getDate(),m=bd.getMonth()+1,y=bd.getFullYear();
+      c.expression=calcExpr(c.nome);c.destiny=calcDest(d,m,y);
+      c.soul=calcSoul(c.nome);c.mission=red(c.expression+c.destiny);
+      c.personalYear=calcPY(d,m,new Date().getFullYear());
+      c.cycles=calcCycles(d,m,y);c.pinnacles=calcPinn(d,m,y);c.challenges=calcChall(d,m,y);
+      const now=new Date();let age=now.getFullYear()-y;if(now.getMonth()+1<m||(now.getMonth()+1===m&&now.getDate()<d))age--;c.age=age;
+      c.personalMonths=MNS.map((n,i)=>({month:i+1,name:n,personalMonth:calcPM(c.personalYear,i+1)}));
+    }
+  }
+  const tn=TN[c.expression]||'—',dn=DN[c.destiny]||'—';
+  // Screen header
+  document.getElementById('cHdr').setAttribute('data-n',c.expression||'');
+  document.getElementById('cMeta').textContent=`CÓDIGO DE CARREIRA · ${(c.apelido||c.nome||'').toUpperCase()} · CONFIDENCIAL`;
+  document.getElementById('cName').textContent=c.apelido||c.nome||'—';
+  document.getElementById('cArch').textContent=tn;
+  // PDF cover — dynamic fields
+  const _n=document.getElementById('pdf-name');
+  const _a=document.getElementById('pdf-archetype');
+  const _t=document.getElementById('pdf-tagline');
+  const _d=document.getElementById('pdf-date');
+  const _ic=document.getElementById('pdf-intro-client');
+  if(_n)_n.textContent=c.apelido||c.nome||'--';
+  if(_a)_a.textContent=tn;
+  if(_t)_t.innerHTML='Direcao: '+dn+'<br>Motivacao central: '+(MN2[c.soul]||'--')+'<br>Codigo anual: '+(CT[c.personalYear]||'--');
+  if(_d)_d.textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
+  if(_ic)_ic.textContent=(c.apelido||c.nome||'').toUpperCase()+' · DIAGNÓSTICO ESTRATÉGICO';
+  // Update all page headers
+  document.querySelectorAll('.ph-client').forEach(function(el){
+    var parts=el.textContent.split('·');
+    if(parts.length>1) el.textContent=(c.apelido||c.nome||'').toUpperCase()+' ·'+parts[1];
+    else el.textContent=(c.apelido||c.nome||'').toUpperCase();
+  });
+  // Render answers
+  renderAnswers(c);
+  // Static sections
+  if(c.cycles)buildTL(c);
+  if(c.personalMonths)buildMen(c);
+  // Reset AI
+  ['c-tal','c-dir','c-blq','c-plan','pdf-tal-body','pdf-dir-body','pdf-blq-body','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=`<div style="font-size:11px;color:var(--muted);padding:20px;border:1px dashed var(--border)">Clique em "Gerar diagnóstico completo".</div>`;});
+  document.getElementById('btnGenerate').disabled=false;
+  document.getElementById('btnGenerate').textContent='⚙ Gerar diagnóstico completo';
+  goTo('client');
+}
+
+function renderAnswers(c){
+  const fl={ate3k:'Até R$3k','3k7k':'R$3k–7k','7k15k':'R$7k–15k','15k30k':'R$15k–30k',acima30k:'Acima R$30k'};
+  const fd={ate5k:'Até R$5k','5k12k':'R$5k–12k','12k25k':'R$12k–25k','25k50k':'R$25k–50k',acima50k:'Acima R$50k'};
+  document.getElementById('c-answers').innerHTML=`
+    <div class="ans-grid">
+      <div class="ans-item gold"><div class="ai-lbl">Nome de batismo</div><div class="ai-val">${c.nome||'—'}</div></div>
+      <div class="ans-item gold"><div class="ai-lbl">Data de nascimento</div><div class="ai-val">${c.nasc||'—'} (${c.age} anos)</div></div>
+      <div class="ans-item"><div class="ai-lbl">Gênero</div><div class="ai-val">${c.gender||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Ocupação</div><div class="ai-val">${c.ocup||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Modelo</div><div class="ai-val">${c.modelo||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Faturamento atual</div><div class="ai-val">${fl[c.fat]||c.fat||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Faturamento desejado</div><div class="ai-val">${fd[c.fatd]||c.fatd||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Estado atual</div><div class="ai-val">${c.estado||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Há quanto tempo</div><div class="ai-val">${c.tempo||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Já tentou</div><div class="ai-val">${c.tent||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Padrão comportamental</div><div class="ai-val">${c.padrao||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Sabotadores</div><div class="ai-val">${c.sab||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Desvalorização</div><div class="ai-val">${c.desv||'—'}/10</div></div>
+      <div class="ans-item"><div class="ai-lbl">Visibilidade</div><div class="ai-val">${c.visib||'—'}</div></div>
+      <div class="ans-item"><div class="ai-lbl">Energia</div><div class="ai-val">${c.en||'—'}/10</div></div>
+      <div class="ans-item"><div class="ai-lbl">Cobrança</div><div class="ai-val">${c.cob||'—'}/10</div></div>
+    </div>
+    <div class="ans-full gold"><div class="ai-lbl">Maior problema hoje</div><div class="ai-val" style="margin-top:4px">${c.dor||'—'}</div></div>
+    <div class="ans-full"><div class="ai-lbl">Vida ideal em 2 anos</div><div class="ai-val" style="margin-top:4px">${c.sonho||'—'}</div></div>
+    <div class="ans-full"><div class="ai-lbl">O que acredita que impede</div><div class="ai-val" style="margin-top:4px">${c.bloq||'—'}</div></div>`;
+}
+
+/* ══ TIMELINE ══ */
+function buildTL(c){
+  const ag=c.age;
+  const cc=c.cycles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cp=c.pinnacles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cch=c.challenges.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const intro=`<div style="background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--gold);padding:24px 28px;margin-bottom:20px"><div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Como ler esta seção</div><p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.8;margin-bottom:10px">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p><ul style="list-style:none"><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos: Formativo, Produtivo e Colheita.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li></ul><p style="font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);margin-top:10px;font-style:italic">Itens marcados como <strong>ATUAL</strong> estão ativos para você hoje, com ${ag} anos.</p></div>`;
+  const cards=`<div class="cgrid"><div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">${cc?TN[cc.num]||cc.num:'—'}</div><div class="rcd">${cc?cc.label+' · '+cc.start+'–'+(cc.end||'∞')+' anos':''}</div></div><div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">${cp?TN[cp.num]||cp.num:'—'}</div><div class="rcd">${cp?cp.label:''}</div></div></div><div class="cgrid"><div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">${cch?CH[cch.num]||cch.num:'—'}</div><div class="rcd">${cch?cch.label:''}</div></div><div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">${TN[c.mission]||c.mission||'—'}</div><div class="rcd">Talento (${c.expression}) + Direção (${c.destiny})</div></div></div>`;
+  let tbl=`<table class="tlt"><thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead><tbody>`;
+  [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{const isc=ag>=x.start&&(x.end===null||ag<=x.end);const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';tbl+=`<tr class="${isc?'cur':''}"><td>${isc?'<span class="tltag">ATUAL</span> ':''}${x.label}</td><td>${t}</td><td>${TN[x.num]||CH[x.num]||x.num}</td><td>${x.start}–${x.end??'∞'} anos</td></tr>`;});
+  tbl+='</tbody></table>';
+  const html=intro+cards+tbl;
+  const htmlCards=intro+cards;
+  document.getElementById('c-tl').innerHTML=html;
+  var _ptlb=document.getElementById('pdf-tl-body');
+  var _ptlt=document.getElementById('pdf-tl-table');
+  if(_ptlb)_ptlb.innerHTML=cards+tbl;
+  if(_ptlt)_ptlt.innerHTML=tbl;
+}
+
+function buildMen(c){
+  const cm=new Date().getMonth()+1;
+  const header=`<div class="rc dk" style="margin-bottom:16px"><div class="rcl">Código Anual Ativo</div><div class="rcv">${CT[c.personalYear]||'—'}</div><div class="rcd">Próximo código: ${CT[c.personalYear===9?1:c.personalYear+1]||'—'}</div></div>`;
+  let grid=`<div class="mgrid">`;
+  c.personalMonths.forEach(m=>{grid+=`<div class="mc ${m.month===cm?'hl':''}"><div class="mn">${m.personalMonth}</div><div class="mname">${m.name}${m.month===cm?' ◀':''}</div><div class="mtheme">${MT[m.personalMonth]||''}</div><div class="mact">${MA[m.personalMonth]||''}</div></div>`;});
+  grid+='</div>';
+  const html=header+grid;
+  document.getElementById('c-men').innerHTML=html;
+  var _pmb=document.getElementById('pdf-men-body');
+  if(_pmb)_pmb.innerHTML=html;
+}
+
+/* ══ GENERATE ══ */
+async function gerarDiagnostico(){
+  const c=currentClient;if(!c)return;
+  document.getElementById('btnGenerate').disabled=true;
+  document.getElementById('btnGenerate').textContent='Gerando...';
+  await Promise.all([aiTalento(c),aiDirecao(c),aiBloquio(c),aiPlano(c)]);
+  document.getElementById('btnGenerate').textContent='✓ Diagnóstico gerado';
+}
+
+async function callAPI(sys,usr){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1800,system:sys,messages:[{role:'user',content:usr}]})});
+  const data=await r.json();return data.content?.[0]?.text||'';
+}
+
+const SYS=`Você é um consultor especialista em diagnóstico estratégico de carreira com metodologia proprietária. NUNCA mencione "numerologia", "cabalística", "místico" ou termos esotéricos. Use: "padrão", "perfil", "código", "análise".
+
+REGRAS CRÍTICAS:
+- SEMPRE 2ª pessoa: "Você tem...", "Seu padrão é...", "Você tende a..."
+- NUNCA 3ª pessoa como "esta pessoa" ou "[nome] gosta de"
+- Linguagem estratégica, voltada a resultado e faturamento
+- Tom McKinsey — premium, direto, sem autoajuda
+- Adapte pronomes ao gênero indicado
+- Formato HTML: <h3>, <p>, <ul><li>, <strong> — sem markdown
+- Assertivo: sem "talvez", "pode ser", "possivelmente"
+- Mínimo 3 frases por parágrafo`;
+
+function ctxC(c){const cc=c.cycles?c.cycles.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;return`PERFIL:
+Nome: ${c.nome} | Apelido: ${c.apelido} | Idade: ${c.age} | Gênero: ${c.gender}
+Talento (expressão): ${c.expression} — ${TN[c.expression]||'—'}
+Direção (destino): ${c.destiny} — ${DN[c.destiny]||'—'}
+Motivação (alma): ${c.soul} — ${MN2[c.soul]||'—'}
+Código de vida (missão): ${c.mission}
+Código anual: ${c.personalYear} — ${CT[c.personalYear]||'—'}
+Ciclo ativo: ${cc?cc.num+' '+cc.label:'—'}
+Desafio atual: ${cch?cch.num+' '+(CH[cch.num]||''):' —'}
+
+FORMULÁRIO:
+Ocupação: ${c.ocup||'—'} | Modelo: ${c.modelo||'—'}
+Faturamento: ${c.fat||'—'} | Desejado: ${c.fatd||'—'}
+Estado: ${c.estado||'—'} | Há quanto tempo: ${c.tempo||'—'}
+Tentativas: ${c.tent||'—'} | Padrão: ${c.padrao||'—'}
+Sabotadores: ${c.sab||'—'} | Desvalorização: ${c.desv}/10 | Cobrança: ${c.cob}/10
+Energia: ${c.en}/10 | Relações: ${c.relac||'—'} | Visibilidade: ${c.visib||'—'}
+Dor: ${c.dor||'—'}
+Sonho: ${c.sonho||'—'}
+Bloqueio percebido: ${c.bloq||'—'}`;}
+
+function setContent(ids,html){
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(el)el.innerHTML='<div class="aib">'+html+'</div>';
+  });
+}
+
+async function aiTalento(c){
+  ['c-tal','pdf-tal-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Analisando talento principal...</p></div>';});
+  const tn=TN[c.expression]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Talento Principal" em 2ª pessoa.\n\n1. <h3>${tn}</h3>\n<p>2 parágrafos. "Você funciona como...", "Seu padrão é...". Use o nome "${c.apelido}". Relacione com ocupação "${c.ocup}" e estado "${c.estado}".</p>\n\n2. <h3>Sua Diretriz de Faturamento</h3>\n<p>Como seu talento gera faturamento com menos desgaste. Concreto e específico para o perfil ${c.expression}.</p>\n\n3. <h3>Seu Posicionamento de Autoridade</h3>\n<p>Como você deve se posicionar. O que o mercado enxerga quando você opera no padrão natural.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Uma ação concreta esta semana.</p></div>`);if(t&&t.trim().length>50)setContent(['c-tal','pdf-tal-body'],t);else setContent(['c-tal','pdf-tal-body'],fbT(c));}
+  catch(e){setContent(['c-tal','pdf-tal-body'],fbT(c));}
+}
+
+async function aiDirecao(c){
+  ['c-dir','pdf-dir-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Mapeando direção estratégica...</p></div>';});
+  const dn=DN[c.destiny]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Direção Estratégica" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${dn}</h3>\n<p>2 parágrafos. "Sua direção aponta para...", "Quando você trabalha alinhada com...". Estado: "${c.estado}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>Cenário de Retorno Financeiro</h3>\n<p>Como essa direção gera faturamento para você. Modelos e nichos concretos.</p>\n\n3. <h3>Sua Diretriz de Transição</h3>\n<p>O que você para e o que prioriza. Baseado na sua dor e sonho.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Um passo concreto nos próximos 7 dias.</p></div>`);if(t&&t.trim().length>50)setContent(['c-dir','pdf-dir-body'],t);else setContent(['c-dir','pdf-dir-body'],fbD(c));}
+  catch(e){setContent(['c-dir','pdf-dir-body'],fbD(c));}
+}
+
+async function aiBloquio(c){
+  ['c-blq','pdf-blq-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Identificando bloqueios...</p></div>';});
+  const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Pontos de Bloqueio" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${cn}</h3>\n<p>2-3 parágrafos. "Seu bloqueio opera...", "Você tende a...". Sabotadores: "${c.sab||'—'}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>O Impacto no Seu Faturamento</h3>\n<p>Custo real. Desvalorização ${c.desv}/10 e cobrança ${c.cob}/10.</p>\n\n3. <h3>Seu Protocolo de Superação</h3>\n<ul><li>3-5 ações concretas baseadas no perfil ${c.expression}</li></ul>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Última decisão onde o bloqueio apareceu. O que você faz diferente agora.</p></div>`);if(t&&t.trim().length>50)setContent(['c-blq','pdf-blq-body'],t);else setContent(['c-blq','pdf-blq-body'],fbB(c));}
+  catch(e){setContent(['c-blq','pdf-blq-body'],fbB(c));}
+}
+
+async function aiPlano(c){
+  ['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="sk"><div class="skl" style="width:80%"></div><div class="skl" style="width:60%"></div><div class="skl" style="width:90%"></div></div>';});
+  const tn=TN[c.expression]||'';
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Plano de 90 Dias. Retorne APENAS JSON puro:\n{"fase1":{"titulo":"título fase 1","semanas":[{"titulo":"Semana 1: título","acoes":["ação1","ação2","ação3"]},{"titulo":"Semana 2: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 3: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 4: título","acoes":["a1","a2","a3"]}]},"fase2":{"titulo":"título fase 2","semanas":[{"titulo":"Semana 5: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 6: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 7: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 8: título","acoes":["a1","a2","a3"]}]},"fase3":{"titulo":"título fase 3","semanas":[{"titulo":"Semana 9: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 10: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 11: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 12: título","acoes":["a1","a2","a3"]}]}}\nAções específicas para: perfil ${c.expression} (${tn}), ocupação "${c.ocup}", estado "${c.estado}", sonho "${c.sonho||'crescer'}". Use o nome "${c.apelido}". Verbos de ação, concreto e mensurável.`);
+    const plan=JSON.parse(t.replace(/```json|```/g,'').trim());
+    const html=renderPlan(plan);
+    ['c-plan','pdf-plan-body','pdf-plan-body2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=html;});
+  }catch(e){const html=renderPlan(fbPlan(c));['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});}
+}
+
+function renderPlan(p){return[{k:'fase1',l:'Fase 1',per:'Dias 1–30'},{k:'fase2',l:'Fase 2',per:'Dias 31–60'},{k:'fase3',l:'Fase 3',per:'Dias 61–90'}].map((f,fi)=>{const fase=p[f.k];if(!fase)return'';const wks=(fase.semanas||[]).map((s,si)=>`<div class="pw"><div class="pwl">Semana ${fi*4+si+1}</div><div class="pwt">${s.titulo}</div><ul class="pwa">${(s.acoes||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>`).join('');return`<div class="pphase"><div class="pph-hdr"><div class="pph-n">${fi+1}</div><div><div class="pph-lbl">${f.l} · ${f.per}</div><div class="pph-title">${fase.titulo}</div></div></div><div class="pph-body">${wks}</div></div>`;}).join('');}
+
+/* FALLBACKS */
+function fbT(c){const tn=TN[c.expression]||'';return`<h3>${tn}</h3><p>Você funciona como <strong>${tn}</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você, ${c.apelido}, tem uma forma específica de gerar valor que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia fora do seu padrão natural.</p><p>Quando você opera dentro do seu perfil natural, sua entrega é exponencialmente superior à média. Trabalhar contra esse padrão — assumindo funções que não o refletem, aceitando qualquer trabalho ou tentando ser o que não é — é a principal causa de estagnação de faturamento.</p><h3>Sua Diretriz de Faturamento</h3><p>O mercado paga mais por especialistas posicionados com clareza. Você gera valor máximo como ${tn} quando filtra suas atividades por alinhamento com o seu padrão — não quando aceita tudo que chega. Cada vez que você diz sim para algo fora do seu perfil, está dizendo não para o faturamento que te pertence.</p><h3>Seu Posicionamento de Autoridade</h3><p>Sua autoridade se constrói pela consistência de entrega dentro do seu padrão. O mercado reconhece especialistas — não generalistas. Posicione-se como referência onde o seu perfil é o diferencial competitivo.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Audite sua agenda desta semana: quantas horas refletem o seu padrão como ${tn}? Se menos de 50%, reposicione imediatamente. O faturamento segue o alinhamento.</p></div>`;}
+function fbD(c){const dn=DN[c.destiny]||'';return`<h3>${dn}</h3><p>Sua direção estratégica aponta para <strong>${dn}</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico, ${c.apelido}. Quando você trabalha alinhada com essa direção, o faturamento vem com mais naturalidade e menos desgaste. Quando você trabalha contra ela, gasta o dobro de energia para metade do resultado.</p><p>No seu estado atual de <strong>${c.estado||'transição'}</strong>, alinhar suas ações com essa direção é a diferença entre remar contra a maré e surfar a onda certa. Você não está faltando esforço — está faltando direção. E direção certa muda tudo.</p><h3>Cenário de Retorno Financeiro</h3><p>O retorno mais previsível para você, com essa direção, vem de posicionamentos onde você atua como referência dentro do seu padrão. Antes de tentar escalar, construa autoridade percebida. O mercado não paga pelo seu esforço — paga pela sua direção estratégica.</p><h3>Sua Diretriz de Transição</h3><p>Você precisa eliminar serviços e clientes que não refletem sua direção. Concentre sua energia apenas no que ativa seu padrão natural. Essa transição exige a coragem de recusar o que não cabe.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Qual nicho específico maximiza o seu perfil e a sua direção? Foque nele e recuse o restante nos próximos 30 dias.</p></div>`;}
+function fbB(c){const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';return`<h3>${cn}</h3><p>Seu padrão de bloqueio opera de forma sutil, ${c.apelido} — frequentemente mascarado de perfeccionismo, excesso de cuidado ou indecisão estratégica. O risco não é você travar de forma óbvia, mas repetir comportamentos antigos exatamente nos momentos de pressão ou de decisão financeira importante.</p><p>Os sabotadores que você reconhece em si mesmo — <strong>${c.sab||'identificados na análise'}</strong> — são manifestações desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência.</p><h3>O Impacto no Seu Faturamento</h3><p>Com sua desvalorização em <strong>${c.desv}/10</strong> e facilidade de cobrança em <strong>${c.cob}/10</strong>, esse bloqueio está custando faturamento real todo mês. Sua estagnação não é falta de esforço — é desalinhamento somado a esse padrão de bloqueio.</p><h3>Seu Protocolo de Superação</h3><ul><li>Identifique a última decisão onde esse padrão surgiu e mapeie o gatilho específico que o ativou</li><li>Crie sua regra de decisão: "Se não ativa o meu padrão principal, eu recuso"</li><li>Revisão semanal de 15 minutos: o que operou dentro do padrão? O que ficou fora?</li><li>Encontre um par de responsabilidade que te confronte quando o bloqueio ressurgir</li></ul><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Identifique agora: qual projeto ou cliente está ativando esse bloqueio hoje? Alinhe ou elimine. Não existe meio-termo quando o seu faturamento está em jogo.</p></div>`;}
+function fbPlan(c){const tn=TN[c.expression]||'seu perfil';return{fase1:{titulo:'Limpeza e Foco — Eliminar o que drena, ativar o que gera',semanas:[{titulo:'Semana 1: Auditoria de alinhamento',acoes:['Liste todas as atividades: ativa ou não o padrão '+tn,'Identifique os 3 projetos que mais consomem energia sem retorno','Mapeie decisões pendentes que o bloqueio adiou']},{titulo:'Semana 2: Eliminação estratégica',acoes:['Encerre ou renegocie pelo menos 1 contrato desalinhado com o padrão '+tn,'Reposicione sua oferta principal para refletir o seu talento natural','Defina nicho prioritário baseado na sua direção estratégica']},{titulo:'Semana 3: Posicionamento inicial',acoes:['Reescreva sua bio profissional alinhada ao seu padrão como '+tn,'Atualize proposta de valor com linguagem de autoridade','Mapeie 5 oportunidades alinhadas com sua direção']},{titulo:'Semana 4: Consolidação da base',acoes:['Organize processos que liberam tempo para trabalho de alto valor','Defina política de preços alinhada ao valor do seu padrão','Planeje o mês 2 com base no seu código anual '+c.personalYear]}]},fase2:{titulo:'Execução e Posicionamento — Construir autoridade percebida',semanas:[{titulo:'Semana 5: Lançamento de autoridade',acoes:['Crie e distribua conteúdo de autoridade alinhado ao seu padrão','Faça 5 conversas estratégicas com potenciais clientes ideais','Apresente nova oferta posicionada para pelo menos 3 pessoas']},{titulo:'Semana 6: Expansão de relacionamentos',acoes:['Mapeie sua rede: quem impulsiona e quem drena o seu padrão','Agende reuniões com 3 parceiros estratégicos potenciais','Implemente processo de indicação ativa com clientes alinhados']},{titulo:'Semana 7: Refinamento da oferta',acoes:['Colete feedback sobre o valor percebido','Ajuste preço baseado no posicionamento do seu padrão','Crie um caso de sucesso documentado para uso em vendas']},{titulo:'Semana 8: Revisão e aceleração',acoes:['Meça resultados das semanas 5–7: o que gerou mais retorno?','Duplique esforço no canal mais efetivo','Prepare estratégia de escala para o mês 3']}]},fase3:{titulo:'Escala e Consolidação — Faturamento previsível e autoridade sólida',semanas:[{titulo:'Semana 9: Escala da oferta principal',acoes:['Lance versão de maior valor da oferta principal','Implemente processo de vendas estruturado para o seu padrão','Defina meta de faturamento específica para os próximos 90 dias']},{titulo:'Semana 10: Sistemas de crescimento',acoes:['Documente processos que mais geram resultado','Delegue atividades operacionais que não ativam seu talento principal','Crie ritmo semanal de prospecção alinhado ao seu código anual '+c.personalYear]},{titulo:'Semana 11: Autoridade de mercado',acoes:['Publique posicionamento de autoridade em pelo menos 2 canais','Solicite depoimentos estratégicos que validam o seu padrão','Mapeie próximas oportunidades de parceria de alto valor']},{titulo:'Semana 12: Balanço e próximo ciclo',acoes:['Meça resultado dos 90 dias: faturamento, posicionamento, energia','Identifique o que funcionou e o que precisa de ajuste fino','Planeje próximos 90 dias com base no código anual '+(c.personalYear===9?1:c.personalYear+1)]}]}}}
+
+function testarURL(){const url=SHEETS_READ_URL+'&t='+Date.now();const win=window.open(url,'_blank');if(!win)alert('Cole esta URL:\n\n'+url);}
+function abrirPDF(){
+  const cl = currentClient;
+  if(!cl){ alert('Selecione um cliente primeiro.'); return; }
+
+  // Helper to get text content safely
+  const gt = (id) => { const el = document.getElementById(id); return el ? el.innerHTML : ''; };
+  const gs = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
+
+  const nome = cl.apelido || cl.nome || '—';
+  const tn = TN[cl.expression] || '—';
+  const dn = DN[cl.destiny] || '—';
+  const mn = MN2[cl.soul] || '—';
+  const py = CT[cl.personalYear] || '—';
+  const mes = new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
+
+  // Get AI-generated content
+  const talBody = gt('pdf-tal-body') || gt('c-tal') || '';
+  const dirBody = gt('pdf-dir-body') || gt('c-dir') || '';
+  const blqBody = gt('pdf-blq-body') || gt('c-blq') || '';
+  const tlBody  = gt('pdf-tl-body')  || gt('c-tl')  || '';
+  const menBody = gt('pdf-men-body') || gt('c-men')  || '';
+  const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Código de Carreira - ${nome}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{margin:0;size:A4 portrait}
+:root{
+  --gold:#b08a3e;--gold-lt:#c9a55a;--gold-dim:rgba(176,138,62,.1);
+  --dark:#0c0b08;--bg:#f8f5ef;--border:#ddd5c3;--text:#1a1810;--muted:#6a6050;
+  --white:#fff;--red:#7a2e1e;--green:#1e5c35;--blue:#1e3558;
+}
+
+/* PRINT BAR - hidden on print */
+.pbar{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--dark);
+  padding:12px 32px;display:flex;align-items:center;justify-content:space-between;}
+.pbar-title{font-family:'Lato',sans-serif;font-size:11px;letter-spacing:3px;color:var(--gold-lt)}
+.pbar-btn{background:var(--gold);color:var(--dark);border:none;padding:10px 28px;
+  font-family:'Lato',sans-serif;font-size:11px;letter-spacing:2px;font-weight:700;cursor:pointer}
+.pbar-note{font-family:'Lato',sans-serif;font-size:10px;color:#555;letter-spacing:1px}
+
+/* SCREEN */
+body{background:#d8d4cc;padding:52px 20px 40px}
+
+/* PAGE - each is one A4 */
+.pg{
+  width:210mm;
+  margin:0 auto 20px;
+  background:white;
+  box-shadow:0 4px 24px rgba(0,0,0,.25);
+  overflow:hidden;
+  page-break-after:always;
+  page-break-inside:avoid;
+}
+.pg:last-child{page-break-after:auto;margin-bottom:0}
+
+/* COVER */
+.cov{background:var(--dark);min-height:297mm;display:flex;flex-direction:column;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cov-bar{height:7px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold));
+  flex-shrink:0;-webkit-print-color-adjust:exact}
+.cov-body{flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:72px 60px 48px;position:relative;overflow:hidden}
+.cov-body::before{content:'';position:absolute;width:480px;height:480px;border-radius:50%;
+  border:1px solid rgba(176,138,62,.08);top:50%;right:-100px;transform:translateY(-50%)}
+.cov-brand{font-family:'Cinzel',serif;font-size:11px;letter-spacing:9px;color:var(--gold-lt);
+  margin-bottom:72px;display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+.cov-brand::after{content:'';width:64px;height:1px;background:rgba(201,165,90,.35)}
+.cov-sub{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:5px;
+  color:rgba(201,165,90,.65);text-transform:uppercase;margin-bottom:24px;position:relative;z-index:1}
+.cov-name{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:300;
+  color:#ffffff;line-height:.92;margin-bottom:18px;letter-spacing:-2px;position:relative;z-index:1}
+.cov-arch{font-family:'Cormorant Garamond',serif;font-size:30px;font-style:italic;
+  color:#e8c870;margin-bottom:36px;font-weight:300;position:relative;z-index:1}
+.cov-line{width:54px;height:2px;background:var(--gold-lt);margin-bottom:28px;position:relative;z-index:1}
+.cov-tag{font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.5);
+  line-height:1.9;max-width:420px;position:relative;z-index:1}
+.cov-foot{padding:26px 60px;border-top:1px solid rgba(176,138,62,.12);
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;
+  -webkit-print-color-adjust:exact}
+.cov-foot-brand{font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;color:rgba(201,165,90,.45)}
+.cov-foot-date{font-family:'Lato',sans-serif;font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px}
+
+/* PAGE HEADER */
+.phdr{display:flex;justify-content:space-between;align-items:center;
+  padding:18px 56px;border-bottom:1px solid var(--border)}
+.phdr-brand{font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--gold)}
+.phdr-client{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+
+/* SECTION HEADER - stays with content using display:contents trick */
+.shdr{background:var(--dark);padding:32px 56px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.shdr-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:9px;font-weight:700}
+.shdr-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:#fff;margin-bottom:4px}
+.shdr-title em{font-style:italic;color:#e8c870}
+.shdr-sub{font-family:'Lato',sans-serif;font-size:11px;color:rgba(255,255,255,.3)}
+
+/* SECTION BODY */
+.sbody{padding:36px 56px 48px}
+
+/* CONTENT */
+.aib{background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:14px}
+.aib h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;
+  color:var(--text);margin:22px 0 10px}
+.aib h3:first-child{margin-top:0}
+.aib p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px}
+.aib strong{font-weight:700}
+.aib ul{list-style:none;margin:8px 0 14px}
+.aib ul li{font-family:'Lato',sans-serif;padding:7px 0 7px 20px;
+  border-bottom:1px solid var(--border);font-size:13px;position:relative;line-height:1.6}
+.aib ul li:last-child{border-bottom:none}
+.aib ul li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.ical{background:rgba(176,138,62,.08);border:1px solid rgba(176,138,62,.2);
+  border-left:4px solid var(--gold);padding:16px 20px;margin:14px 0;
+  -webkit-print-color-adjust:exact}
+.ical-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700}
+.ical p{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.7;margin:0}
+
+/* INTRO */
+.intro-eye{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700}
+.intro-h{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;
+  color:var(--text);line-height:1.05;margin-bottom:6px}
+.intro-h em{font-style:italic;color:var(--gold)}
+.intro-div{width:40px;height:2px;background:var(--gold);margin:20px 0}
+.intro-p{font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:16px}
+.intro-p strong{font-weight:700}
+.intro-box{background:var(--bg);border:1px solid var(--border);
+  border-left:4px solid var(--gold);padding:24px 28px;margin:24px 0}
+.intro-box-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;
+  color:var(--text);margin-bottom:14px}
+.intro-list{list-style:none}
+.intro-list li{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);
+  padding:9px 0 9px 20px;border-bottom:1px solid var(--border);position:relative;line-height:1.6}
+.intro-list li:last-child{border-bottom:none}
+.intro-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.intro-list li strong{font-weight:700}
+.intro-quote{text-align:center;padding:32px;border:1px solid var(--border);
+  margin-top:28px;background:var(--bg)}
+.intro-quote-text{font-family:'Cormorant Garamond',serif;font-size:22px;
+  font-style:italic;color:var(--text);line-height:1.6;margin-bottom:12px}
+.intro-quote-author{font-family:'Lato',sans-serif;font-size:8px;
+  letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.rc{padding:18px 22px;border:1px solid var(--border);border-left:4px solid var(--border)}
+.rc.gold{border-left-color:var(--gold)}.rc.red{border-left-color:var(--red)}
+.rc.blue{border-left-color:var(--blue)}.rc.green{border-left-color:var(--green)}
+.rc.dk{background:var(--dark);border-color:var(--dark);border-left-color:var(--gold);
+  -webkit-print-color-adjust:exact}
+.rcl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.rcv{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;
+  color:var(--text);margin-bottom:3px}
+.rc.dk .rcv{color:#e8c870}
+.rcd{font-family:'Lato',sans-serif;font-size:11px;color:var(--muted);line-height:1.5}
+.rc.dk .rcd{color:#666}
+
+/* TL BOX */
+.tl-intro{background:var(--bg);border:1px solid var(--border);
+  border-left:4px solid var(--gold);padding:20px 24px;margin-bottom:16px}
+.tl-intro-title{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700}
+.tl-intro-body{font-family:'Lato',sans-serif;font-size:13px;color:var(--text);line-height:1.8;margin-bottom:10px}
+.tl-list{list-style:none}
+.tl-list li{font-family:'Lato',sans-serif;padding:6px 0 6px 18px;
+  border-bottom:1px solid var(--border);font-size:12px;position:relative}
+.tl-list li:last-child{border-bottom:none}
+.tl-list li::before{content:'→';position:absolute;left:0;color:var(--gold);font-weight:700}
+.tl-note{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* TABLE */
+.tlt{width:100%;border-collapse:collapse;margin-top:14px}
+.tlt th{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);padding:9px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700}
+.tlt td{font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px}
+.tlt tr.cur td{background:rgba(176,138,62,.08);font-weight:700;-webkit-print-color-adjust:exact}
+.tltag{display:inline-block;font-size:8px;padding:2px 7px;background:var(--dark);
+  color:#e8c870;letter-spacing:1px;-webkit-print-color-adjust:exact}
+
+/* MONTHLY */
+.men-hdr{background:var(--dark);padding:16px 20px;margin-bottom:12px;
+  -webkit-print-color-adjust:exact}
+.men-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.men-val{font-family:'Cormorant Garamond',serif;font-size:19px;color:#e8c870;margin-bottom:2px}
+.men-next{font-family:'Lato',sans-serif;font-size:11px;color:#555}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mc{padding:12px 10px;background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--border)}
+.mc.hl{border-top-color:var(--gold);background:rgba(176,138,62,.07);-webkit-print-color-adjust:exact}
+.mn{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1;margin-bottom:2px}
+.mname{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;
+  color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700}
+.mtheme{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;
+  color:var(--text);margin-bottom:2px}
+.mact{font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);line-height:1.4}
+
+/* PLAN */
+.pphase{border:1px solid var(--border);margin-bottom:14px;overflow:hidden}
+.pph-hdr{background:var(--dark);padding:15px 20px;display:flex;align-items:center;gap:16px;
+  -webkit-print-color-adjust:exact}
+.pph-n{font-family:'Cinzel',serif;font-size:26px;color:var(--gold);line-height:1}
+.pph-lbl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:#666;text-transform:uppercase;font-weight:700;margin-bottom:2px}
+.pph-title{font-family:'Cormorant Garamond',serif;font-size:16px;color:#fff}
+.pph-body{padding:18px 22px;background:white}
+.pw{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.pw:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.pwl{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.pwt{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:6px}
+.pwa{list-style:none}
+.pwa li{font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);
+  padding:4px 0 4px 14px;position:relative;line-height:1.55}
+.pwa li::before{content:'—';position:absolute;left:0;color:var(--gold)}
+
+/* CTA */
+.cta{background:var(--dark);padding:56px 60px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cta-eye{font-family:'Lato',sans-serif;font-size:9px;letter-spacing:4px;
+  color:var(--gold-lt);text-transform:uppercase;margin-bottom:16px;font-weight:700}
+.cta-h{font-family:'Cormorant Garamond',serif;font-size:50px;font-weight:300;
+  color:#fff;margin-bottom:14px;line-height:1.02}
+.cta-h em{font-style:italic;color:#e8c870}
+.cta-div{width:48px;height:2px;background:var(--gold-lt);margin:20px 0}
+.cta-body{font-family:'Lato',sans-serif;font-size:14px;color:rgba(255,255,255,.45);
+  max-width:520px;line-height:1.9;margin-bottom:32px}
+.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px}
+.cta-card{background:rgba(255,255,255,.04);border:1px solid rgba(201,165,90,.18);padding:20px}
+.cta-icon{font-size:22px;margin-bottom:10px}
+.cta-card-title{font-family:'Cormorant Garamond',serif;font-size:18px;color:#fff;margin-bottom:6px}
+.cta-card-desc{font-family:'Lato',sans-serif;font-size:12px;color:rgba(255,255,255,.33);line-height:1.6}
+.cta-bottom{text-align:center}
+.cta-btn{display:inline-block;background:var(--gold);color:var(--dark);
+  padding:16px 48px;font-family:'Lato',sans-serif;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.cta-note{font-family:'Lato',sans-serif;font-size:10px;color:rgba(255,255,255,.2);
+  margin-top:14px;letter-spacing:1px}
+.cta-bar{height:5px;background:linear-gradient(90deg,var(--gold),#e8c870,var(--gold));
+  -webkit-print-color-adjust:exact}
+
+@media print{
+  body{background:white!important;padding:0!important}
+  .pbar{display:none!important}
+  .pg{width:100%!important;margin:0!important;box-shadow:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="pbar">
+  <div class="pbar-title">CÓDIGO DE CARREIRA — ${nome.toUpperCase()}</div>
+  <button class="pbar-btn" onclick="window.print()">⬇ Salvar como PDF</button>
+  <div class="pbar-note">Desative cabeçalhos e rodapés no diálogo de impressão</div>
+</div>
+
+<!-- CAPA -->
+<div class="pg">
+<div class="cov">
+  <div class="cov-bar"></div>
+  <div class="cov-body">
+    <div class="cov-brand">CÓDIGO DE CARREIRA</div>
+    <div class="cov-sub">Diagnóstico Estratégico Individual · Confidencial</div>
+    <h1 class="cov-name">${nome}</h1>
+    <p class="cov-arch">${tn}</p>
+    <div class="cov-line"></div>
+    <p class="cov-tag">Direcao: ${dn}<br>Motivacao central: ${mn}<br>Codigo anual: ${py}</p>
+  </div>
+  <div class="cov-foot">
+    <div class="cov-foot-brand">Código de Carreira</div>
+    <div class="cov-foot-date">${mes}</div>
+  </div>
+</div>
+</div>
+
+<!-- INTRO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · DIAGNÓSTICO ESTRATÉGICO</div></div>
+  <div class="sbody">
+    <div class="intro-eye">Bem-vindo ao seu diagnóstico</div>
+    <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
+    <div class="intro-div"></div>
+    <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direcao profissional.</p>
+    <p class="intro-p">Ao longo de mais de 20.000 analises, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
+    <div class="intro-box">
+      <div class="intro-box-title">Como ler e usar este relatório</div>
+      <ul class="intro-list">
+        <li><strong>Talento Principal</strong> — Seu padrao de maior geracao de valor. E o ponto de partida para qualquer decisao de carreira.</li>
+        <li><strong>Direcao Estrategica</strong> — A trajetoria com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong> — Os padroes que estao travando seu faturamento. Identificar e o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de voce agora.</li>
+        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mes tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
+      </ul>
+    </div>
+    <div class="intro-quote">
+      <div class="intro-quote-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
+      <div class="intro-quote-author">Código de Carreira · Diagnostico Estrategico</div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 TALENTO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 01 — TALENTO PRINCIPAL</div></div>
+  <div class="shdr"><div class="shdr-eye">01 — Ativo Mais Rentável</div><h2 class="shdr-title">Talento <em>Principal</em></h2><p class="shdr-sub">O padrão que gera faturamento com menor desgaste.</p></div>
+  <div class="sbody">${talBody}</div>
+</div>
+
+<!-- 02 DIRECAO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 02 — DIREÇÃO ESTRATÉGICA</div></div>
+  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direcao <em>Estrategica</em></h2><p class="shdr-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p></div>
+  <div class="sbody">${dirBody}</div>
+</div>
+
+<!-- 03 BLOQUEIO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 03 — PONTOS DE BLOQUEIO</div></div>
+  <div class="shdr"><div class="shdr-eye">03 — O Que Está Travando o Faturamento</div><h2 class="shdr-title">Pontos de <em>Bloqueio</em></h2><p class="shdr-sub">Padrões que drenam esforço sem retorno proporcional.</p></div>
+  <div class="sbody">${blqBody}</div>
+</div>
+
+<!-- 04 LINHA DO TEMPO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04 — LINHA DO TEMPO E CICLOS</div></div>
+  <div class="shdr"><div class="shdr-eye">04 — Timing Estratégico</div><h2 class="shdr-title">Linha do Tempo e <em>Ciclos</em></h2><p class="shdr-sub">Fases ativas e o momento certo para cada decisão.</p></div>
+  <div class="sbody">${tlBody}</div>
+</div>
+
+<!-- 05 CALENDARIO -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 05 — CALENDÁRIO PESSOAL</div></div>
+  <div class="shdr"><div class="shdr-eye">05 — Termômetro Mensal</div><h2 class="shdr-title">Codigo Pessoal e <em>Calendario</em></h2><p class="shdr-sub">O que cada mês pede de você — planejamento tático.</p></div>
+  <div class="sbody">${menBody}</div>
+</div>
+
+<!-- 06 PLANO - dynamically split -->
+<div class="pg" id="plan-pg-1">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS</div></div>
+  <div class="shdr"><div class="shdr-eye">06 — Execução Prática</div><h2 class="shdr-title">Plano de <em>90 Dias</em></h2><p class="shdr-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p></div>
+  <div class="sbody" id="plan-inject">${planBody}</div>
+</div>
+
+<!-- CTA -->
+<div class="pg" style="height:auto">
+  <div class="cta">
+    <div class="cta-eye">O diagnóstico está pronto. A execução é o próximo passo.</div>
+    <h2 class="cta-h">Pronto para <em>executar</em><br>com precisão?</h2>
+    <div class="cta-div"></div>
+    <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
+    <div class="cta-grid">
+      <div class="cta-card"><div class="cta-icon">🎯</div><div class="cta-card-title">3 Encontros Individuais</div><div class="cta-card-desc">Sessões exclusivas construídas em cima do seu diagnóstico. Cada encontro tem objetivo claro e ações práticas baseadas no seu perfil específico.</div></div>
+      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
+      <div class="cta-card"><div class="cta-icon">📈</div><div class="cta-card-title">Foco Total em Faturamento</div><div class="cta-card-desc">Cada decisão será validada com base no seu perfil. Sem estratégia genérica — só o que funciona para o seu código específico.</div></div>
+      <div class="cta-card"><div class="cta-icon">🔒</div><div class="cta-card-title">Exclusividade Total</div><div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaço seguro para trabalhar os pontos mais profundos do seu padrão de crescimento.</div></div>
+    </div>
+    <div class="cta-bottom">
+      <div class="cta-btn">Quero aplicar meu Código de Carreira</div>
+      <p class="cta-note">Entre em contato para agendar sua primeira sessão</p>
+    </div>
+  </div>
+  <div class="cta-bar"></div>
+</div>
+
+</body></html>`;
+
+  const win = window.open('','_blank','width=960,height=800,scrollbars=yes');
+  if(!win){ alert('Pop-up bloqueado. Habilite pop-ups para este site.'); return; }
+  win.document.write(html);
+  win.document.close();
+}
+
+
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('login-pwd').addEventListener('keydown',e=>{if(e.key==='Enter')login();});});
+</script>
+</body>
+</html>
