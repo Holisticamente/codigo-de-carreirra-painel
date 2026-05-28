@@ -830,6 +830,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     <h2 class="sh-title">Linha do Tempo e <em>Ciclos</em></h2>
     <p class="sh-sub">Fases ativas e o momento certo para cada decisão.</p>
   </div>
+  <div id="pdf-tl-body2" style="display:none"></div>
   <div class="sec-body" id="pdf-tl-body">
     <div class="tl-intro">
       <div class="tl-intro-title">Como ler esta seção</div>
@@ -894,6 +895,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     <h2 class="sh-title">Código Pessoal e <em>Calendário</em></h2>
     <p class="sh-sub">O que cada mês pede de você — planejamento tático.</p>
   </div>
+  <div id="pdf-men-body2" style="display:none"></div>
   <div class="sec-body" id="pdf-men-body">
     <div class="men-header">
       <div class="mh-lbl">Código Anual Ativo</div>
@@ -1646,58 +1648,11 @@ function abrirPDF(){
   const talBody = gt('pdf-tal-body') || gt('c-tal') || '';
   const dirBody = gt('pdf-dir-body') || gt('c-dir') || '';
   const blqBody = gt('pdf-blq-body') || gt('c-blq') || '';
-  const tlBodyFull = gt('pdf-tl-body') || gt('c-tl') || '';
-  const menBodyFull = gt('pdf-men-body') || gt('c-men') || '';
-  
-  // Split TL into 3 parts: intro+cards / interpretations+transition / table
-  function splitTL(html) {
-    if(!html) return {p1:'',p2:'',p3:''};
-    const d = new DOMParser();
-    const doc = d.parseFromString('<div>'+html+'</div>', 'text/html');
-    const allDivs = doc.querySelector('div').children;
-    // p1: first 2 divs (intro box + cards grid x2)
-    // p2: interpretation blocks + transition
-    // p3: table
-    let p1='', p2='', p3='';
-    Array.from(allDivs).forEach(function(el){
-      const txt = el.outerHTML;
-      if(el.tagName==='TABLE' || (el.style && el.style.marginTop==='16px' && txt.includes('thead'))) {
-        p3 += txt;
-      } else if(txt.includes('O que significa') || txt.includes('Transição à vista')) {
-        p2 += txt;
-      } else {
-        p1 += txt;
-      }
-    });
-    return {p1: p1||html, p2: p2, p3: p3};
-  }
-  
-  // Split Monthly into 2 parts: header+intro+grid / deep dive
-  function splitMen(html) {
-    if(!html) return {p1:'',p2:''};
-    const d = new DOMParser();
-    const doc = d.parseFromString('<div>'+html+'</div>', 'text/html');
-    const allDivs = doc.querySelector('div').children;
-    let p1='', p2='';
-    Array.from(allDivs).forEach(function(el){
-      const txt = el.outerHTML;
-      if(txt.includes('Análise do mês atual') || txt.includes('Próximo mês:')) {
-        p2 += txt;
-      } else {
-        p1 += txt;
-      }
-    });
-    return {p1: p1||html, p2: p2};
-  }
-  
-  const tlParts = splitTL(tlBodyFull);
-  const tlBody1 = tlParts.p1;
-  const tlBody2 = tlParts.p2;
-  const tlBody3 = tlParts.p3;
-  
-  const menParts = splitMen(menBodyFull);
-  const menBody1 = menParts.p1;
-  const menBody2 = menParts.p2;
+  const tlBody1 = gt('pdf-tl-body') || '';
+  const tlBody2 = gt('pdf-tl-body2') || '';
+  const tlBody3 = gt('pdf-tl-table') || '';
+  const menBody1 = gt('pdf-men-body') || '';
+  const menBody2 = gt('pdf-men-body2') || '';
   const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
   
   // Split plan into 3 separate pages — one per phase
