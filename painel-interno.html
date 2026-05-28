@@ -1209,7 +1209,7 @@ function openClient(idx){
   const _ic=document.getElementById('pdf-intro-client');
   if(_n)_n.textContent=c.apelido||c.nome||'--';
   if(_a)_a.textContent=tn;
-  if(_t)_t.innerHTML='Direcao: '+dn+'<br>Motivacao central: '+(MN2[c.soul]||'--')+'<br>Codigo anual: '+(CT[c.personalYear]||'--');
+  if(_t)_t.innerHTML='Direção: '+dn+'<br>Motivação central: '+(MN2[c.soul]||'—')+'<br>Código anual: '+(CT[c.personalYear]||'—');
   if(_d)_d.textContent=new Date().toLocaleDateString('pt-BR',{year:'numeric',month:'long'}).toUpperCase();
   if(_ic)_ic.textContent=(c.apelido||c.nome||'').toUpperCase()+' · DIAGNÓSTICO ESTRATÉGICO';
   // Update all page headers
@@ -1405,6 +1405,23 @@ function abrirPDF(){
   const tlBody  = gt('pdf-tl-body')  || gt('c-tl')  || '';
   const menBody = gt('pdf-men-body') || gt('c-men')  || '';
   const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
+  
+  // Split plan into fase1 and fases 2+3 for separate pages
+  function extractFase(html, faseNum) {
+    if(!html) return '';
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<div>' + html + '</div>', 'text/html');
+    const phases = doc.querySelectorAll('.pphase');
+    if(faseNum === 1) {
+      return phases[0] ? phases[0].outerHTML : html;
+    } else {
+      let result = '';
+      for(let i = 1; i < phases.length; i++) result += phases[i].outerHTML;
+      return result || html;
+    }
+  }
+  const planFase1 = extractFase(planBody, 1);
+  const planFase23 = extractFase(planBody, 2);
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -1586,7 +1603,7 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 .men-val{font-family:'Cormorant Garamond',serif;font-size:19px;color:#e8c870;margin-bottom:2px}
 .men-next{font-family:'Lato',sans-serif;font-size:11px;color:#555}
 .mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.mc{padding:12px 10px;background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--border)}
+.mc{padding:12px 10px;background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--border);word-spacing:normal;letter-spacing:normal;word-break:normal;overflow:visible}
 .mc.hl{border-top-color:var(--gold);background:rgba(176,138,62,.07);-webkit-print-color-adjust:exact}
 .mn{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1;margin-bottom:2px}
 .mname{font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;
@@ -1677,7 +1694,7 @@ body{background:#d8d4cc;padding:52px 20px 40px}
     <h1 class="cov-name">${nome}</h1>
     <p class="cov-arch">${tn}</p>
     <div class="cov-line"></div>
-    <p class="cov-tag">Direcao: ${dn}<br>Motivacao central: ${mn}<br>Codigo anual: ${py}</p>
+    <p class="cov-tag">Direção: ${dn}<br>Motivação central: ${mn}<br>Código anual: ${py}</p>
   </div>
   <div class="cov-foot">
     <div class="cov-foot-brand">Código de Carreira</div>
@@ -1693,22 +1710,22 @@ body{background:#d8d4cc;padding:52px 20px 40px}
     <div class="intro-eye">Bem-vindo ao seu diagnóstico</div>
     <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
     <div class="intro-div"></div>
-    <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direcao profissional.</p>
+    <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direção profissional.</p>
     <p class="intro-p">Ao longo de mais de 4 mil atendimentos nos últimos 7 anos, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
     <div class="intro-box">
       <div class="intro-box-title">Como ler e usar este relatório</div>
       <ul class="intro-list">
-        <li><strong>Talento Principal</strong> — Seu padrao de maior geracao de valor. E o ponto de partida para qualquer decisao de carreira.</li>
-        <li><strong>Direcao Estrategica</strong> — A trajetoria com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
-        <li><strong>Pontos de Bloqueio</strong> — Os padroes que estao travando seu faturamento. Identificar e o primeiro passo para superar.</li>
-        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de voce agora.</li>
-        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mes tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira.</li>
+        <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de você agora.</li>
+        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
         <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
       </ul>
     </div>
     <div class="intro-quote">
       <div class="intro-quote-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
-      <div class="intro-quote-author">Código de Carreira · Diagnostico Estrategico</div>
+      <div class="intro-quote-author">Código de Carreira · Diagnóstico Estratégico</div>
     </div>
   </div>
 </div>
@@ -1720,10 +1737,10 @@ body{background:#d8d4cc;padding:52px 20px 40px}
   <div class="sbody">${talBody}</div>
 </div>
 
-<!-- 02 DIRECAO -->
+<!-- 02 DIREÇÃO -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 02 — DIREÇÃO ESTRATÉGICA</div></div>
-  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direcao <em>Estrategica</em></h2><p class="shdr-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p></div>
+  <div class="shdr"><div class="shdr-eye">02 — Caminho de Maior Faturamento</div><h2 class="shdr-title">Direção <em>Estratégica</em></h2><p class="shdr-sub">A trajetória com maior probabilidade de retorno para o seu perfil.</p></div>
   <div class="sbody">${dirBody}</div>
 </div>
 
@@ -1744,15 +1761,21 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 <!-- 05 CALENDARIO -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 05 — CALENDÁRIO PESSOAL</div></div>
-  <div class="shdr"><div class="shdr-eye">05 — Termômetro Mensal</div><h2 class="shdr-title">Codigo Pessoal e <em>Calendario</em></h2><p class="shdr-sub">O que cada mês pede de você — planejamento tático.</p></div>
+  <div class="shdr"><div class="shdr-eye">05 — Termômetro Mensal</div><h2 class="shdr-title">Código Pessoal e <em>Calendário</em></h2><p class="shdr-sub">O que cada mês pede de você — planejamento tático.</p></div>
   <div class="sbody">${menBody}</div>
 </div>
 
-<!-- 06 PLANO - dynamically split -->
-<div class="pg" id="plan-pg-1">
+<!-- 06 PLANO - FASE 1 -->
+<div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS</div></div>
   <div class="shdr"><div class="shdr-eye">06 — Execução Prática</div><h2 class="shdr-title">Plano de <em>90 Dias</em></h2><p class="shdr-sub">Semana a semana. Ações concretas baseadas no seu perfil e momento.</p></div>
-  <div class="sbody" id="plan-inject">${planBody}</div>
+  <div class="sbody" id="plan-fase1">${planFase1}</div>
+</div>
+
+<!-- 06 PLANO - FASES 2 E 3 -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS (continuação)</div></div>
+  <div class="sbody" id="plan-fase23" style="padding-top:36px">${planFase23}</div>
 </div>
 
 <!-- CTA -->
