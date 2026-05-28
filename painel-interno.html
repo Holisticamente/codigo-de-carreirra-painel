@@ -707,17 +707,17 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     <div class="intro-box">
       <div class="ib-title">Como ler e usar este relatório</div>
       <ul class="ib-list">
-        <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira ou posicionamento.</li>
-        <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
-        <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
-        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de você agora.</li>
-        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
-        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
+        <li><strong>Talento Principal</strong>: Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira ou posicionamento.</li>
+        <li><strong>Direção Estratégica</strong>: A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong>: Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong>: O timing natural da sua trajetória e o que o momento pede de você agora.</li>
+        <li><strong>Calendário Pessoal</strong>: O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong>: Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
       </ul>
     </div>
     <div class="intro-quote">
       <div class="iq-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
-      <div class="iq-author">Código de Carreira · Diagnóstico Estratégico</div>
+      <div class="iq-author">Código de Carreira</div>
     </div>
   </div>
 </div>
@@ -1078,7 +1078,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
       <div class="cta-card">
         <div class="cta-icon">⚡</div>
         <div class="cta-card-title">Ajustes em Tempo Real</div>
-        <div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div>
+        <div class="cta-card-desc">Quando o padrão de bloqueio ressurgir, e ele vai ressurgir, você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div>
       </div>
       <div class="cta-card">
         <div class="cta-icon">📈</div>
@@ -1173,7 +1173,7 @@ function updateStats(cl){const now=new Date(),wa=new Date(now-7*24*60*60*1000);d
 
 function renderTable(clients){
   if(!clients.length){document.getElementById('tbl-body').innerHTML=`<div class="empty-state"><p>Nenhum cliente encontrado.</p></div>`;return;}
-  document.getElementById('tbl-body').innerHTML=`<table><thead><tr><th>Cliente</th><th>Nascimento</th><th>Talento</th><th>Direção</th><th>Ocupação</th><th>Recebido em</th></tr></thead><tbody>${clients.map(c=>`<tr onclick="openClient(${c.idx})"><td><div class="td-name">${c.apelido||c.nome||'—'}</div><div style="font-size:10px;color:var(--muted)">${c.nome||''}</div></td><td class="td-date">${c.nasc||'—'}</td><td>${TN[c.expression]||c.expression||'—'}</td><td style="font-size:11px">${DN[c.destiny]||c.destiny||'—'}</td><td>${c.ocup||'—'}</td><td class="td-date">${c.timestamp||'—'}</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('tbl-body').innerHTML=`<table><thead><tr><th>Cliente</th><th>Nascimento</th><th>Talento</th><th>Direção</th><th>Ocupação</th><th>Recebido em</th></tr></thead><tbody>${clients.map(c=>`<tr onclick="openClient(${c.idx})"><td><div class="td-name">${c.apelido||c.nome||'—'}</div><div style="font-size:10px;color:var(--muted)">${c.nome||''}</div></td><td class="td-date">${c.nasc||'—'}</td><td>${(getTN(c.expression,c.gender)||TN[c.expression]||c.expression||'—')}</td><td style="font-size:11px">${DN[c.destiny]||c.destiny||'—'}</td><td>${c.ocup||'—'}</td><td class="td-date">${c.timestamp||'—'}</td></tr>`).join('')}</tbody></table>`;
 }
 
 function filterClients(){const q=document.getElementById('searchInput').value.toLowerCase();renderTable(allClients.filter(c=>(c.nome||'').toLowerCase().includes(q)||(c.apelido||'').toLowerCase().includes(q)));}
@@ -1195,7 +1195,7 @@ function openClient(idx){
       c.personalMonths=MNS.map((n,i)=>({month:i+1,name:n,personalMonth:calcPM(c.personalYear,i+1)}));
     }
   }
-  const tn=TN[c.expression]||'—',dn=DN[c.destiny]||'—';
+  const tn=getTN(c.expression,c.gender)||TN[c.expression]||'—',dn=DN[c.destiny]||'—';
   // Screen header
   document.getElementById('cHdr').setAttribute('data-n',c.expression||'');
   document.getElementById('cMeta').textContent=`CÓDIGO DE CARREIRA · ${(c.apelido||c.nome||'').toUpperCase()} · CONFIDENCIAL`;
@@ -1258,36 +1258,276 @@ function renderAnswers(c){
 }
 
 /* ══ TIMELINE ══ */
+/* ══ MEANINGS COMPLETOS ══ */
+const TN_F={1:'A Pioneira',2:'A Parceira Estratégica',3:'A Comunicadora',4:'A Arquiteta',5:'A Catalisadora',6:'A Harmonizadora',7:'A Estrategista',8:'A Executiva',9:'A Visionária Humanista',11:'A Inspiradora Mestre',22:'A Arquiteta Mestre'};
+const TN_M={1:'O Pioneiro',2:'O Parceiro Estratégico',3:'O Comunicador',4:'O Arquiteto',5:'O Catalisador',6:'O Harmonizador',7:'O Estrategista',8:'O Executivo',9:'O Visionário Humanista',11:'O Inspirador Mestre',22:'O Arquiteto Mestre'};
+
+function getTN(n, gender){ return (gender==='feminino' ? TN_F[n] : TN_M[n]) || TN[n] || String(n); }
+
+const ARCH_DESC={
+  1:'Perfil de quem lidera pelo exemplo, abre caminhos onde outros não ousam e tem força natural para iniciar projetos e movimentos. Quando este padrão está ativo, o momento pede autonomia, tomada de decisão e coragem para agir sem esperar aprovação externa.',
+  2:'Perfil de quem constrói pontes, media conflitos e cria harmonia em ambientes complexos. A força está na escuta, na diplomacia e na capacidade de fazer diferentes partes trabalharem juntas. Quando este padrão está ativo, parcerias e colaborações estratégicas são o caminho de maior retorno.',
+  3:'Perfil de quem se comunica com naturalidade, inspira por meio da expressão e tem talento para conectar pessoas através de ideias. Quando este padrão está ativo, comunicação, presença e visibilidade são os motores de crescimento.',
+  4:'Perfil de quem constrói com solidez, planeja com precisão e entrega com consistência. A força está na organização, nos processos e na capacidade de transformar ideias em estruturas concretas. Quando este padrão está ativo, construção de base, disciplina e método são o que gera resultado.',
+  5:'Perfil de quem catalisa mudanças, inspira transformação e tem visão ampliada do que é possível. A força está na adaptabilidade, na capacidade de enxergar oportunidades onde outros veem obstáculos. Quando este padrão está ativo, movimento, inovação e quebra de padrões antigos são necessários.',
+  6:'Perfil de quem cuida, harmoniza e cria ambientes de confiança. A força está no serviço de alto valor, na capacidade de gerar lealdade e na entrega que vai além do contratado. Quando este padrão está ativo, relacionamentos, qualidade de entrega e responsabilidade são o diferencial.',
+  7:'Perfil de quem aprofunda, analisa e domina conhecimento com profundidade. A força está na especialização, na capacidade de ver o que outros não veem e na sabedoria acumulada. Quando este padrão está ativo, estudo, estratégia e refinamento da expertise são o caminho.',
+  8:'Perfil de quem executa com autoridade, escala resultados e comanda com visão de longo prazo. A força está na capacidade de transformar competência em poder real, reconhecimento e faturamento. Quando este padrão está ativo, autoridade, resultados concretos e escala são o foco.',
+  9:'Perfil de quem opera com propósito ampliado, pensa em legado e tem capacidade de impactar muitas pessoas ao mesmo tempo. Quando este padrão está ativo, o momento pede entrega generosa, finalização de ciclos e contribuição que vai além do retorno imediato.',
+  11:'Perfil de quem inspira coletivos, tem visão elevada e capacidade de mover pessoas por meio de ideias que tocam algo mais profundo. Quando este padrão está ativo, liderança inspiracional, visibilidade ampliada e impacto coletivo são o chamado.',
+  22:'Perfil de quem concretiza visões em grande escala, transforma ideias ambiciosas em realidade tangível. Quando este padrão está ativo, projetos de longo prazo, construção de legado e impacto estrutural são o terreno de maior retorno.',
+  0:'Padrão que pede equilíbrio entre forças opostas. Quando ativo, o desafio é integrar polaridades internas sem cair em extremos. A superação deste padrão libera uma maturidade que nenhum outro ciclo proporciona.'
+};
+
+const CYC_DESC={
+  1:'Ciclo de início e plantio. O tema dominante é lançar, começar, marcar posição. O que você planta agora colhe nos próximos anos.',
+  2:'Ciclo produtivo e de construção. O tema é consolidar, crescer com consistência e aprofundar o que foi iniciado. É o período de maior geração de resultado quando bem direcionado.',
+  3:'Ciclo de colheita e transmissão. O que foi construído começa a dar frutos de forma mais natural. O tema é compartilhar, ensinar e colher o que foi plantado.',
+  4:'Ciclo de consolidação e método. O tema é organizar, estruturar e construir com solidez.',
+  5:'Ciclo de movimento e expansão. O tema é mudar, adaptar e buscar novos horizontes.',
+  6:'Ciclo de responsabilidade e serviço. O tema é cuidar, entregar com qualidade e construir confiança.',
+  7:'Ciclo de aprofundamento e análise. O tema é estudar, refinar e especializar.',
+  8:'Ciclo de autoridade e colheita financeira. O tema é executar com poder e colher resultados concretos.',
+  9:'Ciclo de conclusão e legado. O tema é fechar ciclos, entregar o que ficou pendente e preparar o terreno para o próximo grande início.'
+};
+
+const PIN_DESC={
+  1:'Pináculo de iniciativa. O tipo de conquista disponível agora exige que você tome a frente, assuma riscos calculados e construa algo seu.',
+  2:'Pináculo de parceria. As maiores conquistas deste período vêm através de colaboração, alianças estratégicas e capacidade de construir em conjunto.',
+  3:'Pináculo de expressão. Visibilidade, comunicação e criatividade são os motores de conquista neste período.',
+  4:'Pináculo de construção. As conquistas mais duradouras vêm do trabalho consistente, da disciplina e da capacidade de sustentar esforço ao longo do tempo.',
+  5:'Pináculo de mudança. As melhores oportunidades surgem de transformações, não de continuidade.',
+  6:'Pináculo de serviço. As conquistas mais significativas vêm de cuidar bem, entregar com excelência e construir relacionamentos de confiança.',
+  7:'Pináculo de especialização. O reconhecimento vem do domínio profundo de um tema ou área.',
+  8:'Pináculo de realização. É o período de maior potencial para conquistas materiais, reconhecimento e autoridade.',
+  9:'Pináculo de legado. As conquistas mais significativas têm dimensão coletiva e impacto duradouro.',
+  11:'Pináculo de inspiração. A conquista disponível é de natureza elevada, com potencial de impactar muitas pessoas.',
+  22:'Pináculo de grandiosidade. As conquistas possíveis neste período têm escala rara e potencial de deixar marca permanente.',
+  0:'Pináculo de equilíbrio. O desafio é encontrar o meio-termo entre opostos e construir a partir dessa integração.'
+};
+
+const CHALL_DESC={
+  0:'O desafio do equilíbrio total pede integração de forças opostas. A tendência é oscilar entre extremos. A superação vem de aprender a sustentar tensões sem colapsar em nenhuma das direções.',
+  1:'O desafio da independência saudável pede que você aprenda a liderar sem isolar, a ser autônoma sem dispensar colaboração.',
+  2:'O desafio da diplomacia sem dependência pede que você construa conexões sem perder o fio da sua própria direção.',
+  3:'O desafio da expressão sem dispersão pede que você canalize sua criatividade e comunicação com foco, sem se perder em múltiplas frentes.',
+  4:'O desafio da disciplina sem rigidez pede que você construa estrutura e consistência sem transformar o método em prisão.',
+  5:'O desafio da liberdade sem instabilidade pede que você incorpore mudança e movimento sem perder a base que sustenta o crescimento.',
+  6:'O desafio da responsabilidade sem autossacrifício pede que você cuide e sirva sem se colocar em último lugar de forma sistemática.',
+  7:'O desafio do conhecimento sem isolamento pede que você aprofunde sua expertise sem se afastar do mundo e das pessoas.',
+  8:'O desafio do poder sem controle pede que você construa autoridade e resultados sem transformar força em dominação.',
+  9:'O desafio do idealismo sem fuga pede que você opere com propósito elevado sem usar o ideal como desculpa para evitar o concreto.'
+};
+
 function buildTL(c){
-  const ag=c.age;
-  const cc=c.cycles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
-  const cp=c.pinnacles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
-  const cch=c.challenges.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
-  const intro=`<div style="background:var(--bg);border:1px solid var(--border);border-left:4px solid var(--gold);padding:24px 28px;margin-bottom:20px"><div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Como ler esta seção</div><p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--text);line-height:1.8;margin-bottom:10px">Sua vida profissional tem ritmos naturais — períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação. A análise abaixo mapeia três camadas simultâneas ativas agora na sua trajetória:</p><ul style="list-style:none"><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Ciclo de Vida</strong> — define o tema geral do período. Há 3 ciclos: Formativo, Produtivo e Colheita.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;border-bottom:1px solid var(--border);font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Pináculo</strong> — indica o tipo de conquista disponível neste período. Há 4 pináculos ao longo da vida.</li><li style="font-family:'Lato',sans-serif;padding:6px 0 6px 18px;font-size:11px;position:relative"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">→</span><strong>Desafio</strong> — revela o padrão que, quando integrado, libera o faturamento travado.</li></ul><p style="font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);margin-top:10px;font-style:italic">Itens marcados como <strong>ATUAL</strong> estão ativos para você hoje, com ${ag} anos.</p></div>`;
-  const cards=`<div class="cgrid"><div class="rc gold"><div class="rcl">Ciclo Ativo</div><div class="rcv">${cc?TN[cc.num]||cc.num:'—'}</div><div class="rcd">${cc?cc.label+' · '+cc.start+'–'+(cc.end||'∞')+' anos':''}</div></div><div class="rc blue"><div class="rcl">Pináculo Ativo</div><div class="rcv">${cp?TN[cp.num]||cp.num:'—'}</div><div class="rcd">${cp?cp.label:''}</div></div></div><div class="cgrid"><div class="rc red"><div class="rcl">Desafio Principal</div><div class="rcv">${cch?CH[cch.num]||cch.num:'—'}</div><div class="rcd">${cch?cch.label:''}</div></div><div class="rc green"><div class="rcl">Código de Vida</div><div class="rcv">${TN[c.mission]||c.mission||'—'}</div><div class="rcd">Talento (${c.expression}) + Direção (${c.destiny})</div></div></div>`;
-  let tbl=`<table class="tlt"><thead><tr><th>Período</th><th>Tipo</th><th>Código</th><th>Intervalo</th></tr></thead><tbody>`;
-  [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{const isc=ag>=x.start&&(x.end===null||ag<=x.end);const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';tbl+=`<tr class="${isc?'cur':''}"><td>${isc?'<span class="tltag">ATUAL</span> ':''}${x.label}</td><td>${t}</td><td>${TN[x.num]||CH[x.num]||x.num}</td><td>${x.start}–${x.end??'∞'} anos</td></tr>`;});
+  const ag = c.age;
+  const fem = c.gender === 'feminino';
+  const cc  = c.cycles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cp  = c.pinnacles.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+  const cch = c.challenges.find(x=>ag>=x.start&&(x.end===null||ag<=x.end));
+
+  // Next cycle transition
+  const nextCyc = c.cycles.find(x=>x.end!==null&&x.end>ag&&x.start>ag);
+  const yearsToNextCyc = nextCyc ? (nextCyc.start - ag) : null;
+  const nextPin = c.pinnacles.find(x=>x.end!==null&&x.end>ag&&x.start>ag);
+  const yearsToNextPin = nextPin ? (nextPin.start - ag) : null;
+
+  function tn(n){ return getTN(n, c.gender); }
+  function archDesc(n){ return ARCH_DESC[n] || ARCH_DESC[0]; }
+  function pronome(){ return fem ? 'ela' : 'ele'; }
+  function seu(){ return fem ? 'sua' : 'seu'; }
+  function artigo(){ return fem ? 'a' : 'o'; }
+
+  // INTRO
+  const intro = `
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid var(--gold);padding:24px 28px;margin-bottom:20px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700">O que é esta análise</div>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">Este mapeamento é construído a partir de uma análise biográfica individual. Cada ser humano atravessa fases naturais de desenvolvimento ao longo da vida, como estações do ano. Existem períodos que pedem construção, outros que pedem colheita, e outros que exigem transformação profunda.</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">A análise biográfica identifica três camadas simultâneas que estão ativas na sua trajetória agora. Cada camada revela um aspecto diferente do momento que você vive e do que ele pede de você.</p>
+  <ul style="list-style:none;margin-top:8px">
+    <li style="font-family:'Lato',sans-serif;font-size:13px;color:var(--text);padding:8px 0 8px 20px;border-bottom:1px solid var(--border);position:relative;line-height:1.65"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">1.</span><strong>Ciclo de Vida</strong> é o tema central do período que você atravessa. Funciona como o pano de fundo de tudo que acontece na sua trajetória. Há três ciclos ao longo da vida, cada um com duração de décadas, e cada um pedindo um tipo diferente de atuação.</li>
+    <li style="font-family:'Lato',sans-serif;font-size:13px;color:var(--text);padding:8px 0 8px 20px;border-bottom:1px solid var(--border);position:relative;line-height:1.65"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">2.</span><strong>Pináculo</strong> é a natureza da conquista disponível neste período. Indica o tipo de resultado que o momento está abrindo para você, e qual postura é necessária para aproveitá-lo.</li>
+    <li style="font-family:'Lato',sans-serif;font-size:13px;color:var(--text);padding:8px 0 8px 20px;position:relative;line-height:1.65"><span style="position:absolute;left:0;color:var(--gold);font-weight:700">3.</span><strong>Desafio</strong> é o padrão interno que, quando integrado, libera o faturamento travado. Não é uma fraqueza. É uma configuração específica que, uma vez reconhecida, se transforma em diferencial estratégico.</li>
+  </ul>
+</div>`;
+
+  // ACTIVE CARDS
+  const cards = `
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+  <div style="padding:20px 22px;border:1px solid var(--border);border-left:5px solid var(--gold)">
+    <div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700">Ciclo Ativo</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:4px">${cc?tn(cc.num):'—'}</div>
+    <div style="font-family:'Lato',sans-serif;font-size:11px;color:var(--muted)">${cc?cc.label+' · '+cc.start+'–'+(cc.end||'∞')+' anos':''}</div>
+  </div>
+  <div style="padding:20px 22px;border:1px solid var(--border);border-left:5px solid var(--blue)">
+    <div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700">Pináculo Ativo</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:4px">${cp?tn(cp.num):'—'}</div>
+    <div style="font-family:'Lato',sans-serif;font-size:11px;color:var(--muted)">${cp?cp.label:''}</div>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+  <div style="padding:20px 22px;border:1px solid var(--border);border-left:5px solid var(--red)">
+    <div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700">Desafio Principal</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:4px">${cch?CH[cch.num]||'—':'—'}</div>
+    <div style="font-family:'Lato',sans-serif;font-size:11px;color:var(--muted)">${cch?cch.label:''}</div>
+  </div>
+  <div style="padding:20px 22px;border:1px solid var(--border);border-left:5px solid var(--green)">
+    <div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;font-weight:700">Código de Vida</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:4px">${getTN(c.mission,c.gender)||'—'}</div>
+    <div style="font-family:'Lato',sans-serif;font-size:11px;color:var(--muted)">Talento (${c.expression}) + Direção (${c.destiny})</div>
+  </div>
+</div>`;
+
+  // INTERPRETATION BLOCKS
+  const interp = `
+<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Ciclo atual</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cc?tn(cc.num):'—'}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px">${cc?CYC_DESC[cc.num]||archDesc(cc.num):''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cc?archDesc(cc.num):''}</p>
+</div>
+
+<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Pináculo atual</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cp?tn(cp.num):'—'}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px">${cp?PIN_DESC[cp.num]||archDesc(cp.num):''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cp?archDesc(cp.num):''}</p>
+</div>
+
+<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Desafio principal</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cch?CH[cch.num]:'—'}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cch?CHALL_DESC[cch.num]||CHALL_DESC[0]:''}</p>
+</div>`;
+
+  // TRANSITION BLOCK
+  let transition = '';
+  if(yearsToNextCyc !== null && yearsToNextCyc <= 10){
+    const nxt = nextCyc;
+    transition = `
+<div style="background:var(--dark);border:1px solid var(--gold);padding:24px 28px;margin-bottom:16px;-webkit-print-color-adjust:exact">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Transição à vista</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#e8c870;margin-bottom:10px">Em ${yearsToNextCyc <= 1 ? 'menos de 1 ano' : yearsToNextCyc + ' anos'} você entra no ciclo ${tn(nxt.num)}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:8px">Esta transição representa uma mudança significativa no tema central da sua trajetória. O que você está construindo agora está diretamente ligado ao que terá disponível neste próximo ciclo.</p>
+  <p style="font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.65);line-height:1.8">${archDesc(nxt.num)}</p>
+</div>`;
+  } else if(yearsToNextPin !== null && yearsToNextPin <= 5){
+    const nxt = nextPin;
+    transition = `
+<div style="background:var(--dark);border:1px solid var(--gold);padding:24px 28px;margin-bottom:16px;-webkit-print-color-adjust:exact">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Transição à vista</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#e8c870;margin-bottom:10px">Em ${yearsToNextPin <= 1 ? 'menos de 1 ano' : yearsToNextPin + ' anos'} você entra no pináculo ${tn(nxt.num)}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:8px">Uma mudança no tipo de conquista disponível está se aproximando. É importante se preparar para este novo momento.</p>
+  <p style="font-family:'Lato',sans-serif;font-size:13px;color:rgba(255,255,255,.65);line-height:1.8">${archDesc(nxt.num)}</p>
+</div>`;
+  }
+
+  // FULL TABLE
+  let tbl = `<table style="width:100%;border-collapse:collapse;margin-top:16px">
+<thead><tr>
+  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Período</th>
+  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Tipo</th>
+  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Código</th>
+  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Intervalo</th>
+</tr></thead><tbody>`;
+
+  [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{
+    const isc=ag>=x.start&&(x.end===null||ag<=x.end);
+    const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';
+    const name = t==='Desafio' ? (CH[x.num]||'—') : tn(x.num);
+    const bg = isc ? 'background:rgba(176,138,62,.08);font-weight:700' : '';
+    tbl+=`<tr style="${bg}">
+      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${isc?'<span style="display:inline-block;font-size:8px;padding:2px 7px;background:#0c0b08;color:#e8c870;letter-spacing:1px;font-family:\'Lato\',sans-serif">ATUAL</span> ':''}${x.label}</td>
+      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${t}</td>
+      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${name}</td>
+      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${x.start}–${x.end??'∞'} anos</td>
+    </tr>`;
+  });
   tbl+='</tbody></table>';
-  const html=intro+cards+tbl;
-  const htmlCards=intro+cards;
-  document.getElementById('c-tl').innerHTML=html;
-  var _ptlb=document.getElementById('pdf-tl-body');
-  var _ptlt=document.getElementById('pdf-tl-table');
-  if(_ptlb)_ptlb.innerHTML=cards+tbl;
-  if(_ptlt)_ptlt.innerHTML=tbl;
+
+  const html = intro + cards + interp + transition + tbl;
+
+  document.getElementById('c-tl').innerHTML = html;
+  var _ptlb = document.getElementById('pdf-tl-body');
+  var _ptlt = document.getElementById('pdf-tl-table');
+  if(_ptlb) _ptlb.innerHTML = intro + cards + interp + transition;
+  if(_ptlt) _ptlt.innerHTML = tbl;
 }
 
 function buildMen(c){
-  const cm=new Date().getMonth()+1;
-  const header=`<div class="rc dk" style="margin-bottom:16px"><div class="rcl">Código Anual Ativo</div><div class="rcv">${CT[c.personalYear]||'—'}</div><div class="rcd">Próximo código: ${CT[c.personalYear===9?1:c.personalYear+1]||'—'}</div></div>`;
-  let grid=`<div class="mgrid">`;
-  c.personalMonths.forEach(m=>{grid+=`<div class="mc ${m.month===cm?'hl':''}"><div class="mn">${m.personalMonth}</div><div class="mname">${m.name}${m.month===cm?' ◀':''}</div><div class="mtheme">${MT[m.personalMonth]||''}</div><div class="mact">${MA[m.personalMonth]||''}</div></div>`;});
-  grid+='</div>';
-  const html=header+grid;
-  document.getElementById('c-men').innerHTML=html;
-  var _pmb=document.getElementById('pdf-men-body');
-  if(_pmb)_pmb.innerHTML=html;
+  const cm = new Date().getMonth()+1;
+  const fem = c.gender === 'feminino';
+  const py = c.personalYear;
+  const nextPy = py===9 ? 1 : py+1;
+
+  const MEN_DESC = {
+    1:'Mês de início e plantio. A energia favorece lançamentos, novas iniciativas e tomada de posição. É o melhor momento para apresentar algo novo ao mercado, iniciar conversas importantes e marcar presença com clareza.',
+    2:'Mês de colaboração e ajuste. A energia pede escuta, negociação e construção de pontes. Parcerias e alianças têm mais facilidade de se concretizar. Forçar decisões sozinha tende a gerar atrito.',
+    3:'Mês de comunicação e visibilidade. A energia favorece expressão, marketing, vendas e conexão com novas pessoas. É o momento de aparecer, falar e criar conteúdo que posicione.',
+    4:'Mês de execução e disciplina. A energia pede método, organização e entrega. Processos, finanças e estrutura são o foco. O que foi planejado agora precisa ser executado com consistência.',
+    5:'Mês de movimento e oportunidade. A energia é imprevisível e favorece quem é flexível. Oportunidades surgem fora do planejado. Rigidez tende a gerar frustração. Aceitar o inesperado com inteligência é o diferencial.',
+    6:'Mês de responsabilidade e equilíbrio. A energia favorece quem cuida bem do que já tem. Qualidade de entrega, atenção ao cliente e fortalecimento de vínculos existentes geram mais resultado do que buscar coisas novas.',
+    7:'Mês de estratégia e planejamento. A energia pede pausa reflexiva, análise e refinamento. Não é o melhor momento para lançamentos ou decisões impulsivas. É o momento de planejar o próximo movimento com precisão.',
+    8:'Mês de resultados e autoridade. A energia favorece cobranças, fechamento de negócios e consolidação de posicionamento. Quem construiu bem nos meses anteriores colhe agora com mais naturalidade.',
+    9:'Mês de finalização e balanço. A energia pede encerramento de ciclos, avaliação do que foi construído e liberação do que não serve mais. O espaço criado agora é o que permite o novo começar com força.'
+  };
+
+  // Current month deep analysis
+  const curDesc = MEN_DESC[calcPM(py,cm)] || '';
+  const nextM = cm===12?1:cm+1;
+  const nextMDesc = MEN_DESC[calcPM(py,nextM)] || '';
+  const prevM = cm===1?12:cm-1;
+
+  const header = `
+<div style="background:var(--dark);border:1px solid var(--gold);padding:20px 24px;margin-bottom:16px;-webkit-print-color-adjust:exact">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;font-weight:700">Código Anual Ativo</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:21px;color:#e8c870;margin-bottom:4px">${CT[py]||'—'}</div>
+  <div style="font-family:'Lato',sans-serif;font-size:12px;color:#666">Próximo código: ${CT[nextPy]||'—'}</div>
+</div>`;
+
+  const introMen = `
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid var(--gold);padding:24px 28px;margin-bottom:20px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;font-weight:700">Como ler este calendário</div>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">Assim como existem estações do ano que determinam o que plantar e o que colher, sua trajetória tem ritmos mensais próprios. Cada mês carrega uma energia específica que, quando aproveitada, potencializa seus resultados. Quando ignorada, gera esforço sem retorno proporcional.</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">Os números no calendário abaixo indicam o tema energético de cada mês. Não é uma previsão do que vai acontecer. É uma bússola que indica qual tipo de ação tende a gerar mais resultado em cada período.</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">O mês marcado com <strong>◀</strong> é o mês atual. Use as orientações do mês corrente como guia prático para suas decisões e prioridades desta semana.</p>
+</div>`;
+
+  // Monthly grid
+  let grid = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">';
+  [1,2,3,4,5,6,7,8,9,10,11,12].forEach(m=>{
+    const pm = calcPM(py,m);
+    const isHL = m===cm;
+    const bg = isHL ? 'border-top:3px solid var(--gold);background:rgba(176,138,62,.08)' : 'border-top:3px solid var(--border);background:var(--bg)';
+    grid += `<div style="padding:12px 10px;border:1px solid var(--border);${bg};-webkit-print-color-adjust:exact">
+      <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold);line-height:1;margin-bottom:2px">${pm}</div>
+      <div style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:5px;font-weight:700">${MNS[m-1]}${m===cm?' ◀':''}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">${MT[pm]||''}</div>
+      <div style="font-family:'Lato',sans-serif;font-size:10px;color:var(--muted);line-height:1.4">${MA[pm]||''}</div>
+    </div>`;
+  });
+  grid += '</div>';
+
+  // Current month deep dive
+  const deepDive = `
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid var(--gold);padding:24px 28px;margin-bottom:12px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Análise do mês atual: ${MNS[cm-1]}</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px">${MT[calcPM(py,cm)]||''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${curDesc}</p>
+</div>
+<div style="background:var(--bg);border:1px solid var(--border);padding:20px 24px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;font-weight:700">Próximo mês: ${MNS[nextM-1]}</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">${MT[calcPM(py,nextM)]||''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:13px;color:var(--muted);line-height:1.8">${nextMDesc}</p>
+</div>`;
+
+  const html = header + introMen + grid + deepDive;
+
+  document.getElementById('c-men').innerHTML = html;
+  var _pmb = document.getElementById('pdf-men-body');
+  if(_pmb) _pmb.innerHTML = html;
 }
+
 
 /* ══ GENERATE ══ */
 async function gerarDiagnostico(){
@@ -1306,17 +1546,17 @@ async function callAPI(sys,usr){
 const SYS=`Você é um consultor especialista em diagnóstico estratégico de carreira com metodologia proprietária. NUNCA mencione "numerologia", "cabalística", "místico" ou termos esotéricos. Use: "padrão", "perfil", "código", "análise".
 
 REGRAS CRÍTICAS:
-- SEMPRE 2ª pessoa: "Você tem...", "Seu padrão é...", "Você tende a..."
-- NUNCA 3ª pessoa como "esta pessoa" ou "[nome] gosta de"
-- Linguagem estratégica, voltada a resultado e faturamento
-- Tom McKinsey — premium, direto, sem autoajuda
-- Adapte pronomes ao gênero indicado
-- Formato HTML: <h3>, <p>, <ul><li>, <strong> — sem markdown
-- Assertivo: sem "talvez", "pode ser", "possivelmente"
-- Mínimo 3 frases por parágrafo`;
+Use SEMPRE 2a pessoa direta: "Você tem...", "Seu padrão é...", "Você tende a..."
+NUNCA use 3a pessoa como "esta pessoa" ou o nome isolado como sujeito.
+Linguagem estratégica, voltada a resultado e faturamento. Tom direto e premium, sem autoajuda.
+Adapte TODOS os pronomes, artigos e adjetivos ao gênero indicado no perfil.
+Se feminino: "a Pioneira", "ela opera", "sua entrega", "posicionada", "construída".
+Se masculino: "o Pioneiro", "ele opera", "seu retorno", "posicionado", "construído".
+Formato HTML: use h3, p, ul li, strong. Sem markdown, sem traços duplos como separadores.
+Seja assertivo: sem "talvez", "pode ser", "possivelmente". Mínimo 3 frases por parágrafo.`;
 
 function ctxC(c){const cc=c.cycles?c.cycles.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;return`PERFIL:
-Nome: ${c.nome} | Apelido: ${c.apelido} | Idade: ${c.age} | Gênero: ${c.gender}
+Nome: ${c.nome} | Apelido: ${c.apelido} | Idade: ${c.age} | Gênero: ${c.gender} (${c.gender==='feminino'?'use pronomes e adjetivos no feminino em todo o texto':'use pronomes e adjetivos no masculino em todo o texto'})
 Talento (expressão): ${c.expression} — ${TN[c.expression]||'—'}
 Direção (destino): ${c.destiny} — ${DN[c.destiny]||'—'}
 Motivação (alma): ${c.soul} — ${MN2[c.soul]||'—'}
@@ -1345,7 +1585,7 @@ function setContent(ids,html){
 
 async function aiTalento(c){
   ['c-tal','pdf-tal-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Analisando talento principal...</p></div>';});
-  const tn=TN[c.expression]||'';
+  const tn=getTN(c.expression,c.gender)||TN[c.expression]||'';
   try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Talento Principal" em 2ª pessoa.\n\n1. <h3>${tn}</h3>\n<p>2 parágrafos. "Você funciona como...", "Seu padrão é...". Use o nome "${c.apelido}". Relacione com ocupação "${c.ocup}" e estado "${c.estado}".</p>\n\n2. <h3>Sua Diretriz de Faturamento</h3>\n<p>Como seu talento gera faturamento com menos desgaste. Concreto e específico para o perfil ${c.expression}.</p>\n\n3. <h3>Seu Posicionamento de Autoridade</h3>\n<p>Como você deve se posicionar. O que o mercado enxerga quando você opera no padrão natural.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Uma ação concreta esta semana.</p></div>`);if(t&&t.trim().length>50)setContent(['c-tal','pdf-tal-body'],t);else setContent(['c-tal','pdf-tal-body'],fbT(c));}
   catch(e){setContent(['c-tal','pdf-tal-body'],fbT(c));}
 }
@@ -1366,7 +1606,7 @@ async function aiBloquio(c){
 
 async function aiPlano(c){
   ['c-plan','pdf-plan-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="sk"><div class="skl" style="width:80%"></div><div class="skl" style="width:60%"></div><div class="skl" style="width:90%"></div></div>';});
-  const tn=TN[c.expression]||'';
+  const tn=getTN(c.expression,c.gender)||TN[c.expression]||'';
   try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Plano de 90 Dias. Retorne APENAS JSON puro:\n{"fase1":{"titulo":"título fase 1","semanas":[{"titulo":"Semana 1: título","acoes":["ação1","ação2","ação3"]},{"titulo":"Semana 2: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 3: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 4: título","acoes":["a1","a2","a3"]}]},"fase2":{"titulo":"título fase 2","semanas":[{"titulo":"Semana 5: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 6: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 7: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 8: título","acoes":["a1","a2","a3"]}]},"fase3":{"titulo":"título fase 3","semanas":[{"titulo":"Semana 9: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 10: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 11: título","acoes":["a1","a2","a3"]},{"titulo":"Semana 12: título","acoes":["a1","a2","a3"]}]}}\nAções específicas para: perfil ${c.expression} (${tn}), ocupação "${c.ocup}", estado "${c.estado}", sonho "${c.sonho||'crescer'}". Use o nome "${c.apelido}". Verbos de ação, concreto e mensurável.`);
     const plan=JSON.parse(t.replace(/```json|```/g,'').trim());
     const html=renderPlan(plan);
@@ -1377,10 +1617,10 @@ async function aiPlano(c){
 function renderPlan(p){return[{k:'fase1',l:'Fase 1',per:'Dias 1–30'},{k:'fase2',l:'Fase 2',per:'Dias 31–60'},{k:'fase3',l:'Fase 3',per:'Dias 61–90'}].map((f,fi)=>{const fase=p[f.k];if(!fase)return'';const wks=(fase.semanas||[]).map((s,si)=>`<div class="pw"><div class="pwl">Semana ${fi*4+si+1}</div><div class="pwt">${s.titulo}</div><ul class="pwa">${(s.acoes||[]).map(a=>`<li>${a}</li>`).join('')}</ul></div>`).join('');return`<div class="pphase"><div class="pph-hdr"><div class="pph-n">${fi+1}</div><div><div class="pph-lbl">${f.l} · ${f.per}</div><div class="pph-title">${fase.titulo}</div></div></div><div class="pph-body">${wks}</div></div>`;}).join('');}
 
 /* FALLBACKS */
-function fbT(c){const tn=TN[c.expression]||'';return`<h3>${tn}</h3><p>Você funciona como <strong>${tn}</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você, ${c.apelido}, tem uma forma específica de gerar valor que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia fora do seu padrão natural.</p><p>Quando você opera dentro do seu perfil natural, sua entrega é exponencialmente superior à média. Trabalhar contra esse padrão — assumindo funções que não o refletem, aceitando qualquer trabalho ou tentando ser o que não é — é a principal causa de estagnação de faturamento.</p><h3>Sua Diretriz de Faturamento</h3><p>O mercado paga mais por especialistas posicionados com clareza. Você gera valor máximo como ${tn} quando filtra suas atividades por alinhamento com o seu padrão — não quando aceita tudo que chega. Cada vez que você diz sim para algo fora do seu perfil, está dizendo não para o faturamento que te pertence.</p><h3>Seu Posicionamento de Autoridade</h3><p>Sua autoridade se constrói pela consistência de entrega dentro do seu padrão. O mercado reconhece especialistas — não generalistas. Posicione-se como referência onde o seu perfil é o diferencial competitivo.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Audite sua agenda desta semana: quantas horas refletem o seu padrão como ${tn}? Se menos de 50%, reposicione imediatamente. O faturamento segue o alinhamento.</p></div>`;}
+function fbT(c){const tn=getTN(c.expression,c.gender)||TN[c.expression]||'';return`<h3>${tn}</h3><p>Você funciona como <strong>${tn}</strong> — e esse é o seu caminho de menor resistência para o crescimento financeiro. Você, ${c.apelido}, tem uma forma específica de gerar valor que, quando alinhada com suas atividades diárias, reduz o seu desgaste e aumenta o seu retorno de forma consistente. O problema não é a sua capacidade — é que você provavelmente está aplicando energia fora do seu padrão natural.</p><p>Quando você opera dentro do seu perfil natural, sua entrega é exponencialmente superior à média. Trabalhar contra esse padrão — assumindo funções que não o refletem, aceitando qualquer trabalho ou tentando ser o que não é — é a principal causa de estagnação de faturamento.</p><h3>Sua Diretriz de Faturamento</h3><p>O mercado paga mais por especialistas posicionados com clareza. Você gera valor máximo como ${tn} quando filtra suas atividades por alinhamento com o seu padrão — não quando aceita tudo que chega. Cada vez que você diz sim para algo fora do seu perfil, está dizendo não para o faturamento que te pertence.</p><h3>Seu Posicionamento de Autoridade</h3><p>Sua autoridade se constrói pela consistência de entrega dentro do seu padrão. O mercado reconhece especialistas — não generalistas. Posicione-se como referência onde o seu perfil é o diferencial competitivo.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Audite sua agenda desta semana: quantas horas refletem o seu padrão como ${tn}? Se menos de 50%, reposicione imediatamente. O faturamento segue o alinhamento.</p></div>`;}
 function fbD(c){const dn=DN[c.destiny]||'';return`<h3>${dn}</h3><p>Sua direção estratégica aponta para <strong>${dn}</strong>. Essa é a trajetória com maior probabilidade de retorno financeiro para o seu perfil específico, ${c.apelido}. Quando você trabalha alinhada com essa direção, o faturamento vem com mais naturalidade e menos desgaste. Quando você trabalha contra ela, gasta o dobro de energia para metade do resultado.</p><p>No seu estado atual de <strong>${c.estado||'transição'}</strong>, alinhar suas ações com essa direção é a diferença entre remar contra a maré e surfar a onda certa. Você não está faltando esforço — está faltando direção. E direção certa muda tudo.</p><h3>Cenário de Retorno Financeiro</h3><p>O retorno mais previsível para você, com essa direção, vem de posicionamentos onde você atua como referência dentro do seu padrão. Antes de tentar escalar, construa autoridade percebida. O mercado não paga pelo seu esforço — paga pela sua direção estratégica.</p><h3>Sua Diretriz de Transição</h3><p>Você precisa eliminar serviços e clientes que não refletem sua direção. Concentre sua energia apenas no que ativa seu padrão natural. Essa transição exige a coragem de recusar o que não cabe.</p><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Qual nicho específico maximiza o seu perfil e a sua direção? Foque nele e recuse o restante nos próximos 30 dias.</p></div>`;}
 function fbB(c){const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';return`<h3>${cn}</h3><p>Seu padrão de bloqueio opera de forma sutil, ${c.apelido} — frequentemente mascarado de perfeccionismo, excesso de cuidado ou indecisão estratégica. O risco não é você travar de forma óbvia, mas repetir comportamentos antigos exatamente nos momentos de pressão ou de decisão financeira importante.</p><p>Os sabotadores que você reconhece em si mesmo — <strong>${c.sab||'identificados na análise'}</strong> — são manifestações desse padrão central. Eles surgem com mais força exatamente quando a oportunidade de crescimento está mais próxima. Não é coincidência.</p><h3>O Impacto no Seu Faturamento</h3><p>Com sua desvalorização em <strong>${c.desv}/10</strong> e facilidade de cobrança em <strong>${c.cob}/10</strong>, esse bloqueio está custando faturamento real todo mês. Sua estagnação não é falta de esforço — é desalinhamento somado a esse padrão de bloqueio.</p><h3>Seu Protocolo de Superação</h3><ul><li>Identifique a última decisão onde esse padrão surgiu e mapeie o gatilho específico que o ativou</li><li>Crie sua regra de decisão: "Se não ativa o meu padrão principal, eu recuso"</li><li>Revisão semanal de 15 minutos: o que operou dentro do padrão? O que ficou fora?</li><li>Encontre um par de responsabilidade que te confronte quando o bloqueio ressurgir</li></ul><div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Identifique agora: qual projeto ou cliente está ativando esse bloqueio hoje? Alinhe ou elimine. Não existe meio-termo quando o seu faturamento está em jogo.</p></div>`;}
-function fbPlan(c){const tn=TN[c.expression]||'seu perfil';return{fase1:{titulo:'Limpeza e Foco — Eliminar o que drena, ativar o que gera',semanas:[{titulo:'Semana 1: Auditoria de alinhamento',acoes:['Liste todas as atividades: ativa ou não o padrão '+tn,'Identifique os 3 projetos que mais consomem energia sem retorno','Mapeie decisões pendentes que o bloqueio adiou']},{titulo:'Semana 2: Eliminação estratégica',acoes:['Encerre ou renegocie pelo menos 1 contrato desalinhado com o padrão '+tn,'Reposicione sua oferta principal para refletir o seu talento natural','Defina nicho prioritário baseado na sua direção estratégica']},{titulo:'Semana 3: Posicionamento inicial',acoes:['Reescreva sua bio profissional alinhada ao seu padrão como '+tn,'Atualize proposta de valor com linguagem de autoridade','Mapeie 5 oportunidades alinhadas com sua direção']},{titulo:'Semana 4: Consolidação da base',acoes:['Organize processos que liberam tempo para trabalho de alto valor','Defina política de preços alinhada ao valor do seu padrão','Planeje o mês 2 com base no seu código anual '+c.personalYear]}]},fase2:{titulo:'Execução e Posicionamento — Construir autoridade percebida',semanas:[{titulo:'Semana 5: Lançamento de autoridade',acoes:['Crie e distribua conteúdo de autoridade alinhado ao seu padrão','Faça 5 conversas estratégicas com potenciais clientes ideais','Apresente nova oferta posicionada para pelo menos 3 pessoas']},{titulo:'Semana 6: Expansão de relacionamentos',acoes:['Mapeie sua rede: quem impulsiona e quem drena o seu padrão','Agende reuniões com 3 parceiros estratégicos potenciais','Implemente processo de indicação ativa com clientes alinhados']},{titulo:'Semana 7: Refinamento da oferta',acoes:['Colete feedback sobre o valor percebido','Ajuste preço baseado no posicionamento do seu padrão','Crie um caso de sucesso documentado para uso em vendas']},{titulo:'Semana 8: Revisão e aceleração',acoes:['Meça resultados das semanas 5–7: o que gerou mais retorno?','Duplique esforço no canal mais efetivo','Prepare estratégia de escala para o mês 3']}]},fase3:{titulo:'Escala e Consolidação — Faturamento previsível e autoridade sólida',semanas:[{titulo:'Semana 9: Escala da oferta principal',acoes:['Lance versão de maior valor da oferta principal','Implemente processo de vendas estruturado para o seu padrão','Defina meta de faturamento específica para os próximos 90 dias']},{titulo:'Semana 10: Sistemas de crescimento',acoes:['Documente processos que mais geram resultado','Delegue atividades operacionais que não ativam seu talento principal','Crie ritmo semanal de prospecção alinhado ao seu código anual '+c.personalYear]},{titulo:'Semana 11: Autoridade de mercado',acoes:['Publique posicionamento de autoridade em pelo menos 2 canais','Solicite depoimentos estratégicos que validam o seu padrão','Mapeie próximas oportunidades de parceria de alto valor']},{titulo:'Semana 12: Balanço e próximo ciclo',acoes:['Meça resultado dos 90 dias: faturamento, posicionamento, energia','Identifique o que funcionou e o que precisa de ajuste fino','Planeje próximos 90 dias com base no código anual '+(c.personalYear===9?1:c.personalYear+1)]}]}}}
+function fbPlan(c){const tn=getTN(c.expression,c.gender)||TN[c.expression]||'seu perfil';return{fase1:{titulo:'Limpeza e Foco — Eliminar o que drena, ativar o que gera',semanas:[{titulo:'Semana 1: Auditoria de alinhamento',acoes:['Liste todas as atividades: ativa ou não o padrão '+tn,'Identifique os 3 projetos que mais consomem energia sem retorno','Mapeie decisões pendentes que o bloqueio adiou']},{titulo:'Semana 2: Eliminação estratégica',acoes:['Encerre ou renegocie pelo menos 1 contrato desalinhado com o padrão '+tn,'Reposicione sua oferta principal para refletir o seu talento natural','Defina nicho prioritário baseado na sua direção estratégica']},{titulo:'Semana 3: Posicionamento inicial',acoes:['Reescreva sua bio profissional alinhada ao seu padrão como '+tn,'Atualize proposta de valor com linguagem de autoridade','Mapeie 5 oportunidades alinhadas com sua direção']},{titulo:'Semana 4: Consolidação da base',acoes:['Organize processos que liberam tempo para trabalho de alto valor','Defina política de preços alinhada ao valor do seu padrão','Planeje o mês 2 com base no seu código anual '+c.personalYear]}]},fase2:{titulo:'Execução e Posicionamento — Construir autoridade percebida',semanas:[{titulo:'Semana 5: Lançamento de autoridade',acoes:['Crie e distribua conteúdo de autoridade alinhado ao seu padrão','Faça 5 conversas estratégicas com potenciais clientes ideais','Apresente nova oferta posicionada para pelo menos 3 pessoas']},{titulo:'Semana 6: Expansão de relacionamentos',acoes:['Mapeie sua rede: quem impulsiona e quem drena o seu padrão','Agende reuniões com 3 parceiros estratégicos potenciais','Implemente processo de indicação ativa com clientes alinhados']},{titulo:'Semana 7: Refinamento da oferta',acoes:['Colete feedback sobre o valor percebido','Ajuste preço baseado no posicionamento do seu padrão','Crie um caso de sucesso documentado para uso em vendas']},{titulo:'Semana 8: Revisão e aceleração',acoes:['Meça resultados das semanas 5–7: o que gerou mais retorno?','Duplique esforço no canal mais efetivo','Prepare estratégia de escala para o mês 3']}]},fase3:{titulo:'Escala e Consolidação — Faturamento previsível e autoridade sólida',semanas:[{titulo:'Semana 9: Escala da oferta principal',acoes:['Lance versão de maior valor da oferta principal','Implemente processo de vendas estruturado para o seu padrão','Defina meta de faturamento específica para os próximos 90 dias']},{titulo:'Semana 10: Sistemas de crescimento',acoes:['Documente processos que mais geram resultado','Delegue atividades operacionais que não ativam seu talento principal','Crie ritmo semanal de prospecção alinhado ao seu código anual '+c.personalYear]},{titulo:'Semana 11: Autoridade de mercado',acoes:['Publique posicionamento de autoridade em pelo menos 2 canais','Solicite depoimentos estratégicos que validam o seu padrão','Mapeie próximas oportunidades de parceria de alto valor']},{titulo:'Semana 12: Balanço e próximo ciclo',acoes:['Meça resultado dos 90 dias: faturamento, posicionamento, energia','Identifique o que funcionou e o que precisa de ajuste fino','Planeje próximos 90 dias com base no código anual '+(c.personalYear===9?1:c.personalYear+1)]}]}}}
 
 function testarURL(){const url=SHEETS_READ_URL+'&t='+Date.now();const win=window.open(url,'_blank');if(!win)alert('Cole esta URL:\n\n'+url);}
 function abrirPDF(){
@@ -1392,7 +1632,7 @@ function abrirPDF(){
   const gs = (id) => { const el = document.getElementById(id); return el ? el.innerText : ''; };
 
   const nome = cl.apelido || cl.nome || '—';
-  const tn = TN[cl.expression] || '—';
+  const tn = getTN(cl.expression, cl.gender) || TN[cl.expression] || '—';
   const dn = DN[cl.destiny] || '—';
   const mn = MN2[cl.soul] || '—';
   const py = CT[cl.personalYear] || '—';
@@ -1708,21 +1948,22 @@ body{background:#d8d4cc;padding:52px 20px 40px}
     <h2 class="intro-h">Entendendo o seu<br><em>Código de Carreira</em></h2>
     <div class="intro-div"></div>
     <p class="intro-p">Este documento é o resultado de uma análise individual e exclusiva. Ele não é um teste genérico nem um relatório automático — é um <strong>mapa estratégico</strong> construído a partir dos seus padrões únicos de funcionamento, comportamento e direção profissional.</p>
-    <p class="intro-p">Ao longo de mais de 4 mil atendimentos nos últimos 7 anos, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza — e mostrar o caminho de menor resistência para o seu crescimento.</p>
+    <p class="intro-p">Ao longo de mais de 4 mil atendimentos nos últimos 7 anos, identificamos que pessoas com determinados perfis tendem a tomar decisões parecidas, enfrentam os mesmos tipos de bloqueios e repetem ciclos semelhantes na carreira. Este diagnóstico foi construído para revelar esses padrões com clareza e mostrar o caminho de menor resistência para o seu crescimento.</p>
+    <p class="intro-p">A metodologia utilizada cruza três fontes de análise biográfica: o mapeamento do seu padrão natural de funcionamento a partir do nome completo de batismo, o mapeamento dos ciclos e fases da sua trajetória a partir da data de nascimento, e as informações sobre o seu momento atual fornecidas no formulário. O cruzamento dessas três camadas gera um diagnóstico único, impossível de ser replicado para outra pessoa.</p>
     <div class="intro-box">
       <div class="intro-box-title">Como ler e usar este relatório</div>
       <ul class="intro-list">
-        <li><strong>Talento Principal</strong> — Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira.</li>
-        <li><strong>Direção Estratégica</strong> — A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
-        <li><strong>Pontos de Bloqueio</strong> — Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
-        <li><strong>Linha do Tempo e Ciclos</strong> — O timing natural da sua trajetória e o que o momento pede de você agora.</li>
-        <li><strong>Calendário Pessoal</strong> — O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
-        <li><strong>Plano de 90 Dias</strong> — Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
+        <li><strong>Talento Principal</strong>: Seu padrão de maior geração de valor. É o ponto de partida para qualquer decisão de carreira.</li>
+        <li><strong>Direção Estratégica</strong>: A trajetória com maior probabilidade de retorno financeiro. Funciona como um GPS profissional.</li>
+        <li><strong>Pontos de Bloqueio</strong>: Os padrões que estão travando seu faturamento. Identificar é o primeiro passo para superar.</li>
+        <li><strong>Linha do Tempo e Ciclos</strong>: O timing natural da sua trajetória e o que o momento pede de você agora.</li>
+        <li><strong>Calendário Pessoal</strong>: O termômetro mensal. Cada mês tem uma energia que, quando aproveitada, maximiza seus resultados.</li>
+        <li><strong>Plano de 90 Dias</strong>: Um roteiro prático, semana a semana, baseado no seu perfil e momento atual.</li>
       </ul>
     </div>
     <div class="intro-quote">
       <div class="intro-quote-text">"Direção estratégica não é privilégio.<br>É uma escolha."</div>
-      <div class="intro-quote-author">Código de Carreira · Diagnóstico Estratégico</div>
+      <div class="intro-quote-author">Código de Carreira</div>
     </div>
   </div>
 </div>
@@ -1790,7 +2031,7 @@ body{background:#d8d4cc;padding:52px 20px 40px}
     <p class="cta-body">Você agora tem o diagnóstico mais preciso que já teve sobre sua carreira. Mas clareza sem execução vira frustração. A maioria das pessoas lê um relatório como este e volta para o piloto automático em 7 dias. A mentoria existe para garantir que isso não aconteça com você.</p>
     <div class="cta-grid">
       <div class="cta-card"><div class="cta-icon">🎯</div><div class="cta-card-title">3 Encontros Individuais</div><div class="cta-card-desc">Sessões exclusivas construídas em cima do seu diagnóstico. Cada encontro tem objetivo claro e ações práticas baseadas no seu perfil específico.</div></div>
-      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrão de bloqueio ressurgir — e ele vai — você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
+      <div class="cta-card"><div class="cta-icon">⚡</div><div class="cta-card-title">Ajustes em Tempo Real</div><div class="cta-card-desc">Quando o padrão de bloqueio ressurgir, e ele vai ressurgir, você terá suporte direto para corrigir a rota antes de perder tempo e faturamento.</div></div>
       <div class="cta-card"><div class="cta-icon">📈</div><div class="cta-card-title">Foco Total em Faturamento</div><div class="cta-card-desc">Cada decisão será validada com base no seu perfil. Sem estratégia genérica — só o que funciona para o seu código específico.</div></div>
       <div class="cta-card"><div class="cta-icon">🔒</div><div class="cta-card-title">Exclusividade Total</div><div class="cta-card-desc">Acompanhamento 100% individual e confidencial. Espaço seguro para trabalhar os pontos mais profundos do seu padrão de crescimento.</div></div>
     </div>
