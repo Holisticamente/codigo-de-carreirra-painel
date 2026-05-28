@@ -1406,22 +1406,19 @@ function abrirPDF(){
   const menBody = gt('pdf-men-body') || gt('c-men')  || '';
   const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
   
-  // Split plan into fase1 and fases 2+3 for separate pages
+  // Split plan into 3 separate pages — one per phase
   function extractFase(html, faseNum) {
     if(!html) return '';
     const parser = new DOMParser();
     const doc = parser.parseFromString('<div>' + html + '</div>', 'text/html');
     const phases = doc.querySelectorAll('.pphase');
-    if(faseNum === 1) {
-      return phases[0] ? phases[0].outerHTML : html;
-    } else {
-      let result = '';
-      for(let i = 1; i < phases.length; i++) result += phases[i].outerHTML;
-      return result || html;
-    }
+    if(phases.length === 0) return html;
+    const idx = faseNum - 1;
+    return phases[idx] ? phases[idx].outerHTML : '';
   }
   const planFase1 = extractFase(planBody, 1);
-  const planFase23 = extractFase(planBody, 2);
+  const planFase2 = extractFase(planBody, 2);
+  const planFase3 = extractFase(planBody, 3);
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
@@ -1772,10 +1769,16 @@ body{background:#d8d4cc;padding:52px 20px 40px}
   <div class="sbody" id="plan-fase1">${planFase1}</div>
 </div>
 
-<!-- 06 PLANO - FASES 2 E 3 -->
+<!-- 06 PLANO - FASE 2 -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS (continuação)</div></div>
-  <div class="sbody" id="plan-fase23" style="padding-top:36px">${planFase23}</div>
+  <div class="sbody" id="plan-fase2" style="padding-top:36px">${planFase2}</div>
+</div>
+
+<!-- 06 PLANO - FASE 3 -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 06 — PLANO DE 90 DIAS (continuação)</div></div>
+  <div class="sbody" id="plan-fase3" style="padding-top:36px">${planFase3}</div>
 </div>
 
 <!-- CTA -->
