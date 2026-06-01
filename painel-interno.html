@@ -1641,13 +1641,14 @@ function fbT(c){
   const tn=getTN(c.expression,c.gender)||TN[c.expression]||'';
   const arch=ARCH_DESC[c.expression]||'';
   const nom=c.apelido||c.nome||'você';
+  const p='font-family:Lato,sans-serif;font-size:14px;color:#1a1810;line-height:1.85;margin-bottom:14px';
   return '<h3>'+tn+'</h3>'
-  +'<p style="font-family:\'Lato\',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:14px">'+arch+'</p>'
+  +'<p style="'+p+'">'+arch+'</p>'
   +'<h3>Como isso aparece na vida de '+nom+'</h3>'
-  +'<p style="font-family:\'Lato\',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:14px">Quando você olha para a sua trajetória com esse olhar, muita coisa faz sentido de um jeito que não fazia antes. Os momentos em que você se sentiu mais viva, mais produtiva, mais satisfeita provavelmente foram momentos em que você estava operando dentro desse padrão. Os momentos de frustração e esgotamento provavelmente foram momentos em que você estava trabalhando contra ele.</p>'
-  +'<p style="font-family:\'Lato\',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:14px">O que você faz com isso agora? Primeiro, para de se cobrar por não ser o que não é. Segundo, começa a filtrar suas atividades, clientes e oportunidades pelo critério mais simples e mais poderoso que existe: isso ativa o meu padrão natural ou vai contra ele?</p>'
+  +'<p style="'+p+'">Quando você olha para a sua trajetória com esse olhar, muita coisa faz sentido de um jeito que não fazia antes. Os momentos em que você se sentiu mais viva, mais produtiva, mais satisfeita provavelmente foram momentos em que você estava operando dentro desse padrão. Os momentos de frustração e esgotamento provavelmente foram momentos em que você estava trabalhando contra ele.</p>'
+  +'<p style="'+p+'">O que você faz com isso agora? Primeiro, para de se cobrar por não ser o que não é. Segundo, começa a filtrar suas atividades, clientes e oportunidades pelo critério mais simples que existe: isso ativa o meu padrão natural ou vai contra ele?</p>'
   +'<h3>Por onde começar</h3>'
-  +'<p style="font-family:\'Lato\',sans-serif;font-size:14px;color:var(--text);line-height:1.85">Olha para a sua semana atual. Das atividades que você faz, quantas refletem genuinamente quem você é como '+tn+'? Se a resposta for menos da metade, você encontrou o primeiro ponto de mudança. Não é sobre trabalhar mais. É sobre trabalhar mais parecido com você.</p>'
+  +'<p style="'+p+'">Olha para a sua semana atual. Das atividades que você faz, quantas refletem genuinamente quem você é como '+tn+'? Se a resposta for menos da metade, você encontrou o primeiro ponto de mudança. Não é sobre trabalhar mais. É sobre trabalhar mais parecido com você.</p>'
   +'<div class="ical"><div class="ical-lbl">Para refletir agora</div>'
   +'<p>Qual foi a última vez que você fez algo e sentiu que o tempo passou voando? O que era? Essa resposta tem muito a dizer sobre onde está o seu talento real.</p></div>';
 }
