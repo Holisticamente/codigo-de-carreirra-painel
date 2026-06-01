@@ -1433,28 +1433,7 @@ function buildTL(c){
 </div>`;
   }
 
-  // FULL TABLE
-  let tbl = `<table style="width:100%;border-collapse:collapse;margin-top:16px">
-<thead><tr>
-  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Período</th>
-  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Tipo</th>
-  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Código</th>
-  <th style="font-family:'Lato',sans-serif;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:10px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:700">Intervalo</th>
-</tr></thead><tbody>`;
-
-  [...c.cycles,...c.pinnacles,...c.challenges].forEach(x=>{
-    const isc=ag>=x.start&&(x.end===null||ag<=x.end);
-    const t=x.label.includes('Ciclo')?'Ciclo':x.label.includes('Pináculo')?'Pináculo':'Desafio';
-    const name = t==='Desafio' ? (CH[x.num]||'—') : tn(x.num);
-    const bg = isc ? 'background:rgba(176,138,62,.08);font-weight:700' : '';
-    tbl+=`<tr style="${bg}">
-      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${isc?'<span style="display:inline-block;font-size:8px;padding:2px 7px;background:#0c0b08;color:#e8c870;letter-spacing:1px;font-family:\'Lato\',sans-serif">ATUAL</span> ':''}${x.label}</td>
-      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${t}</td>
-      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${name}</td>
-      <td style="font-family:'Lato',sans-serif;padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px">${x.start}–${x.end??'∞'} anos</td>
-    </tr>`;
-  });
-  tbl+='</tbody></table>';
+  const tbl = ''; // tabela histórica removida
 
   const html = intro + cards + interp + transition + tbl;
 
@@ -1479,7 +1458,7 @@ function buildTL(c){
   if(_ptlb2)  _ptlb2.innerHTML  = interpMain + transition;
   var _ptlm = document.getElementById('pdf-tl-mission');
   if(_ptlm)   _ptlm.innerHTML   = interpMission;
-  if(_ptlt)   _ptlt.innerHTML   = tbl;
+  // tabela histórica removida
 }
 
 function buildMen(c){
@@ -2091,11 +2070,6 @@ body{background:#d8d4cc;padding:52px 20px 40px}
   <div class="sbody" style="padding-top:36px">${tlBodyMission}</div>
 </div>
 
-<!-- 04 LINHA DO TEMPO - P5: histórico completo -->
-<div class="pg">
-  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, HISTÓRICO COMPLETO</div></div>
-  <div class="sbody" style="padding-top:36px">${tlBody3}</div>
-</div>
 
 <!-- 05 CALENDARIO - P1 -->
 <div class="pg">
