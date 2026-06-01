@@ -832,6 +832,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   </div>
   <div id="pdf-tl-body2" style="display:none"></div>
   <div id="pdf-tl-body-cards" style="display:none"></div>
+  <div id="pdf-tl-mission" style="display:none"></div>
   <div class="sec-body" id="pdf-tl-body">
     <div class="tl-intro">
       <div class="tl-intro-title">Como ler esta seção</div>
@@ -1462,9 +1463,22 @@ function buildTL(c){
   var _ptlb1b = document.getElementById('pdf-tl-body-cards');
   var _ptlb2 = document.getElementById('pdf-tl-body2');
   var _ptlt  = document.getElementById('pdf-tl-table');
-  if(_ptlb)   _ptlb.innerHTML   = intro;
-  if(_ptlb1b) _ptlb1b.innerHTML = cards;
-  if(_ptlb2)  _ptlb2.innerHTML  = interp + transition;
+  // Split interp: first 3 blocks (Ciclo, Pináculo, Desafio) + last block (Missão)
+  var interpParts = interp.split('</div>\n<div style');
+  var interpMain = '';
+  var interpMission = '';
+  if(interpParts.length >= 4){
+    interpMain = interpParts.slice(0,3).join('</div>\n<div style') + '</div>';
+    interpMission = '<div style' + interpParts.slice(3).join('</div>\n<div style');
+  } else {
+    interpMain = interp;
+  }
+  
+  if(_ptlb)   _ptlb.innerHTML   = intro + cards;
+  if(_ptlb1b) _ptlb1b.innerHTML = '';
+  if(_ptlb2)  _ptlb2.innerHTML  = interpMain + transition;
+  var _ptlm = document.getElementById('pdf-tl-mission');
+  if(_ptlm)   _ptlm.innerHTML   = interpMission;
   if(_ptlt)   _ptlt.innerHTML   = tbl;
 }
 
@@ -1699,10 +1713,11 @@ function abrirPDF(){
   const talBody = gt('pdf-tal-body') || gt('c-tal') || '';
   const dirBody = gt('pdf-dir-body') || gt('c-dir') || '';
   const blqBody = gt('pdf-blq-body') || gt('c-blq') || '';
-  const tlBody1     = gt('pdf-tl-body') || '';
-  const tlBodyCards = gt('pdf-tl-body-cards') || '';
-  const tlBody2     = gt('pdf-tl-body2') || '';
-  const tlBody3     = gt('pdf-tl-table') || '';
+  const tlBody1       = gt('pdf-tl-body') || '';
+  const tlBodyCards   = gt('pdf-tl-body-cards') || '';
+  const tlBody2       = gt('pdf-tl-body2') || '';
+  const tlBodyMission = gt('pdf-tl-mission') || '';
+  const tlBody3       = gt('pdf-tl-table') || '';
   const menBody1 = gt('pdf-men-body') || '';
   const menBody2 = gt('pdf-men-body2') || '';
   const planBody= gt('pdf-plan-body')|| gt('c-plan') || '';
@@ -2057,26 +2072,26 @@ body{background:#d8d4cc;padding:52px 20px 40px}
   <div class="sbody">${blqBody}</div>
 </div>
 
-<!-- <!-- 04 LINHA DO TEMPO - P1: explicação -->
+<!-- 04 LINHA DO TEMPO - P1: explicação + cards -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, LINHA DO TEMPO E CICLOS</div></div>
   <div class="shdr"><div class="shdr-eye">04, Timing Estratégico</div><h2 class="shdr-title">Linha do Tempo e <em>Ciclos</em></h2><p class="shdr-sub">Em qual estação da sua vida você está, e o que ela pede de você agora.</p></div>
-  <div class="sbody">${tlBody1}</div>
+  <div class="sbody">${tlBody1}${tlBodyCards}</div>
 </div>
 
-<!-- 04 LINHA DO TEMPO - P2: cards ativos -->
-<div class="pg">
-  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, SEUS CICLOS ATIVOS</div></div>
-  <div class="sbody" style="padding-top:36px">${tlBodyCards}</div>
-</div>
-
-<!-- 04 LINHA DO TEMPO - P3: o que cada ciclo significa -->
+<!-- 04 LINHA DO TEMPO - P3: ciclo, pináculo, desafio -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, O QUE CADA CICLO SIGNIFICA</div></div>
   <div class="sbody" style="padding-top:36px">${tlBody2}</div>
 </div>
 
-<!-- 04 LINHA DO TEMPO - P4: histórico completo -->
+<!-- 04 LINHA DO TEMPO - P4: código de vida -->
+<div class="pg">
+  <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, SEU CÓDIGO DE VIDA</div></div>
+  <div class="sbody" style="padding-top:36px">${tlBodyMission}</div>
+</div>
+
+<!-- 04 LINHA DO TEMPO - P5: histórico completo -->
 <div class="pg">
   <div class="phdr"><div class="phdr-brand">Código de Carreira</div><div class="phdr-client">${nome.toUpperCase()} · 04, HISTÓRICO COMPLETO</div></div>
   <div class="sbody" style="padding-top:36px">${tlBody3}</div>
