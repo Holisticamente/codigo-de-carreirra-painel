@@ -234,6 +234,11 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
         <label>Como você descreveria seu estado atual com a carreira?</label>
         <div class="rg" id="f_estado"></div>
       </div>
+      <div class="fg">
+        <label>Como você se sente ao acordar para trabalhar na segunda-feira?</label>
+        <div class="scrow" id="sc_seg"></div>
+        <div class="scends"><span>Com o estômago pesado</span><span>Com energia e vontade</span></div>
+      </div>
       <div class="frow">
         <div class="fg">
           <label>Há quanto tempo você está nesse estado?</label>
@@ -288,6 +293,10 @@ body{background:var(--bg);color:var(--text);font-family:'IBM Plex Mono',monospac
       <div class="fg">
         <label>Na sua percepção, o que está impedindo você de chegar lá?</label>
         <textarea id="f_bloq" placeholder="O que você acredita que é o obstáculo real entre onde está e onde quer chegar..."></textarea>
+      </div>
+      <div class="fg">
+        <label>Se você tivesse que resumir sua relação com a carreira em uma palavra, qual seria?</label>
+        <div class="rg" id="f_palavra"></div>
       </div>
     </div>
 
@@ -462,6 +471,16 @@ function initForm(){
     {v:'misto',l:'Quero reconhecimento mas tenho dificuldade de me mostrar'},
     {v:'evita',l:'Evito exposição — prefiro fazer bem feito no silêncio'},
   ],'visib');
+  bScale('sc_seg');
+  bRadio('f_palavra',[
+    {v:'perdida',l:'Perdida'},
+    {v:'estagnada',l:'Estagnada'},
+    {v:'inquieta',l:'Inquieta'},
+    {v:'esgotada',l:'Esgotada'},
+    {v:'pronta',l:'Pronta para mudar'},
+    {v:'confusa',l:'Confusa'},
+    {v:'esperancosa',l:'Esperançosa'},
+  ],'palavra');
   bRadio('f_relac',[
     {v:'impulsionam',l:'Principalmente me impulsionam'},
     {v:'misto',l:'Misto — algumas constroem, outras drenam'},
@@ -502,6 +521,7 @@ async function enviarFormulario(){
     modelo: document.getElementById('f_modelo').value,
     fat: document.getElementById('f_fat').value,
     fatd: document.getElementById('f_fatd').value,
+    seg: gSc('sc_seg'),
     estado: gRad('estado'),
     tempo: document.getElementById('f_tempo').value,
     tent: gChk('f_tent').join(', '),
@@ -512,6 +532,7 @@ async function enviarFormulario(){
     dor: document.getElementById('f_dor').value.trim(),
     sonho: document.getElementById('f_sonho').value.trim(),
     bloq: document.getElementById('f_bloq').value.trim(),
+    palavra: gRad('palavra'),
     en: gSc('sc_en'),
     relac: gRad('relac'),
     cob: gSc('sc_cob'),
