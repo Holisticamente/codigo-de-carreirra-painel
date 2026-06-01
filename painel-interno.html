@@ -1718,7 +1718,9 @@ function abrirPDF(){
     return phases[idx] ? phases[idx].outerHTML : '';
   }
   const planFase1 = extractFase(planBody, 1);
-  const planFase2 = extractFasconst html = `<!DOCTYPE html>
+  const planFase2 = extractFase(planBody, 2);
+  const planFase3 = extractFase(planBody, 3);
+  const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
