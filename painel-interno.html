@@ -539,7 +539,7 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .pdf-page-wrap{
   width:210mm;margin:0 auto 24px;
   box-shadow:0 4px 24px rgba(0,0,0,.15);
-  overflow:hidden;
+  overflow:visible;
 }
 @media print{
   .hdr,.client-actions,.no-print,#sc-login,#sc-dash{display:none!important}
@@ -1271,18 +1271,18 @@ const TN_M={1:'O Pioneiro',2:'O Parceiro Estratégico',3:'O Comunicador',4:'O Ar
 function getTN(n, gender){ return (gender==='feminino' ? TN_F[n] : TN_M[n]) || TN[n] || String(n); }
 
 const ARCH_DESC={
-  1:'Você é o tipo de pessoa que não espera. Enquanto outros ainda estão pensando, você já está fazendo. Essa característica é uma dádiva, mas só funciona quando você está no lugar certo. Quando está errado, parece teimosia. Quando está certo, parece genialidade. O momento pede que você confie no seu instinto e aja, mesmo sem ter tudo resolvido.',
-  2:'Você tem um dom raro: consegue fazer pessoas muito diferentes se entenderem. Onde tem conflito, você enxerga solução. Onde tem confusão, você encontra o fio que organiza tudo. Sua força não está em aparecer, está em fazer as coisas funcionarem. O momento pede que você construa pontes e aposte em parcerias reais.',
-  3:'Palavras são a sua ferramenta mais poderosa. Seja escrevendo, falando, ensinando ou simplesmente conversando, você tem a capacidade de fazer as pessoas sentirem algo. Isso vale muito mais do que você imagina. O momento pede presença, expressão e coragem de se mostrar para o mundo.',
-  4:'Você é o alicerce. Não o mais barulhento, mas o mais sólido. Tem uma capacidade natural de criar estrutura onde tem caos, de transformar ideias soltas em algo concreto que funciona. O que você constrói dura. O momento pede paciência, método e consistência, que são exatamente o que você tem de melhor.',
-  5:'Você vê o que está por vir antes dos outros. Tem uma antena ligada para mudanças, tendências e possibilidades que ainda não existem. Isso pode parecer inquietação para quem está ao redor, mas é na verdade visão de futuro. O momento pede movimento, abertura para o novo e coragem de experimentar.',
-  6:'Você cuida com uma profundidade que poucas pessoas têm. Quando se compromete com algo ou alguém, vai fundo de verdade. Esse cuidado cria laços de lealdade que dinheiro não compra. O momento pede que você invista na qualidade do que entrega e nas relações que constrói.',
-  7:'Você não fica na superfície. Enquanto a maioria está satisfeita com respostas rasas, você precisa entender de verdade, ir até o fundo da questão. Essa profundidade é o que transforma você em referência com o tempo. O momento pede estudo, silêncio e aprofundamento no que você já sabe.',
-  8:'Você nasceu para resultados. Tem uma capacidade natural de transformar competência em autoridade e autoridade em retorno real. Não é arrogância, é clareza. O momento pede que você assuma o espaço que é seu, cobre o que vale e pare de se esconder atrás da humildade.',
-  9:'Você pensa grande, pensa em todo mundo, pensa no impacto que vai deixar. Às vezes parece que o que você quer é grande demais, mas não é. É só diferente da maioria. O momento pede entrega generosa, finalização do que ficou pela metade e disposição para contribuir além do que você recebe de volta.',
-  11:'Você toca as pessoas de um jeito que vai além das palavras. Tem uma presença que muda o clima do ambiente. Isso é raro e é sua maior responsabilidade. O momento pede que você use essa influência com intenção, que apareça e inspire sem precisar explicar por quê.',
-  22:'Você pensa em escala. O que para outros parece um sonho grande demais, para você parece só uma questão de tempo e organização. Tem a capacidade de construir coisas que duram muito além de você. O momento pede coragem para jogar no nível que você foi feito para jogar.',
-  0:'Este padrão é como um cabo de guerra interno. De um lado, uma força. Do outro, a força oposta. A tendência é oscilar entre os dois extremos sem encontrar o meio. A superação vem quando você aprende que não precisa escolher um lado. Pode integrar os dois.'
+  1:'<strong>O que é este perfil:</strong> O Pioneiro é a pessoa que abre caminhos. Enquanto a maioria espera ter certeza antes de agir, o Pioneiro já está no meio do caminho. Tem uma energia natural para começar coisas, liderar pelo exemplo e ir na frente mesmo sem ter todas as respostas. Não é impulsividade. É coragem de verdade. O problema é que quando esse perfil está sendo usado no lugar errado, ou sufocado por regras e hierarquias que não combinam com ele, parece inquietação sem fim.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você confie no seu instinto e aja, mesmo sem ter tudo resolvido. A sua maior armadilha é esperar a hora perfeita. Ela não vai chegar. A hora certa é quando você decide que é hora.',
+  2:'<strong>O que é este perfil:</strong> O Parceiro Estratégico é a pessoa que faz as coisas funcionarem junto com outras pessoas. Tem um dom raro de sentir o que está faltando numa relação, num time, numa negociação. Onde tem atrito, você enxerga o caminho para a harmonia. Onde tem partes que não se falam, você é o fio que as conecta. Isso não é ser bonzinho. É uma habilidade estratégica que vale muito dinheiro quando bem posicionada.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você construa pontes e aposte em parcerias reais. Tentar fazer tudo sozinho é nadar contra a sua própria natureza.',
+  3:'<strong>O que é este perfil:</strong> O Comunicador é a pessoa que move outros com palavras. Seja escrevendo, falando, ensinando ou simplesmente contando uma história, você tem o poder de fazer as pessoas sentirem algo. Isso vale muito mais do que a maioria das pessoas percebe. O problema é que quando esse talento fica engavetado por medo de julgamento ou falta de direção, a pessoa sente um vazio difícil de nomear.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo presença, expressão e coragem de se mostrar para o mundo. Cada dia que você fica em silêncio é um dia que o seu maior talento fica guardado.',
+  4:'<strong>O que é este perfil:</strong> O Arquiteto é a pessoa que constrói coisas que duram. Não no sentido literal, mas no sentido de que você tem uma habilidade natural de pegar o caos e transformar em estrutura. Onde outros veem confusão, você enxerga um sistema esperando para ser montado. Onde tem ideias soltas, você vê como conectar os pontos. Esse talento é invísivel para quem tem, porque parece óbvio. Para quem não tem, é extraordinário.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo paciência, método e consistência. O que você constrói devagar e com cuidado dura décadas. O que você tenta construir com pressa desmorona na primeira chuva.',
+  5:'<strong>O que é este perfil:</strong> O Catalisador é a pessoa que vê o futuro antes dos outros. Tem uma antena natural para mudanças, tendências e possibilidades que ainda não existem. Para quem está ao redor, isso pode parecer inquietação. Para quem entende, é visão. O desafio desse perfil é que ele precisa de movimento. Quando fica parado por muito tempo, começa a murchar.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você se mova. Que experimente. Que quebre o que precisa ser quebrado. A estabilidade que você busca não vai vir de ficar no lugar. Vai vir de construir enquanto se move.',
+  6:'<strong>O que é este perfil:</strong> O Harmonizador é a pessoa que cuida de um jeito que transforma ambientes. Quando você está presente, as coisas ficam mais suaves, mais humanas, mais funcionais. Tem uma capacidade de criar vínculos de confiança que dinheiro não compra e que são, na prática, o ativo mais valioso de qualquer carreira ou negócio.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você invista na qualidade do que entrega e nas relações que constrói. Não na quantidade de coisas que faz, mas na profundidade com que faz cada uma.',
+  7:'<strong>O que é este perfil:</strong> O Estrategista é a pessoa que não fica na superfície. Enquanto a maioria está satisfeita com respostas rasas, você precisa entender de verdade, ir até o fundo da questão. Isso cria uma profundidade que, com o tempo, transforma quem a tem em referência absoluta na sua área. O problema é que esse perfil tende a se esconder atrás do conhecimento, estudando sem aparecer.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo estudo, silêncio e aprofundamento. Mas também está pedindo que você compartilhe o que sabe. Conhecimento guardado não serve para ninguém.',
+  8:'<strong>O que é este perfil:</strong> O Executivo é a pessoa que foi feita para resultados. Tem uma capacidade natural de transformar competência em autoridade e autoridade em retorno real. Não é arrogância, é clareza. Quando esse perfil está bem posicionado, as coisas acontecem. Quando está no lugar errado, a frustração é enorme porque a capacidade existe mas não encontra onde se expressar.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você assuma o espaço que é seu. Chefe o que vale. Ocupe o lugar que lhe pertence. Humildade em excesso é desperdício de talento.',
+  9:'<strong>O que é este perfil:</strong> O Visionário Humanista é a pessoa que pensa em todo mundo ao mesmo tempo. Tem uma visão ampla que vai além do seu próprio benefício. Isso cria um propósito profundo que muitos invejam, mas também um peso que poucos entendem. O desafio desse perfil é trazer os grandes sonhos para o concreto sem perder a essência.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo entrega generosa e finalização do que ficou pela metade. O impacto que você quer ter no mundo começa com o que você entrega hoje, não com o projeto perfeito que ainda está na sua cabeça.',
+  11:'<strong>O que é este perfil:</strong> O Inspirador Mestre é a pessoa que toca as outras de um jeito que vai além das palavras. Tem uma presença que muda o clima do ambiente. As pessoas saem de uma conversa com você sentindo que algo se moveu dentro delas. Esse é um dom raro e uma responsabilidade enorme.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você use essa influência com intenção. Que apareça e inspire sem precisar de palco ou microfone. A sua presença já é o palco.',
+  22:'<strong>O que é este perfil:</strong> O Arquiteto Mestre é a pessoa que constrói em escala. O que para outros parece um sonho grande demais, para você parece uma questão de tempo e organização. Tem a capacidade de transformar visões ambiciosas em realidade tangível e deixar uma marca que vai além da sua própria vida.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você jogue no nível que você foi feito para jogar. Projetos pequenos demais são um desperdício do que você tem.',
+  0:'<strong>O que é este padrão:</strong> O Equilíbrio Total é o padrão de quem vive entre dois extremos. É como uma gangorra onde de um lado fica uma força e do outro fica a força oposta. A tendência é saltar de um lado para o outro sem encontrar o meio. Isso não é fraqueza de caráter. É uma configuração específica que pede integração.<br><br><strong>O que significa agora:</strong> Este padrão está pedindo que você aprenda a ficar no centro mesmo quando a gangorra balance. A superação não vem de escolher um lado. Vem de sustentar os dois ao mesmo tempo.'
 };
 
 const CYC_DESC={
@@ -1386,24 +1386,27 @@ function buildTL(c){
 
   // INTERPRETATION BLOCKS
   const interp = `
-<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
-  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Ciclo atual</div>
-  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cc?tn(cc.num):'—'}</p>
-  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px">${cc?CYC_DESC[cc.num]||archDesc(cc.num):''}</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid var(--gold);padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Seu Ciclo de Vida atual: ${cc?tn(cc.num):'desconhecido'}</div>
+  <p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px">${cc?cc.label+' &middot; dos '+cc.start+' aos '+(cc.end?cc.end:'fim da vida')+' anos':''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">${cc?CYC_DESC[cc.num]||'':''}</p>
   <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cc?archDesc(cc.num):''}</p>
 </div>
-
-<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
-  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Pináculo atual</div>
-  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cp?tn(cp.num):'—'}</p>
-  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px">${cp?PIN_DESC[cp.num]||archDesc(cp.num):''}</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid #1e3558;padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Seu Pináculo atual: ${cp?tn(cp.num):'desconhecido'}</div>
+  <p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px">${cp?cp.label:''}</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85;margin-bottom:12px">${cp?PIN_DESC[cp.num]||'':''}</p>
   <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cp?archDesc(cp.num):''}</p>
 </div>
-
-<div style="background:var(--bg);border:1px solid var(--border);padding:28px 32px;margin-bottom:16px">
-  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700">O que significa seu Desafio principal</div>
-  <p style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px">${cch?CH[cch.num]:'—'}</p>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid #7a2e1e;padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Seu Desafio principal: ${cch?CH[cch.num]:'desconhecido'}</div>
+  <p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px">${cch?cch.label:''}</p>
   <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${cch?CHALL_DESC[cch.num]||CHALL_DESC[0]:''}</p>
+</div>
+<div style="background:var(--bg);border:1px solid var(--border);border-left:5px solid #1e5c35;padding:28px 32px;margin-bottom:16px">
+  <div style="font-family:'Lato',sans-serif;font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;font-weight:700">Seu Código de Vida: ${getTN(c.mission,c.gender)||'—'}</div>
+  <p style="font-family:'Lato',sans-serif;font-size:12px;color:var(--muted);margin-bottom:14px">A combinação do seu Talento com a sua Direção</p>
+  <p style="font-family:'Lato',sans-serif;font-size:14px;color:var(--text);line-height:1.85">${archDesc(c.mission)}</p>
 </div>`;
 
   // TRANSITION BLOCK
@@ -1600,21 +1603,21 @@ function setContent(ids,html){
 async function aiTalento(c){
   ['c-tal','pdf-tal-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Analisando talento principal...</p></div>';});
   const tn=getTN(c.expression,c.gender)||TN[c.expression]||'';
-  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Talento Principal" em 2ª pessoa.\n\n1. <h3>${tn}</h3>\n<p>2 parágrafos. "Você funciona como...", "Seu padrão é...". Use o nome "${c.apelido}". Relacione com ocupação "${c.ocup}" e estado "${c.estado}".</p>\n\n2. <h3>Sua Diretriz de Faturamento</h3>\n<p>Como seu talento gera faturamento com menos desgaste. Concreto e específico para o perfil ${c.expression}.</p>\n\n3. <h3>Seu Posicionamento de Autoridade</h3>\n<p>Como você deve se posicionar. O que o mercado enxerga quando você opera no padrão natural.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Uma ação concreta esta semana.</p></div>`);if(t&&t.trim().length>50)setContent(['c-tal','pdf-tal-body'],t);else setContent(['c-tal','pdf-tal-body'],fbT(c));}
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção Talento Principal. Estrutura OBRIGATÓRIA:\n\n<h3>${tn}: quem é esta pessoa</h3>\n<p>Explique o que é este perfil de forma simples e humana. Use metáfora do dia a dia. Fale como se estivesse descrevendo alguém que a pessoa conhece. Mínimo 3 frases. NÃO comece com orientações.</p>\n\n<h3>Como isso aparece na vida de ${c.apelido}</h3>\n<p>Conecte o perfil com a realidade desta pessoa: ocupação ${c.ocup}, estado ${c.estado}, sabotadores ${c.sab}. Mostre que você fala especificamente dela.</p>\n\n<h3>O que fazer com isso</h3>\n<p>Orientações práticas. Sem jargão. Linguagem acessível para qualquer pessoa.</p>\n\n<div class=ical><div class=ical-lbl>Para refletir agora</div><p>Uma pergunta concreta baseada no perfil e momento atual.</p></div>`);if(t&&t.trim().length>50)setContent(['c-tal','pdf-tal-body'],t);else setContent(['c-tal','pdf-tal-body'],fbT(c));}
   catch(e){setContent(['c-tal','pdf-tal-body'],fbT(c));}
 }
 
 async function aiDirecao(c){
   ['c-dir','pdf-dir-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Mapeando direção estratégica...</p></div>';});
   const dn=DN[c.destiny]||'';
-  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Direção Estratégica" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${dn}</h3>\n<p>2 parágrafos. "Sua direção aponta para...", "Quando você trabalha alinhada com...". Estado: "${c.estado}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>Cenário de Retorno Financeiro</h3>\n<p>Como essa direção gera faturamento para você. Modelos e nichos concretos.</p>\n\n3. <h3>Sua Diretriz de Transição</h3>\n<p>O que você para e o que prioriza. Baseado na sua dor e sonho.</p>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Um passo concreto nos próximos 7 dias.</p></div>`);if(t&&t.trim().length>50)setContent(['c-dir','pdf-dir-body'],t);else setContent(['c-dir','pdf-dir-body'],fbD(c));}
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção Direção Estratégica. Estrutura OBRIGATÓRIA:\n\n<h3>${dn}: o que isso significa</h3>\n<p>Explique o que é esta direção de forma simples com metáfora concreta. Qualquer pessoa deve entender, não só quem trabalha em empresa grande.</p>\n\n<h3>Por que esse é o caminho de ${c.apelido}</h3>\n<p>Conecte com a realidade desta pessoa: dor ${c.dor}, sonho ${c.sonho}, estado ${c.estado}. Fale para quem pode querer largar emprego, virar terapeuta, empreender ou mudar de área.</p>\n\n<h3>O que muda na prática</h3>\n<p>Exemplos concretos e humanos do que fazer diferente.</p>\n\n<div class=ical><div class=ical-lbl>Para refletir agora</div><p>Uma reflexão baseada nesta direção e no momento desta pessoa.</p></div>`);if(t&&t.trim().length>50)setContent(['c-dir','pdf-dir-body'],t);else setContent(['c-dir','pdf-dir-body'],fbD(c));}
   catch(e){setContent(['c-dir','pdf-dir-body'],fbD(c));}
 }
 
 async function aiBloquio(c){
   ['c-blq','pdf-blq-body'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="aib loading"><p style="color:var(--muted);font-style:italic">Identificando bloqueios...</p></div>';});
   const cch=c.challenges?c.challenges.find(x=>c.age>=x.start&&(x.end===null||c.age<=x.end)):null;const cn=cch?CH[cch.num]||'padrão latente':'padrão latente';
-  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção "Pontos de Bloqueio" em 2ª pessoa. Use o nome "${c.apelido}".\n\n1. <h3>${cn}</h3>\n<p>2-3 parágrafos. "Seu bloqueio opera...", "Você tende a...". Sabotadores: "${c.sab||'—'}", dor: "${c.dor||'—'}".</p>\n\n2. <h3>O Impacto no Seu Faturamento</h3>\n<p>Custo real. Desvalorização ${c.desv}/10 e cobrança ${c.cob}/10.</p>\n\n3. <h3>Seu Protocolo de Superação</h3>\n<ul><li>3-5 ações concretas baseadas no perfil ${c.expression}</li></ul>\n\n4. <div class="ical"><div class="ical-lbl">⚡ Insight para Ação</div><p>Última decisão onde o bloqueio apareceu. O que você faz diferente agora.</p></div>`);if(t&&t.trim().length>50)setContent(['c-blq','pdf-blq-body'],t);else setContent(['c-blq','pdf-blq-body'],fbB(c));}
+  try{const t=await callAPI(SYS,`${ctxC(c)}\n\nTAREFA: Seção Pontos de Bloqueio. Estrutura OBRIGATÓRIA:\n\n<h3>${cn}: o que é este padrão</h3>\n<p>Explique o que é este desafio sem julgamento. Use metáfora ou situação do cotidiano. Mostre que é um padrão humano, não falha de caráter. Empático e profundo.</p>\n\n<h3>Como isso aparece na vida de ${c.apelido}</h3>\n<p>Conecte com: sabotadores ${c.sab}, dor ${c.dor}, desvalorização ${c.desv} de 10. Seja específico.</p>\n\n<h3>O custo real</h3>\n<p>O que este padrão está custando na prática. Não só financeiro. Linguagem humana e direta.</p>\n\n<h3>O que fazer diferente</h3>\n<ul><li>3 a 5 ações concretas e simples que qualquer pessoa consiga fazer.</li></ul>\n\n<div class=ical><div class=ical-lbl>Para refletir agora</div><p>Uma pergunta para identificar onde este padrão está ativo hoje.</p></div>`);if(t&&t.trim().length>50)setContent(['c-blq','pdf-blq-body'],t);else setContent(['c-blq','pdf-blq-body'],fbB(c));}
   catch(e){setContent(['c-blq','pdf-blq-body'],fbB(c));}
 }
 
@@ -1729,14 +1732,15 @@ body{background:#d8d4cc;padding:52px 20px 40px}
 /* PAGE - each is one A4 */
 .pg{
   width:210mm;
-  height:297mm;
+  min-height:100mm;
   margin:0 auto 20px;
   background:white;
   box-shadow:0 4px 24px rgba(0,0,0,.25);
-  overflow:hidden;
+  overflow:visible;
   position:relative;
   display:block;
-  flex-shrink:0;
+  page-break-after:always;
+  page-break-inside:avoid;
 }
 /* Screen: show pages stacked */
 /* Print: each .pg = one A4 page */
